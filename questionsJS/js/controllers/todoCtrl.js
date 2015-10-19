@@ -7,8 +7,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$timeout',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $timeout) {
 	// set local storage
 	$scope.$storage = $localStorage;
 
@@ -123,6 +123,8 @@ $scope.addTodo = function () {
 	});
 	// remove the posted question in the input
 	$scope.input.wholeMsg = '';
+	// set time interval to 5s to prevent user keep posting questions
+	$scope.setPostTimeInterval();
 };
 
 $scope.editTodo = function (todo) {
@@ -232,5 +234,31 @@ angular.element($window).bind("scroll", function() {
 		$scope.$apply();
 	}
 });
+
+// set post time interval to prevent user repeating post questions
+$scope.setPostTimeInterval = function () {
+	// disable the button after post button clicked
+	angular.element(document.getElementById('btn_post'))[0].disabled = true;
+	// console.log("Post Time interval start");
+
+	// time count donw
+	$scope.postTimeCounter = 5;	
+
+	// refresh and display the time count
+  $scope.onTimeout = function(){
+  		// console.log($scope.postTimeCounter);  		 
+      $scope.postTimeCounter--;
+      mytimeout = $timeout($scope.onTimeout,1000);
+  }
+  var mytimeout = $timeout($scope.onTimeout, 1000);
+
+  // terminal the timer after 5 seconds
+	$timeout(function() {			
+		$timeout.cancel(mytimeout);
+		// console.log("Post Time interval end");
+		angular.element(document.getElementById('btn_post'))[0].disabled = false;
+		$scope.postTimeCounter = 0;		
+	}, 5000);	
+}
 
 }]);

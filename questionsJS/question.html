@@ -43,22 +43,48 @@
 		<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>
 
 		<div class="well well-sm">
-			<form name="todoForm" id="todoForm" ng-submit="addTodo()">
-				<div class="input-group">				
+			<!-- tab navigation bar -->
+		  <ul class="nav nav-pills" id="tabs">
+		    <li class="active"><a data-toggle="tab" href="#tab_post"><i class="fa fa-commenting"></i> Post</a></li>
+		    <li><a data-toggle="tab" href="#tab_search"><i class="fa fa-search"></i> Search</a></li>
+		  </ul>
 
-					<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Search or Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
-					<div class="input-group-btn">
-						<button class="btn btn-default" type="submit" ng-click="submitted = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
-					</div>
-				</div><!-- /input-group -->
-			</form>
+			<!-- tab content -->
+		  <div class="tab-content">
+		    <div id="tab_post" class="tab-pane fade in active">
+					<form name="todoForm" id="todoForm" ng-submit="addTodo()">
+						<div class="input-group">				
+							<!-- <input type="text" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" /> -->
+							<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
+							<div class="input-group-btn">
+								<button id="btn_post" class="btn btn-default" type="submit" ng-click="submitted = todoForm.$invalid; input.searchMsg='';"><i class="fa fa-commenting fa-lg"></i></button>
+							</div>
+						</div><!-- /input-group -->
+					</form>
+		    </div><!-- /#tab_post -->
+
+		    <div id="tab_search" class="tab-pane fade">
+					<div class="input-group">				
+						<input type="text" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" />					
+						<div class="input-group-btn">
+							<button id="btn_search" class="btn btn-default" type="button"><i class="fa fa-search fa-lg"></i></button>
+						</div>
+					</div><!-- /input-group -->
+		    </div>
+		  </div>
+			
+			<span ng-style="{visibility: (postTimeCounter>0) && 'visible' || 'hidden'}"><small>Please wait for {{postTimeCounter}}	second to post again...</small></span>
+
 		</div>
 
-		<div class="alert alert-danger" role="alert" ng-show="todoForm.$error.minlength && submitted">Your question must be longer than 5 characters!</div>
+		<!-- Error messages -->
+		<div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.minlength && submitted"><strong>Error!</strong> Your question must be longer than 5 characters! <a class="close" data-dismiss="alert" ng-click="submitted = false">&times;</a></div>
+		<div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.required && submitted"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> Your question cannot be empty! </div>
 
+		<hr>
 
 		<div class="list-group" id="todo-list">
-			<span class="list-group-item" ng-repeat="todo in todos | filter:input | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+			<span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
 				<h4 class="list-group-item-heading" ng-switch on="todo.headLastChar">
 					<span class="label label-danger" ng-show="todo.new">New</span>
 					<span class="badge">{{todo.echo}}</span>
@@ -90,7 +116,11 @@
 	type="button" ng-click="increaseMax()"> Show more</button>
 -->
 
+<!-- jquery -->
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
@@ -109,5 +139,13 @@
 <script src="js/directives/todoFocus.js"></script>
 <script src="js/directives/todoBlur.js"></script>
 <script src="js/directives/todoEscape.js"></script>
+<script type="text/javascript">
+	$('#tabs a').click(function (e) {
+	  e.preventDefault()
+	  $(this).tab('show')
+	})
+	
+
+</script>
 </body>
 </html>
