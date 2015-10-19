@@ -43,18 +43,18 @@
 		<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>
 
 		<div class="well well-sm">
-			<div class="input-group">
-				<!--
-				<form id="todo-form" ng-submit="addTodo()">
-			-->
-				<input type="text" id="new-todo" class="form-control"
-				placeholder="Search or Post Question"
-				ng-model="input.wholeMsg" autofocus></input>
-				<span class="input-group-btn">
-					<button class="btn btn-default" type="button" ng-click="addTodo()"><i class="fa fa-commenting fa-lg"></i></button>
-				</span>
-			</div><!-- /input-group -->
+			<form name="todoForm" id="todoForm" ng-submit="addTodo()">
+				<div class="input-group">				
+
+					<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Search or Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
+					<div class="input-group-btn">
+						<button class="btn btn-default" type="submit" ng-click="submitted = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
+					</div>
+				</div><!-- /input-group -->
+			</form>
 		</div>
+
+		<div class="alert alert-danger" role="alert" ng-show="todoForm.$error.minlength && submitted">Your question must be longer than 5 characters!</div>
 
 
 		<div class="list-group" id="todo-list">
