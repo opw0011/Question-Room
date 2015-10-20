@@ -93,8 +93,10 @@
 					<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
 					<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
 				</h4>
-				<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span> created: {{todo.dateString}}
-					<span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
+				<!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
+				<!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
+				<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span></p>
+				<p>created: {{todo.dateString}} <span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
 
 					<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
 					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
@@ -117,10 +119,10 @@
 -->
 
 <!-- jquery -->
-<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="js/lib/jquery.min.js"></script>
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="js/lib/bootstrap.min.js"></script>
 
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
@@ -129,6 +131,8 @@
 <script src="js/lib/firebase.js"></script>
 <script src="js/lib/angular.min.js"></script>
 <script src="js/lib/angularfire.js"></script>
+<script src="js/lib/angular-sanitize.js"></script>
+
 
 <!-- Ng storage 0.3.6  -->
 <script src="js/lib/ngStorage.min.js"></script>

@@ -65,7 +65,8 @@ $scope.$watchCollection('todos', function () {
 		todo.dateString = new Date(todo.timestamp).toString();
 		todo.tags = todo.wholeMsg.match(/#\w+/g);
 
-		todo.trustedDesc = $sce.trustAsHtml(todo.linkedDesc);
+		// todo.trustedDesc = $sce.trustAsHtml(todo.linkedDesc);
+		todo.trustedDesc = todo.linkedDesc;
 	});
 
 	$scope.totalCount = total;
