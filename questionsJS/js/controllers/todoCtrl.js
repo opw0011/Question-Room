@@ -31,7 +31,7 @@ if (!roomId || roomId.length === 0) {
 }
 
 // TODO: Please change this URL for your app
-var firebaseURL = "https://comp3111-qroom.firebaseapp.com";
+var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
 
 
 $scope.roomId = roomId;
@@ -99,8 +99,8 @@ $scope.getFirstAndRestSentence = function($string) {
 
 $scope.addTodo = function () {
 	var newTodo = $scope.input.wholeMsg.trim();
+	var todoID = $scope.input.email.trim();
 
-	// No input, so just do nothing
 	if (!newTodo.length) {
 		return;
 	}
@@ -118,11 +118,13 @@ $scope.addTodo = function () {
 		completed: false,
 		timestamp: new Date().getTime(),
 		tags: "...",
+		email: todoID,
 		echo: 0,
 		order: 0
 	});
-	// remove the posted question in the input
+	// remove the posted question and email address in the input
 	$scope.input.wholeMsg = '';
+	$scope.input.email = '';
 	// set time interval to 5s to prevent user keep posting questions
 	$scope.setPostTimeInterval();
 };
@@ -245,14 +247,14 @@ $scope.setPostTimeInterval = function () {
 	$scope.postTimeCounter = 5;
 
 	// refresh and display the time count
-  $scope.onTimeout = function(){
-  		// console.log($scope.postTimeCounter);
-      $scope.postTimeCounter--;
-      mytimeout = $timeout($scope.onTimeout,1000);
-  }
-  var mytimeout = $timeout($scope.onTimeout, 1000);
+	$scope.onTimeout = function(){
+		// console.log($scope.postTimeCounter);
+		$scope.postTimeCounter--;
+		mytimeout = $timeout($scope.onTimeout,1000);
+	}
+	var mytimeout = $timeout($scope.onTimeout, 1000);
 
-  // terminal the timer after 5 seconds
+	// terminal the timer after 5 seconds
 	$timeout(function() {
 		$timeout.cancel(mytimeout);
 		// console.log("Post Time interval end");

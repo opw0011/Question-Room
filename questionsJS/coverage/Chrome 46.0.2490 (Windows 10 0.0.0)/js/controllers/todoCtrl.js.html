@@ -15,10 +15,10 @@
 <div class="header low">
     <h1>Code coverage report for <span class="entity">js\controllers\todoCtrl.js</span></h1>
     <h2>
-        Statements: <span class="metric">42.74% <small>(50 / 117)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Statements: <span class="metric">39.53% <small>(51 / 129)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         Branches: <span class="metric">34.38% <small>(11 / 32)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
-        Functions: <span class="metric">13.64% <small>(3 / 22)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
-        Lines: <span class="metric">41.59% <small>(47 / 113)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Functions: <span class="metric">12% <small>(3 / 25)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
+        Lines: <span class="metric">38.4% <small>(48 / 125)</small></span> &nbsp;&nbsp;&nbsp;&nbsp;
         Ignored: <span class="metric"><span class="ignore-none">none</span></span> &nbsp;&nbsp;&nbsp;&nbsp;
     </h2>
     <div class="path"><a href="../../index.html">All files</a> &#187; <a href="index.html">js/controllers/</a> &#187; todoCtrl.js</div>
@@ -261,7 +261,35 @@
 234
 235
 236
-237</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
+237
+238
+239
+240
+241
+242
+243
+244
+245
+246
+247
+248
+249
+250
+251
+252
+253
+254
+255
+256
+257
+258
+259
+260
+261
+262
+263
+264
+265</td><td class="line-coverage"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -387,6 +415,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -492,6 +522,32 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -506,8 +562,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window',
-function ($scope, $location, $firebaseArray, $sce, $localStorage, $window) {
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$timeout',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $timeout) {
 	// set local storage
 	$scope.$storage = $localStorage;
 &nbsp;
@@ -530,7 +586,7 @@ if (!roomId || roomId.length === 0) {
 }
 &nbsp;
 // TODO: Please change this URL for your app
-var firebaseURL = "https://classquestion.firebaseio.com/";
+var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
 &nbsp;
 &nbsp;
 $scope.roomId = roomId;
@@ -622,6 +678,8 @@ $scope.addTodo = <span class="fstat-no" title="function not covered" >function (
 	});
 	// remove the posted question in the input
 <span class="cstat-no" title="statement not covered" >	$scope.input.wholeMsg = '';</span>
+	// set time interval to 5s to prevent user keep posting questions
+<span class="cstat-no" title="statement not covered" >	$scope.setPostTimeInterval();</span>
 };
 &nbsp;
 $scope.editTodo = <span class="fstat-no" title="function not covered" >function (todo) {</span>
@@ -732,13 +790,39 @@ angular.element($window).bind("scroll", <span class="fstat-no" title="function n
 	}
 });
 &nbsp;
+// set post time interval to prevent user repeating post questions
+$scope.setPostTimeInterval = <span class="fstat-no" title="function not covered" >function () {</span>
+	// disable the button after post button clicked
+<span class="cstat-no" title="statement not covered" >	angular.element(document.getElementById('btn_post'))[0].disabled = true;</span>
+	// console.log("Post Time interval start");
+&nbsp;
+	// time count donw
+<span class="cstat-no" title="statement not covered" >	$scope.postTimeCounter = 5;</span>
+&nbsp;
+	// refresh and display the time count
+<span class="cstat-no" title="statement not covered" >  $scope.onTimeout = <span class="fstat-no" title="function not covered" >function(){</span></span>
+  		// console.log($scope.postTimeCounter);
+<span class="cstat-no" title="statement not covered" >      $scope.postTimeCounter--;</span>
+<span class="cstat-no" title="statement not covered" >      mytimeout = $timeout($scope.onTimeout,1000);</span>
+  }
+<span class="cstat-no" title="statement not covered" >  var mytimeout = $timeout($scope.onTimeout, 1000);</span>
+&nbsp;
+  // terminal the timer after 5 seconds
+<span class="cstat-no" title="statement not covered" >	$timeout(<span class="fstat-no" title="function not covered" >function() {</span></span>
+<span class="cstat-no" title="statement not covered" >		$timeout.cancel(mytimeout);</span>
+		// console.log("Post Time interval end");
+<span class="cstat-no" title="statement not covered" >		angular.element(document.getElementById('btn_post'))[0].disabled = false;</span>
+<span class="cstat-no" title="statement not covered" >		$scope.postTimeCounter = 0;</span>
+	}, 5000);
+}
+&nbsp;
 }]);
 &nbsp;</pre></td></tr>
 </table></pre>
 
 </div>
 <div class="footer">
-    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Thu Oct 01 2015 11:40:35 GMT+0800 (China Standard Time)</div>
+    <div class="meta">Generated by <a href="http://istanbul-js.org/" target="_blank">istanbul</a> at Tue Oct 20 2015 20:22:52 GMT+0800 (China Standard Time)</div>
 </div>
 <script src="../../prettify.js"></script>
 <script>
