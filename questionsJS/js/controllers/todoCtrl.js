@@ -79,7 +79,7 @@ $scope.$watchCollection('todos', function () {
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
 	var head = $string;
-	var desc = "";
+	var desc = '';
 
 	var separators = [". ", "? ", "! ", '\n'];
 
@@ -100,8 +100,8 @@ $scope.getFirstAndRestSentence = function($string) {
 
 $scope.addTodo = function () {
 	var newTodo = $scope.input.wholeMsg.trim();
+	var todoID = $scope.input.email;
 
-	// No input, so just do nothing
 	if (!newTodo.length) {
 		return;
 	}
@@ -119,11 +119,13 @@ $scope.addTodo = function () {
 		completed: false,
 		timestamp: new Date().getTime(),
 		tags: "...",
+		email: todoID,
 		echo: 0,
 		order: 0
 	});
-	// remove the posted question in the input
+	// remove the posted question and email address in the input
 	$scope.input.wholeMsg = '';
+	$scope.input.email = '';
 	// set time interval to 5s to prevent user keep posting questions
 	$scope.setPostTimeInterval();
 };
@@ -243,23 +245,23 @@ $scope.setPostTimeInterval = function () {
 	// console.log("Post Time interval start");
 
 	// time count donw
-	$scope.postTimeCounter = 5;	
+	$scope.postTimeCounter = 5;
 
 	// refresh and display the time count
-  $scope.onTimeout = function(){
-  		// console.log($scope.postTimeCounter);  		 
-      $scope.postTimeCounter--;
-      mytimeout = $timeout($scope.onTimeout,1000);
-  }
-  var mytimeout = $timeout($scope.onTimeout, 1000);
+	$scope.onTimeout = function(){
+		// console.log($scope.postTimeCounter);
+		$scope.postTimeCounter--;
+		mytimeout = $timeout($scope.onTimeout,1000);
+	}
+	var mytimeout = $timeout($scope.onTimeout, 1000);
 
-  // terminal the timer after 5 seconds
-	$timeout(function() {			
+	// terminal the timer after 5 seconds
+	$timeout(function() {
 		$timeout.cancel(mytimeout);
 		// console.log("Post Time interval end");
 		angular.element(document.getElementById('btn_post'))[0].disabled = false;
-		$scope.postTimeCounter = 0;		
-	}, 5000);	
+		$scope.postTimeCounter = 0;
+	}, 5000);
 }
 
 }]);
