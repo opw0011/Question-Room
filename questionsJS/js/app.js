@@ -7,5 +7,5 @@
 *
 * @type {angular.Module}
 */
-var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'ngSanitize']);
+var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'ngSanitize', 'emojiApp']);
 // added ngSanitize

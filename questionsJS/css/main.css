@@ -4,11 +4,11 @@
 }
 
 
-.icon{display: inline-block;}
+.icon {display: inline-block;}
 .icon,
-.icon + span{vertical-align: middle;}
+.icon + span {vertical-align: middle;}
 
-.icon.facebook{
+.icon.facebook {
   background: url(../img/icon-facebook.png) no-repeat 0 0;
   height: 29px;
   width: 38px;
@@ -22,8 +22,7 @@
     position: absolute;
 }
 
-
-#toTop{
+#toTop {
 	position: fixed;
 	bottom: 95px;
 	right: 40px;
