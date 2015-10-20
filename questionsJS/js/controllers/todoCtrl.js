@@ -31,7 +31,7 @@ if (!roomId || roomId.length === 0) {
 }
 
 // TODO: Please change this URL for your app
-var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
+var firebaseURL = "https://comp3111-qroom.firebaseapp.com";
 
 
 $scope.roomId = roomId;
@@ -242,23 +242,23 @@ $scope.setPostTimeInterval = function () {
 	// console.log("Post Time interval start");
 
 	// time count donw
-	$scope.postTimeCounter = 5;	
+	$scope.postTimeCounter = 5;
 
 	// refresh and display the time count
   $scope.onTimeout = function(){
-  		// console.log($scope.postTimeCounter);  		 
+  		// console.log($scope.postTimeCounter);
       $scope.postTimeCounter--;
       mytimeout = $timeout($scope.onTimeout,1000);
   }
   var mytimeout = $timeout($scope.onTimeout, 1000);
 
   // terminal the timer after 5 seconds
-	$timeout(function() {			
+	$timeout(function() {
 		$timeout.cancel(mytimeout);
 		// console.log("Post Time interval end");
 		angular.element(document.getElementById('btn_post'))[0].disabled = false;
-		$scope.postTimeCounter = 0;		
-	}, 5000);	
+		$scope.postTimeCounter = 0;
+	}, 5000);
 }
 
 }]);
