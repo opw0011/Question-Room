@@ -58,13 +58,15 @@
 							<!-- <input type="text" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" /> -->
 							<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
 							<div class="input-group-btn">
-								<button id="btn_post" class="btn btn-default" type="submit" ng-click="submitted = todoForm.$invalid; input.searchMsg='';"><i class="fa fa-commenting fa-lg"></i></button>
+								<button id="btn_post" class="btn btn-default" type="submit" ng-click="submitted = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
 							</div>
 						</div><!-- /input-group -->
 						<!-- input email address -->
 						<form name="myForm1">
 								<label>Email:
-									<input type="email" name="input" class="form-control" ng-init="input.email=''" autofocus>
+									<div ng-init="input.email=''">
+										<input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
+									</div>
 								</label>
 								<span class="error" ng-show="myForm1.input.$error.email">Not valid email!</span>
 						</form>
@@ -74,17 +76,19 @@
 				<div id="tab_search" class="tab-pane fade">
 					<div class="input-group">
 						<input type="text" id="new-search" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" />
+						<div class="input-group-btn">
+							<button id="btn_reset" class="btn btn-danger" ng-click="input.searchMsg='';input.searchMail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
+						</div>
 					</div><!-- /input-group -->
 					<!-- search by email -->
 					<form name="myForm2" ng-submit="searchByMail()">
 							<label>Email:
-								<input type="email" name="input" class="form-control" ng-init="input.searchMail=''" autofocus>
+								<div ng-init="input.searchMail=''">
+									<input type="email" name="input" class="form-control" placeholder="Search by mail" ng-model="input.searchMail" />
+								</div>
 							</label>
-							<span class="error" ng-show="myForm2.input.$error.searchMail">Not valid email!</span>
+							<span class="error" ng-show="myForm2.input.$error.email">Not valid email!</span>
 					</form>
-					<div class="input-group-btn">
-						<button id="btn_search" class="btn btn-default" type="submit">Search by mail <i class="fa fa-search fa-lg"></i></button>
-					</div>
 				</div>
 
 			</div>
@@ -99,8 +103,8 @@
 
 		<hr>
 
-		<div class="list-group" id="todo-list">
-			<span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}">
+		<div class="list-group" id="todo-list" >
+			<span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | filter:input.searchMail:true |questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
 				<h4 class="list-group-item-heading" ng-switch on="todo.headLastChar">
 					<span class="label label-danger" ng-show="todo.new">New</span>
 					<span class="badge">{{todo.echo}}</span>
@@ -114,13 +118,14 @@
 				<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span></p>
 				<p>created: {{todo.dateString}} <span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
 
-					<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
-					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
-					&nbsp;
-					<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
-				</span>
-			</div>
+				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
+				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="subEcho(todo)" ng-disabled="!$storage[todo.$id]">Dislike</button>
+				<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
+				&nbsp;
+				<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
+			</span>
 		</div>
+	</div>
 
 
 

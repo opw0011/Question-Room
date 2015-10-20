@@ -3,7 +3,7 @@
 
 /**
 * The questionFilter
-* Show the new questions on the top and show only max questions 
+* Show the new questions on the top and show only max questions
 *
 */
 todomvc.filter('questionFilter', function () {

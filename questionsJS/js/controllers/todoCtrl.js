@@ -143,7 +143,18 @@ $scope.addEcho = function (todo) {
 	$scope.todos.$save(todo);
 
 	// Disable the button
-	$scope.$storage[todo.$id] = "echoed";
+	$scope.$storage[todo.$id] = true;
+};
+
+$scope.subEcho = function (todo) {
+	$scope.editedTodo = todo;
+	todo.echo = todo.echo - 1;
+	// Hack to order using this order.
+	todo.order = todo.order +1;
+	$scope.todos.$save(todo);
+
+	// Disable the button
+	$scope.$storage[todo.$id] = false;
 };
 
 $scope.doneEditing = function (todo) {
