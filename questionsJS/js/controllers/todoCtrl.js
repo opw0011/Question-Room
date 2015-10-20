@@ -78,7 +78,7 @@ $scope.$watchCollection('todos', function () {
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
 	var head = $string;
-	var desc = "";
+	var desc = '';
 
 	var separators = [". ", "? ", "! ", '\n'];
 
@@ -99,7 +99,7 @@ $scope.getFirstAndRestSentence = function($string) {
 
 $scope.addTodo = function () {
 	var newTodo = $scope.input.wholeMsg.trim();
-	var todoID = $scope.input.email.trim();
+	var todoID = $scope.input.email;
 
 	if (!newTodo.length) {
 		return;

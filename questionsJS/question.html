@@ -61,25 +61,31 @@
 								<button id="btn_post" class="btn btn-default" type="submit" ng-click="submitted = todoForm.$invalid; input.searchMsg='';"><i class="fa fa-commenting fa-lg"></i></button>
 							</div>
 						</div><!-- /input-group -->
+						<!-- input email address -->
+						<form name="myForm1">
+								<label>Email:
+									<input type="email" name="input" class="form-control" ng-init="input.email=''" autofocus>
+								</label>
+								<span class="error" ng-show="myForm1.input.$error.email">Not valid email!</span>
+						</form>
 					</form>
 				</div><!-- /#tab_post -->
 
 				<div id="tab_search" class="tab-pane fade">
 					<div class="input-group">
 						<input type="text" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" />
-						<div class="input-group-btn">
-							<button id="btn_search" class="btn btn-default" type="button"><i class="fa fa-search fa-lg"></i></button>
-						</div>
 					</div><!-- /input-group -->
+					<!-- search by email -->
+					<form name="myForm2" ng-submit="searchByMail()">
+							<label>Email:
+								<input type="email" name="input" class="form-control" ng-init="input.searchMail=''" autofocus>
+							</label>
+							<span class="error" ng-show="myForm2.input.$error.searchMail">Not valid email!</span>
+					</form>
+					<div class="input-group-btn">
+						<button id="btn_search" class="btn btn-default" type="submit">Search by mail <i class="fa fa-search fa-lg"></i></button>
+					</div>
 				</div>
-
-				<!-- input email address -->
-				<form name="myForm">
-				    <label>Email:
-				      <input type="email" name="input" class="form-control" ng-class="email: todo.email" ng-model="input.email" autofocus>
-				    </label>
-				    <span class="error" ng-show="myForm.input.$error.email">Not valid email!</span>
-				</form>
 
 			</div>
 
