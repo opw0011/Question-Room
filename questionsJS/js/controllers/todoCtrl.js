@@ -76,6 +76,18 @@ $scope.$watchCollection('todos', function () {
 	$scope.absurl = $location.absUrl();
 }, true);
 
+//filter words detector, return true is detected
+$scope.filterWord = function($string) {
+	var str = $string;
+	//filtered words library
+	var filterWords = ["shit", "fuck"];
+
+	//"i" is to ignore case and "g" for global
+	var wRegExp = new RegExp(filterWords.join("|"), "gi");
+
+	return wRegExp.test(str);
+};
+
 // Get the first sentence and rest
 $scope.getFirstAndRestSentence = function($string) {
 	var head = $string;
