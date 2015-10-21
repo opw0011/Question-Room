@@ -56,24 +56,24 @@
 					<form name="todoForm" id="todoForm" ng-submit="addTodo()">
 						<div class="input-group">
 							<!-- <input type="text" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" /> -->
-							<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Post Question without foul words"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
+							<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
 							<!-- <span class="warning" ng-show="filterWord(input.wholeMsg)">No foul words!</span> -->
 							<div class="input-group-btn">
 								<button id="btn_post" class="btn btn-default" type="submit" ng-disabled="filterWord(input.wholeMsg)" ng-click="submitted = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
 							</div>
 						</div><!-- /input-group -->
-						<!-- collapsable list -->						
-			      <div id="collapse_list" class="panel-collapse collapse">
-			        <ul class="list-group">
-			          <li class="list-group-item">
+						<!-- collapsable list -->
+						<div id="collapse_list" class="panel-collapse collapse">
+							<ul class="list-group">
+								<li class="list-group-item">
 									<!-- input email address -->
 									<label>Email:</label>
 									<div ng-init="input.email=''">
 										<input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
-									</div>									
-			          </li>
-			        </ul>
-			      </div>						
+									</div>
+								</li>
+							</ul>
+						</div>
 					</form>
 					<div class="pull-left">
 						<span ng-style="{visibility: (postTimeCounter>0) && 'visible' || 'hidden'}"><small>Please wait for {{postTimeCounter}}	second to post again...</small></span>
@@ -81,7 +81,7 @@
 					<div class="pull-right">
 						<a id="toggle_advanced" data-toggle="collapse" href="#collapse_list"><span class="glyphicon glyphicon-collapse-down"></span> Show advanced options</a>
 					</div>
-			<div class="clearfix"></div>		
+					<div class="clearfix"></div>
 				</div><!-- /#tab_post -->
 
 				<div id="tab_search" class="tab-pane fade">
@@ -90,7 +90,7 @@
 						<div class="input-group-btn">
 							<button id="btn_reset" class="btn btn-danger" ng-click="input.searchMsg='';input.searchMail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
 						</div>
-					</div><!-- /input-group -->		
+					</div><!-- /input-group -->
 					<label>Email:</label>
 					<div ng-init="input.searchMail=''">
 						<input type="email" name="input" class="form-control" placeholder="Search by mail" ng-model="input.searchMail" />
@@ -127,22 +127,18 @@
 				<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-check" ng-click="toggleCompleted(todo)">Toggle Completed</button>
 				&nbsp;
 				<button ng-show="isAdmin" class="btn btn-default btn-xs glyphicon glyphicon-trash" aria-hidden="true" ng-click="removeTodo(todo)">Del</button>
-		</span>
+			</span>
+		</div>
 	</div>
-</div>
 
+	<!--
 
+	<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
 
-
-<!--
-
-<div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
-
-<button ng-hide="totalCount<=maxQuestion"
-class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
-type="button" ng-click="increaseMax()"> Show more</button>
+	<button ng-hide="totalCount<=maxQuestion"
+	class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
+	type="button" ng-click="increaseMax()"> Show more</button>
 -->
-
 
 <!-- jquery -->
 <script src="js/lib/jquery.min.js"></script>
@@ -169,24 +165,6 @@ type="button" ng-click="increaseMax()"> Show more</button>
 <script src="js/directives/todoFocus.js"></script>
 <script src="js/directives/todoBlur.js"></script>
 <script src="js/directives/todoEscape.js"></script>
-<script type="text/javascript">
-// jQuery
-$(document).ready(function(){
-	// activate the bootstrap tab
-	$('#tabs a').click(function (e) {
-		e.preventDefault()
-		$(this).tab('show')
-	});
-	$('#toggle_advanced').click(function (e) {
-		e.preventDefault()
-	});
-	$('#tab_post').on("hide.bs.collapse", function(){
-    $("#toggle_advanced").html('<span class="glyphicon glyphicon-collapse-down"></span> Show advanced options');
-  });
-	$('#tab_post').on("show.bs.collapse", function(){
-    $("#toggle_advanced").html('<span class="glyphicon glyphicon-collapse-up"></span> Hide advanced options');
-  });
-});
-</script>
+
 </body>
 </html>
