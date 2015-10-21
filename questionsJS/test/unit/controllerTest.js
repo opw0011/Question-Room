@@ -51,14 +51,74 @@ describe('TodoCtrl', function() {
           {str:"Hello.co? This is Sung", exp: "Hello.co?"},
           {str:"Hello.co This is Sung", exp: "Hello.co This is Sung"},
           {str:"Hello.co \nThis is Sung", exp: "Hello.co \n"},
-
-          {str:"Hello?? This is Sung", exp: "Hello??"},
+          {str:"Hello?? \nThis is Sung", exp: "Hello??"},
         ];
 
         for (var i in testInputs) {
           var results = scope.getFirstAndRestSentence(testInputs[i].str);
           expect(results[0]).toEqual(testInputs[i].exp);
         }
+      });
+
+      it('filterWord Testing', function() {
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
+
+        it('watchcollection', function() {
+          var ctrl = controller('TodoCtrl', {
+            $scope: scope,
+          });
+
+          var testTodos = [{
+            wholeMsg: "newTodo",
+            head: "head",
+            headLastChar: "?",
+            desc: "desc",
+            linkedDesc: "linkedDesc",
+            completed: false,
+            timestamp: 0,
+            tags: "...",
+            echo: 1,
+            order: 3
+          },{
+            wholeMsg: "newTodo",
+            head: "head",
+            headLastChar: "?",
+            desc: "desc",
+            linkedDesc: "linkedDesc",
+            completed: true,
+            timestamp: 0,
+            tags: "...",
+            echo: 3,
+            order: 2
+          },{}];
+
+          scope.todos = testTodos;
+          scope.$digest();
+
+          expect(scope.totalCount).toEqual(2);
+          expect(scope.completedCount).toEqual(1);
+        });
+
+        var testInputs = [
+          {str:"fuck you", exp: true},
+          {str:"eat shit", exp: true},
+          {str:"hello", exp: false},
+        ];
+
+        for (var i in testInputs) {
+          var result = scope.filterWord(testInputs[i].str);
+          expect(result).toEqual(testInputs[i].exp);
+        }
+      });
+
+      it('addTodo', function() {
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
+
+        scope.addTodo();
       });
 
       it('RoomId', function() {
@@ -70,6 +130,46 @@ describe('TodoCtrl', function() {
         });
 
         expect(scope.roomId).toBe("new");
+      });
+
+      it('addEcho Testing', function() {
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope,
+        });
+
+        var test_todo = {
+          wholeMsg: "newTodo",
+          head: "head",
+          headLastChar: "?",
+          desc: "desc",
+          linkedDesc: "linkedDesc",
+          completed: false,
+          timestamp: 0,
+          tags: "...",
+          echo: 0,
+          order: 2
+        };
+        scope.addEcho(test_todo);
+
+        expect(test_todo.echo).toBe(1);
+        expect(test_todo.order).toBe(1);
+      });
+
+      it('increaseMax Testing', function() {
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope,
+          $window: window
+        });
+
+        scope.maxQuestion = 1;
+        scope.totalCount = 100;
+        scope.increaseMax();
+        expect(scope.maxQuestion).toEqual(101);
+
+        scope.maxQuestion = 100;
+        scope.totalCount = 1;
+        scope.increaseMax();
+        expect(scope.maxQuestion).toEqual(100);
       });
 
       it('toTop Testing', function() {
