@@ -53,8 +53,11 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
+        TextView echoText = (TextView) view.findViewById(R.id.echo_count);
+        echoText.setText("" + echo);
+
         Button echoButton = (Button) view.findViewById(R.id.echo);
-        echoButton.setText("" + echo);
+        //echoButton.setText("" + echo);
         echoButton.setTextColor(Color.BLUE);
 
 
