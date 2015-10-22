@@ -8,4 +8,11 @@
 *
 * @type {angular.Module}
 */
-var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'ngSanitize']);
+var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'ngSanitize', 'ezfb'])
+
+.config(function (ezfbProvider) {
+  ezfbProvider.setInitParams({
+    appId: '1074795829199506',
+    version: 'v2.5'
+  });
+});

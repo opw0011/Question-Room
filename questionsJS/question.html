@@ -29,18 +29,15 @@
 	<div class="container">
 		<div class="input-group pull-right">
 			<a class="btn btn-default" href="./index.html">Main</a>
-			<button ng-hide="$authData" class="btn btn-primary left" type="button" ng-click="FBLogin()">Want Admin? Sign in with Facebook</button>
+			<button ng-hide="$authData" class="btn btn-primary left" ng-click="login()" ng-disabled="loginStatus.status == 'connected'">Connect with Facebook</button>
+			&nbsp;
+			<button class="btn btn-danger" ng-click="logout()" ng-disabled="!loginStatus || loginStatus.status != 'connected'">Logout</button>
 		</div>
 		<!-- <div class="clearfix"></div>		 -->
 		<div class="page-header">
 			<h1>Questions for {{roomId}}?</h1>
 			<small>Share room url: {{absurl}}</small>
 		</div>
-
-		<!-- after login -->
-		<img ng-show="$authData" src="https://graph.facebook.com/{{$authData.facebook.id}}/picture/?type=square&return_ssl_resources=1" alt="{{name}}" />
-		{{$authData.facebook.displayName}}
-		<button ng-show="$authData" class="btn btn-primary left" type="button" ng-click="FBLogout()">Logout</button>
 
 		<div class="well well-sm" id="question_box">
 			<!-- tab navigation bar -->
@@ -54,9 +51,7 @@
 				<div id="tab_post" class="tab-pane fade in active">
 					<form name="todoForm" id="todoForm" ng-submit="addTodo()">
 						<div class="input-group">
-							<!-- <input type="text" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" /> -->
 							<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>
-							<!-- <span class="warning" ng-show="filterWord(input.wholeMsg)">No foul words!</span> -->
 							<div class="input-group-btn">
 								<button id="btn_post" class="btn btn-default" type="submit" ng-disabled="filterWord(input.wholeMsg)" ng-click="submitted = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
 							</div>
@@ -87,7 +82,7 @@
 					<div class="input-group">
 						<input type="text" id="new-search" class="form-control"	placeholder="Search Question"	ng-model="input.searchMsg" />
 						<div class="input-group-btn">
-							<button id="btn_reset" class="btn btn-danger" ng-click="input.searchMsg='';input.searchMail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
+							<button id="btn_reset" class="btn btn-danger" ng-click="input.wholeMsg='';input.email='';input.searchMsg='';input.searchMail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
 						</div>
 					</div><!-- /input-group -->
 					<label>Email:</label>
@@ -122,7 +117,10 @@
 				<p>created: {{todo.dateString}} <span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
 
 				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
+				&nbsp;
 				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="subEcho(todo)" ng-disabled="!$storage[todo.$id]">Dislike</button>
+				&nbsp;
+				<button class="btn btn-success" ng-click="share()">share</button>
 			</span>
 		</div>
 	</div>
@@ -136,9 +134,6 @@
 	type="button" ng-click="increaseMax()"> Show more</button>
 -->
 
-<!-- Facebook -->
-<script src="http://connect.facebook.net/en_US/all.js"></script>
-
 <!-- jquery -->
 <script src="js/lib/jquery.min.js"></script>
 
@@ -148,11 +143,12 @@
 <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
 <script src="js/lib/Autolinker.min.js"></script>
 
-<!-- 2.2.2 -->
+<!-- Angular -->
 <script src="js/lib/firebase.js"></script>
 <script src="js/lib/angular.min.js"></script>
 <script src="js/lib/angularfire.js"></script>
 <script src="js/lib/angular-sanitize.js"></script>
+<script src="js/lib/angular-easyfb.min.js"></script>
 
 <!-- Ng storage 0.3.6  -->
 <script src="js/lib/ngStorage.min.js"></script>
