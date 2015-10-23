@@ -1,11 +1,16 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.app.AlertDialog;
 import android.app.ListActivity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
+import android.media.Image;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -32,7 +37,8 @@ public class MainActivity extends ListActivity {
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
-    private ImageButton shareButton;
+    private ImageButton emailOptionButton;
+    private String email_address;
 
     private DBUtil dbutil;
 
@@ -82,19 +88,17 @@ public class MainActivity extends ListActivity {
             }
         });
 
+        emailOptionButton = (ImageButton) findViewById(R.id.emailOption);
+        emailOptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popUpEmailForm();
+            }
+        });
+
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
-
-        shareButton = (ImageButton) findViewById(R.id.shareButton);
-        if(shareButton != null) {
-            shareButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    shareQuestion();
-                }
-            });
-        }
     }
 
     @Override
@@ -205,12 +209,55 @@ public class MainActivity extends ListActivity {
         finish();
     }
 
-    public void shareQuestion() {
+    public void shareQuestion(String key) {
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
+
+        final String[] msg = new String[1];
+        Firebase msgRef = mFirebaseRef.child(key).child("wholeMsg");
+        msgRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                msg[0] = (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Shared content";
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "A Question from QuestionRoom");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg[0]);
         startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
+    }
+
+    private void popUpEmailForm() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final EditText userEmail = new EditText(this);
+        userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+
+        builder.setTitle("Subscribe the question");
+        builder.setView(userEmail)
+                .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        email_address = userEmail.getText().toString();
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+        ;
+
+        AlertDialog subscribeAlert = builder.create();
+        subscribeAlert.show();
     }
 }

@@ -60,7 +60,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         //echoButton.setText("" + echo);
         echoButton.setTextColor(Color.BLUE);
 
-
         echoButton.setTag(question.getKey()); // Set tag for button
 
         echoButton.setOnClickListener(
@@ -73,6 +72,15 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                 }
 
         );
+
+        ImageButton shareButton = (ImageButton) view.findViewById(R.id.shareButton);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity m = (MainActivity) view.getContext();
+                m.shareQuestion((String) view.getTag());
+            }
+        });
 
         String msgString = "";
 

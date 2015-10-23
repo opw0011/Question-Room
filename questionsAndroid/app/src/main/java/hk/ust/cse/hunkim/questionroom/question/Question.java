@@ -23,6 +23,7 @@ public class Question implements Comparable<Question> {
     private int echo;
     private int order;
     private boolean newQuestion;
+    private String email;
 
     public String getDateString() {
         return dateString;
@@ -58,6 +59,25 @@ public class Question implements Comparable<Question> {
         this.headLastChar = head.substring(head.length() - 1);
 
         this.timestamp = new Date().getTime();
+
+        this.email = "";
+    }
+
+    public Question(String message, String email) {
+        this.wholeMsg = message;
+        this.echo = 0;
+        this.head = getFirstSentence(message).trim();
+        this.desc = "";
+        if (this.head.length() < message.length()) {
+            this.desc = message.substring(this.head.length());
+        }
+
+        // get the last char
+        this.headLastChar = head.substring(head.length() - 1);
+
+        this.timestamp = new Date().getTime();
+
+        this.email = email;
     }
 
     /**
@@ -130,6 +150,8 @@ public class Question implements Comparable<Question> {
     public int getOrder() {
         return order;
     }
+
+    public String getEmail() { return email; }
 
     public boolean isNewQuestion() {
         return newQuestion;

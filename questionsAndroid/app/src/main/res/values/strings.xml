@@ -10,5 +10,6 @@
     <string name="error_invalid_room_name">Use only alphanumeric characters</string>
     <string name="error_field_required">This field is required</string>
     <string name="share_to">Share question to ...</string>
-
+    <string name="email_hint">Email Address</string>
+    <string name="dialog_subscribe_email">Subscribe your question</string>
 </resources>
