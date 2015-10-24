@@ -24,6 +24,23 @@
         android:layout_above="@+id/listFooter"
         android:transcriptMode="alwaysScroll" />
 
+    <LinearLayout
+        android:id="@+id/emailBar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/listFooter"
+        android:layout_marginBottom="10dp">
+
+        <TextView
+            android:id="@+id/email"
+            android:layout_width="fill_parent"
+            android:layout_height="10dp"
+            android:background="#f0f0f0"
+            android:textSize="12sp"
+            android:textColor="#a0a0a0"
+            />
+
+    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/listFooter"
@@ -34,9 +51,12 @@
 
         <ImageButton
             android:id="@+id/emailOption"
-            android:layout_width="20dp"
+            android:layout_width="wrap_content"
             android:layout_height="20dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:src="@drawable/email"
+            android:layout_gravity="center_horizontal|center_vertical"
             />
 
         <EditText
