@@ -135,7 +135,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 	$scope.filterWord = function($string) {
 		var str = $string;
 		//filtered words library
-		var filterWords = ["shit", "fuck", "asshole","diu"];
+		var filterWords = ["shit", "fuck", "asshole","diu","wtf"];
 		//"i" is to ignore case and "g" for global
 		var wRegExp = new RegExp(filterWords.join("|"), "gi");
 		return wRegExp.test(str);
