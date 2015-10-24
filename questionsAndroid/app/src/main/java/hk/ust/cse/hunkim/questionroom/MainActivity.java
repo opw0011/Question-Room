@@ -5,16 +5,15 @@ import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
-import android.media.Image;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
@@ -38,7 +37,8 @@ public class MainActivity extends ListActivity {
     private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
     private ImageButton emailOptionButton;
-    private String email_address;
+    private String emailAddress = "";
+    private TextView emailTextView;
 
     private DBUtil dbutil;
 
@@ -96,6 +96,14 @@ public class MainActivity extends ListActivity {
             }
         });
 
+        emailTextView = (TextView) findViewById(R.id.email);
+        if(emailAddress == "") {
+            emailTextView.setVisibility(View.INVISIBLE);
+        }
+        else {
+            emailTextView.setText(emailAddress);
+        }
+
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
@@ -152,7 +160,7 @@ public class MainActivity extends ListActivity {
         String input = inputText.getText().toString();
         if (!input.equals("")) {
             // Create our 'model', a Chat object
-            Question question = new Question(input);
+            Question question = new Question(input, emailAddress);
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(question);
             inputText.setText("");
@@ -241,13 +249,24 @@ public class MainActivity extends ListActivity {
 
         final EditText userEmail = new EditText(this);
         userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        userEmail.setHint("Enter email");
+        if(emailAddress != "") {
+            userEmail.setText(emailAddress, null);
+        }
+
+        //Set layout of email input box programmatically
+        TableLayout.LayoutParams emailParams = new TableLayout.LayoutParams();
+        emailParams.setMargins(5, 5, 5, 5);
+        userEmail.setLayoutParams(emailParams);
 
         builder.setTitle("Subscribe the question");
         builder.setView(userEmail)
                 .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        email_address = userEmail.getText().toString();
+                        emailAddress = userEmail.getText().toString();
+                        emailTextView.setText(emailAddress);
+                        emailTextView.setVisibility(View.VISIBLE);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
