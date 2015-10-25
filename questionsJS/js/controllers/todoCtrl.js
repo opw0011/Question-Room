@@ -82,7 +82,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 	$scope.maxQuestion = scrollCountDelta;
 
 	var splits = $location.path().trim().split("/");
-	var roomId = angular.lowercase(splits[1]);
+	var roomId = angular.uppercase(splits[1]);
 	if (!roomId || roomId.length === 0) {
 		roomId = "all";
 	}
