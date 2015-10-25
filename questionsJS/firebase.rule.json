@@ -2,9 +2,9 @@
   "rules": {
   "$roomname": {
         "questions": {
-          ".read": true,  
-          ".write": true,
-          
+          ".read": true,
+          ".write": false,
+
           // Must have echo, head, desc
          // ".validate": "newData.hasChildren(['echo', 'head', 'desc', 'timestamp'])",
 
@@ -12,8 +12,8 @@
           "echo": { ".validate": "newData.isNumber()" },
           "head": { ".validate": "newData.isString()"},
           "desc": { ".validate": true },
-          "timestamp": { ".validate": "newData.val() <= now" }  
-          
+          "timestamp": { ".validate": "newData.val() <= now" }
+
           // but no other child paths are allowed
           // in this case, $other means any key excluding "title" and "color"
           //"$other": { ".validate": false }
