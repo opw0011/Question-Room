@@ -20,6 +20,9 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
 
+	<!-- angular smilies -->
+	<link rel="stylesheet" href="plugins/emoji/dist/angular-smilies-embed.min.css">
+
 	<!-- need this for comlted ones. TODO: can I do this in bootstrap -->
 	<link rel="stylesheet" href="css/main.css">
 
@@ -51,8 +54,9 @@
 				<div id="tab_post" class="tab-pane fade in active">
 					<form name="todoForm" id="todoForm" ng-submit="addTodo()">
 						
-						<div class="input-group">								
-							<input type="text" id="new-todo" name="new-todo" class="form-control"	placeholder="Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>							
+						<div class="input-group">
+							<span class="input-group-addon" smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>								
+							<input type="text" id="new-todo" name="new-todo" class="form-control"	focus-on-change="input.wholeMsg" placeholder="Post Question"	ng-model="input.wholeMsg" autofocus required minlength="5"/>							
 							<div class="input-group-btn">
 								<button id="btn_post" class="btn btn-default" type="submit" ng-disabled="filterWord(input.wholeMsg)" ng-click="submitted = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
 							</div>
@@ -110,11 +114,11 @@
 					<!-- switch -->
 					<span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
 					<span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
-					<span ng-class="{completed: todo.completed}">{{todo.head}}</span>
+					<span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
 				</h4>
 				<!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
 				<!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
-				<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc"></span></p>
+				<p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
 				<p>created: {{todo.dateString}} <span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
 
 				<button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
@@ -161,6 +165,10 @@
 <script src="js/lib/angular-sanitize.js"></script>
 <script src="js/lib/angular-easyfb.min.js"></script>
 
+<!-- angular-strap -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/v2.3.2/angular-strap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/angular-strap/v2.3.2/angular-strap.tpl.min.js"></script> 
+
 <!-- Ng storage 0.3.6  -->
 <script src="js/lib/ngStorage.min.js"></script>
 
@@ -172,6 +180,11 @@
 <script src="js/directives/todoBlur.js"></script>
 <script src="js/directives/todoEscape.js"></script>
 
+<!-- UI bootstrap (angular)-->
+<script src="js/lib/ui-bootstrap-tpls-0.14.3.min.js"></script>
+
+<!-- angular smilies -->
+<script src="plugins/emoji/dist/angular-smilies.js"></script>
 
 </body>
 </html>
