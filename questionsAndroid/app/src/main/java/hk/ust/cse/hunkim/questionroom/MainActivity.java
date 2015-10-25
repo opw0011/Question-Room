@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -29,7 +30,6 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
 
-    // TODO: change this to your own Firebase URL
     private static final String FIREBASE_URL = "https://comp3111-qroom.firebaseio.com/";
 
     private String roomName;
@@ -39,6 +39,7 @@ public class MainActivity extends ListActivity {
     private ImageButton emailOptionButton;
     private String emailAddress = "";
     private TextView emailTextView;
+    boolean sendMessageIntervalEnded = true;
 
     private DBUtil dbutil;
 
@@ -68,6 +69,7 @@ public class MainActivity extends ListActivity {
 
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
+
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
@@ -156,14 +158,39 @@ public class MainActivity extends ListActivity {
     }
 
     private void sendMessage() {
+        // Helper countdown for implementing: require post time interval > 5 second
+        final CountDownTimer countdown = new CountDownTimer(5000, 1000) {
+            public void onTick(long millisUntilFinished) {
+                sendMessageIntervalEnded = false;
+            }
+
+            public void onFinish() {
+                sendMessageIntervalEnded = true;
+
+            }
+        };
+
+        // Implement post interval > 5 seconds and input content > 5 letters
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
-        if (!input.equals("")) {
-            // Create our 'model', a Chat object
-            Question question = new Question(input, emailAddress);
-            // Create a new, auto-generated child of that chat location, and save our chat data there
-            mFirebaseRef.push().setValue(question);
-            inputText.setText("");
+        if (sendMessageIntervalEnded){
+            if (!input.equals("") && (input.length() >= 5)) {
+                // Start the counter to count for 5 seconds
+                countdown.start();
+
+                // Create our 'model', a Chat object
+                Question question = new Question(input, emailAddress);
+                // Create a new, auto-generated child of that chat location, and save our chat data there
+                mFirebaseRef.push().setValue(question);
+                inputText.setText("");
+            }
+            else {
+                Toast.makeText(MainActivity.this, "Your message is too short, please re-enter!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        else {
+            CharSequence message = "Please wait 5 seconds before posting next time...";
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
         }
     }
 
