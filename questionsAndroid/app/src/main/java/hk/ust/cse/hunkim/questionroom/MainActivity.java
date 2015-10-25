@@ -1,11 +1,16 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -36,9 +41,12 @@ public class MainActivity extends ListActivity {
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
     private QuestionListAdapter mChatListAdapter;
+
     private ImageButton emailOptionButton;
     private String emailAddress = "";
     private TextView emailTextView;
+
+    private ImageButton iuButton;
 
     private DBUtil dbutil;
 
@@ -104,6 +112,16 @@ public class MainActivity extends ListActivity {
             emailTextView.setText(emailAddress);
         }
 
+        iuButton = (ImageButton)findViewById(R.id.imageupload);
+        iuButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+
+            public void onClick(View v)
+            {
+                openGallery(1);
+            }
+        });
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
@@ -244,7 +262,8 @@ public class MainActivity extends ListActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
     }
 
-    private void popUpEmailForm() {
+    private void popUpEmailForm()
+    {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         final EditText userEmail = new EditText(this);
@@ -253,6 +272,9 @@ public class MainActivity extends ListActivity {
         if(emailAddress != "") {
             userEmail.setText(emailAddress, null);
         }
+
+
+
 
         //Set layout of email input box programmatically
         TableLayout.LayoutParams emailParams = new TableLayout.LayoutParams();
@@ -278,5 +300,37 @@ public class MainActivity extends ListActivity {
 
         AlertDialog subscribeAlert = builder.create();
         subscribeAlert.show();
+    }
+
+
+    public void openGallery(int req_code)
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file to upload "), req_code);
+    }
+    public void onActivityResult (int requestCode, int resultCode, Intent data)
+    {
+        String selectedPath1;
+        if (resultCode == RESULT_OK)
+        {
+            Uri selectedImageUri = data.getData();
+            if (requestCode ==  1)
+
+            {
+                selectedPath1 = getPath(selectedImageUri);
+                System.out.println("selectedPath1 : " + selectedPath1);
+            }
+        }
+    }
+
+    public String getPath(Uri uri)
+    {
+        String[] projection = { MediaStore.Images.Media.DATA };
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
     }
 }
