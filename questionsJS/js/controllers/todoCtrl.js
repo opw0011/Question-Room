@@ -90,7 +90,6 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 	// TODO: Please change this URL for your app
 	var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
 
-
 	$scope.roomId = roomId;
 	var url = firebaseURL + roomId + "/questions/";
 	var echoRef = new Firebase(url);
