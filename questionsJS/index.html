@@ -12,8 +12,8 @@
   <title>Question Room</title>
 
   <link rel="shortcut icon" href="favicon.ico">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap-theme.min.css">
 
   <!-- Custom styles for this template -->
   <link href="css/cover.css" rel="stylesheet">
@@ -41,15 +41,15 @@
           <p class="lead">This totally anonymous and real-time updating question moderated system permits students to ask more questions in a typical class setting.
             Simply join a question room using a simple name (such as comp3111).</p>
             <p class="lead" class="col-md-2 col-md-offset-5">
-              <form name="form" class="navbar-form navbar-left" role="search">
-                <input type="text" id="suggestBox" name = "input" class="form-control large" ng-model="roomId" required ng-trim="false" aria-describedby="sizing-addon1" placeholder="Room name">
-                <a href="#" id="join-button" class="btn btn-lg btn-default" ng-click="join()">Join</a>
+              <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
+                <input type="text" id="suggestBox" name = "input" class="form-control large" ng-model="roomId" required ng-trim="false" aria-describedby="sizing-addon1" placeholder="Room name" autofocus>
+                <a href="#" class="btn btn-lg btn-default" ng-hide="form.input.$error.required || !checkRoom()" ng-click="join()">Join</a>
               </form>
             </p>
 
             <div class="alert alert-warning" role="alert" ng-show="form.input.$error.required">
               Room name is required!</div>
-              <div id="no-room" class="alert alert-warning" role="alert">
+              <div id="no-room" class="alert alert-warning" role="alert" ng-hide="checkRoom()">
                 Room is beyond reach!</div>
               </div>
 
@@ -79,7 +79,11 @@
 
         <script>
         angular.module('app', [])
-        .controller('controller', ['$scope', '$location', '$window', function($scope, $location, $window) {
+        .controller('controller', ['$scope', '$location', '$window', '$http', function($scope, $location, $window, $http) {
+          $scope.checkRoom = function() {
+            return true;
+          }
+
           $scope.join = function () {
             $window.location.href = 'question.html#/' + $scope.roomId;
           }
