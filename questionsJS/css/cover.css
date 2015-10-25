@@ -36,12 +36,10 @@ body {
 }
 
 .jsonSuggest li a small {
-  display:block;
-  text-align:right;
+	display:block;
+	text-align:right;
 }
-.jsonSuggest {fonr-size: 0.8em;}
-
-#join-button {display:none;}
+.jsonSuggest { font-size:1em; }
 
 /* Extra markup and styles for table-esque vertical and horizontal centering */
 .site-wrapper {
