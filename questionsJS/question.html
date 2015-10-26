@@ -52,7 +52,7 @@
             <!-- tab content -->
             <div class="tab-content">
                 <div id="tab_post" class="tab-pane fade in active">
-                    <form name="todoForm" id="todoForm" ng-submit="addTodo()">
+                    <form name="todoForm" id="todoForm" ng-submit="addTodo()" ng-init="input.wholeMsg=''">
 
                         <div class="input-group">
                             <span class="input-group-addon" smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
@@ -164,10 +164,6 @@
 <script src="js/lib/angularfire.min.js"></script>
 <script src="js/lib/angular-sanitize.min.js"></script>
 <script src="js/lib/angular-easyfb.min.js"></script>
-
-<!-- angular-strap -->
-<script src="js/lib/angular-strap.min.js"></script>
-<script src="js/lib/angular-strap.tpl.min.js"></script>
 
 <!-- Ng storage 0.3.6  -->
 <script src="js/lib/ngStorage.min.js"></script>
