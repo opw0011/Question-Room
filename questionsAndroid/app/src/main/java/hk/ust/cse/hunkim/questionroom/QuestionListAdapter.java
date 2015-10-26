@@ -74,6 +74,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         );
 
         ImageButton shareButton = (ImageButton) view.findViewById(R.id.shareButton);
+
+        shareButton.setTag(question.getKey());
+
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
