@@ -15,6 +15,7 @@ import android.os.Bundle;
 
 import android.os.CountDownTimer;
 
+import android.os.Handler;
 import android.provider.MediaStore;
 
 import android.text.InputType;
@@ -49,17 +50,19 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 public class MainActivity extends ListActivity {
 
     private static final String FIREBASE_URL = "https://comp3111-qroom.firebaseio.com/";
+    // TODO: should use a clever way to store the dirtyWords in one place, sync with Web version
+    private static final String[] dirtyWords = {"shit", "fuck", "asshole", "diu", "wtf"};
 
     private String roomName;
     private Firebase mFirebaseRef;
     private ValueEventListener mConnectedListener;
-    private QuestionListAdapter mChatListAdapter;
 
+    private QuestionListAdapter mChatListAdapter;
     private ImageButton emailOptionButton;
     private String emailAddress = "";
     private String image= "";
     private TextView emailTextView;
-    boolean sendMessageIntervalEnded = true;
+    private boolean sendMessageIntervalEnded = true;
 
     private ImageButton iuButton;
 
@@ -198,30 +201,53 @@ public class MainActivity extends ListActivity {
 
             public void onFinish() {
                 sendMessageIntervalEnded = true;
-
             }
         };
 
-        // Implement post interval > 5 seconds and input content > 5 letters
+        // Implement post interval > 5 seconds and
+        // input content > 5 letters
+        // TODO: add dirty words filter
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
 
-        if (sendMessageIntervalEnded) {
-            if (!input.equals("") && (input.length() >= 5)) {
+        if (!input.equals("") && (input.length() >= 5)) {
+            if (sendMessageIntervalEnded) {
                 // Start the counter to count for 5 seconds
                 countdown.start();
 
+                // Send message here:
                 // Create our 'model', a Chat object
                 Question question = new Question(input, emailAddress, image);
                 // Create a new, auto-generated child of that chat location, and save our chat data there
                 mFirebaseRef.push().setValue(question);
                 inputText.setText("");
-            } else {
-                Toast.makeText(MainActivity.this, "Your message is too short, please re-enter!", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            CharSequence message = "Please wait 5 seconds before posting next time...";
-            Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT).show();
+            else {
+                CharSequence message = "Please wait 5 seconds before posting next time...";
+                final Toast waitToast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+                waitToast.show();
+                // shorten the display time of toast
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        waitToast.cancel();
+                    }
+                }, 1000);
+            }
+        }
+        else {
+            CharSequence message = "Your message is too short, please re-enter!";
+            final Toast messageShortToast = Toast.makeText(MainActivity.this, message, Toast.LENGTH_SHORT);
+            messageShortToast.show();
+            // shorten the display time of toast
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    messageShortToast.cancel();
+                }
+            }, 1000);
         }
     }
 
