@@ -24,6 +24,9 @@ public class Question implements Comparable<Question> {
     private int order;
     private boolean newQuestion;
     private String email;
+    private String image;
+
+
 
     public String getDateString() {
         return dateString;
@@ -61,6 +64,7 @@ public class Question implements Comparable<Question> {
         this.timestamp = new Date().getTime();
 
         this.email = "";
+        this.image=null;
     }
 
     public Question(String message, String email) {
@@ -78,6 +82,25 @@ public class Question implements Comparable<Question> {
         this.timestamp = new Date().getTime();
 
         this.email = email;
+        this.image=null;
+    }
+
+    public Question(String message, String email, String image) {
+        this.wholeMsg = message;
+        this.echo = 0;
+        this.head = getFirstSentence(message).trim();
+        this.desc = "";
+        if (this.head.length() < message.length()) {
+            this.desc = message.substring(this.head.length());
+        }
+
+        // get the last char
+        this.headLastChar = head.substring(head.length() - 1);
+
+        this.timestamp = new Date().getTime();
+
+        this.email = email;
+        this.image = image;
     }
 
     /**
@@ -152,6 +175,9 @@ public class Question implements Comparable<Question> {
     }
 
     public String getEmail() { return email; }
+
+    public String getImage(){return image;}
+
 
     public boolean isNewQuestion() {
         return newQuestion;
