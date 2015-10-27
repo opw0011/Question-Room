@@ -1,12 +1,18 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.text.Html;
+import android.util.Base64;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -90,6 +96,13 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         }
 
         msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
+        if(question.getImage()!=null&& !question.getImage().equals(""))
+        {
+            byte[] data = Base64.decode(question.getImage(), Base64.DEFAULT);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
+            ImageView im = (ImageView) view.findViewById(R.id.image);
+            im.setImageBitmap(bitmap);
+        }
 
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
         view.setOnClickListener(new View.OnClickListener() {

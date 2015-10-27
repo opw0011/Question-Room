@@ -12,6 +12,7 @@ import android.nfc.Tag;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
+import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -27,6 +28,11 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -44,6 +50,7 @@ public class MainActivity extends ListActivity {
 
     private ImageButton emailOptionButton;
     private String emailAddress = "";
+    private String image= "";
     private TextView emailTextView;
 
     private ImageButton iuButton;
@@ -176,11 +183,13 @@ public class MainActivity extends ListActivity {
     private void sendMessage() {
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         String input = inputText.getText().toString();
-        if (!input.equals("")) {
+        if (!input.equals(""))    {
             // Create our 'model', a Chat object
-            Question question = new Question(input, emailAddress);
+            Question question = new Question(input, emailAddress, image);
+
             // Create a new, auto-generated child of that chat location, and save our chat data there
             mFirebaseRef.push().setValue(question);
+
             inputText.setText("");
         }
     }
@@ -312,15 +321,33 @@ public class MainActivity extends ListActivity {
     }
     public void onActivityResult (int requestCode, int resultCode, Intent data)
     {
-        String selectedPath1;
+
         if (resultCode == RESULT_OK)
         {
             Uri selectedImageUri = data.getData();
             if (requestCode ==  1)
 
             {
-                selectedPath1 = getPath(selectedImageUri);
-                System.out.println("selectedPath1 : " + selectedPath1);
+                String selectedPath1 = getPath(selectedImageUri);
+                File file = new File(selectedPath1);
+                long size=file.length();
+                if(size>5<<20)
+                {
+                    Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+                try {
+                    FileInputStream ip = new FileInputStream(file);
+                    byte[] b = new byte[(int) file.length()];
+                    ip.read(b);
+                    ip.close();
+                    image = Base64.encodeToString(b, Base64.DEFAULT);
+
+                }catch(IOException e){
+                    e.printStackTrace();
+                }
+
             }
         }
     }
