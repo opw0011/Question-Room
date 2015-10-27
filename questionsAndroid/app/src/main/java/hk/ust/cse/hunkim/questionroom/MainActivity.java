@@ -1,5 +1,6 @@
 package hk.ust.cse.hunkim.questionroom;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ListActivity;
@@ -9,6 +10,7 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.net.Uri;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.os.CountDownTimer;
@@ -21,12 +23,14 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
+import android.graphics.drawable.Drawable;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -221,7 +225,7 @@ public class MainActivity extends ListActivity {
         }
     }
 
-    public void updateEcho (String key)
+    public void updateEcho (String key, final boolean like)
     {
         if (dbutil.contains(key)) {
             Log.e("Dupkey", "Key is already in the DB!");
@@ -236,7 +240,10 @@ public class MainActivity extends ListActivity {
                         Long echoValue = (Long) dataSnapshot.getValue();
                         Log.e("Echo update:", "" + echoValue);
 
-                        echoRef.setValue(echoValue + 1);
+                        if(like)
+                            echoRef.setValue(echoValue + 1);
+                        else
+                            echoRef.setValue(echoValue - 1);
                     }
 
                     @Override
@@ -254,7 +261,10 @@ public class MainActivity extends ListActivity {
                         Long orderValue = (Long) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        orderRef.setValue(orderValue - 1);
+                        if(like)
+                            orderRef.setValue(orderValue + 1);
+                        else
+                            orderRef.setValue(orderValue - 1);
                     }
 
                     @Override
@@ -311,8 +321,7 @@ public class MainActivity extends ListActivity {
             userEmail.setText(emailAddress, null);
         }
 
-
-        //Set layout of email input box programmatically
+        // Set layout of email input box programmatically
         TableLayout.LayoutParams emailParams = new TableLayout.LayoutParams();
         emailParams.setMargins(5, 5, 5, 5);
         userEmail.setLayoutParams(emailParams);
@@ -338,6 +347,36 @@ public class MainActivity extends ListActivity {
         subscribeAlert.show();
     }
 
+    public void popUpLikeDialog(final String key) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        builder.setPositiveButton("Like", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        updateEcho(key, true);
+                    }
+                })
+                .setNeutralButton("Dislike", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        updateEcho(key, false);
+                    }
+                })
+        ;
+
+        final AlertDialog subscribeAlert = builder.create();
+        /*subscribeAlert.setOnShowListener(new DialogInterface.OnShowListener() {
+            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button likeButton = subscribeAlert.getButton(AlertDialog.BUTTON_POSITIVE);
+                Drawable likeDrawable = getDrawable(R.drawable.like24);
+
+                Button dislikeButton = subscribeAlert.getButton(AlertDialog.BUTTON_NEUTRAL);
+                Drawable dislikeDrawable = getDrawable(R.drawable.dislike24);
+            }
+        });*/
+        subscribeAlert.show();
+    }
 
     public void openGallery ( int req_code)
     {

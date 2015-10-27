@@ -13,29 +13,37 @@
         android:id="@+id/questionLinearLayout"
         >
 
-        <TextView
-        android:id="@+id/echo_count"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/blue_circle"
-        android:textColor="#fff"
-        android:textSize="15dp"
-        android:gravity="center_horizontal|center_vertical"
-        />
+        <LinearLayout
+            android:layout_width="80dp"
+            android:layout_height="60dp"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal"
+            >
 
-        <Button
-            android:id="@+id/echo"
-            android:drawableLeft="@drawable/like24"
-            android:layout_width="60dp"
-            android:layout_height="wrap_content"
-            />
+            <TextView
+                android:id="@+id/echo_count"
+                android:layout_width="20dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="5dp"
+                android:textColor="#7d7d7d"
+                android:textSize="15dp"
+                />
+
+            <ImageButton
+                android:id="@+id/echo"
+                android:src="@drawable/updown"
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:background="#fafafa"
+                />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/head_desc"
-            android:layout_width="180dp"
-            android:layout_height="wrap_content"
+            android:layout_width="150dp"
+            android:layout_height="60dp"
             android:layout_marginLeft="5dp" />
 
         <ImageButton

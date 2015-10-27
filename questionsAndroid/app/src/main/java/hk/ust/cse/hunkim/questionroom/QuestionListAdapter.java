@@ -56,24 +56,24 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
      * @param question An instance representing the current state of a chat message
      */
     @Override
-    protected void populateView(View view, Question question) {
+    protected void populateView(View view, final Question question) {
         DBUtil dbUtil = activity.getDbutil();
 
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
 
         if(echo < -15) {
-            //dbUtil.delete(question.getKey());
             view.findViewById(R.id.questionLinearLayout).setVisibility(View.GONE);
+            //LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.questionLinearLayout);
+            //ViewGroup viewGroup = (ViewGroup) linearLayout.getParent();
+            //viewGroup.removeView(linearLayout);
             return;
         }
 
         TextView echoText = (TextView) view.findViewById(R.id.echo_count);
         echoText.setText("" + echo);
 
-        Button echoButton = (Button) view.findViewById(R.id.echo);
-        //echoButton.setText("" + echo);
-        echoButton.setTextColor(Color.BLUE);
+        ImageButton echoButton = (ImageButton) view.findViewById(R.id.echo);
 
         echoButton.setTag(question.getKey()); // Set tag for button
 
@@ -82,7 +82,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                     @Override
                     public void onClick(View view) {
                         MainActivity m = (MainActivity) view.getContext();
-                        m.updateEcho((String) view.getTag());
+                        m.popUpLikeDialog(question.getKey());
                     }
                 }
 
@@ -121,14 +121,14 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                                     @Override
                                     public void onClick(View view) {
                                         MainActivity m = (MainActivity) view.getContext();
-                                        m.updateEcho((String) view.getTag());
+                                        m.popUpLikeDialog(question.getKey());
                                     }
                                 }
 
         );
 
         // check if we already clicked
-        boolean clickable = !dbUtil.contains(question.getKey());
+        /*boolean clickable = !dbUtil.contains(question.getKey());
 
         echoButton.setClickable(clickable);
         echoButton.setEnabled(clickable);
@@ -141,7 +141,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
             echoButton.getBackground().setColorFilter(null);
         } else {
             echoButton.getBackground().setColorFilter(Color.RED, PorterDuff.Mode.MULTIPLY);
-        }
+        }*/
 
 
         view.setTag(question.getKey());  // store key in the view
