@@ -221,173 +221,168 @@ public class MainActivity extends ListActivity {
         }
     }
 
+    public void updateEcho (String key)
+    {
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
 
-
-
-
-
-            public void updateEcho (String key)
-            {
-                if (dbutil.contains(key)) {
-                    Log.e("Dupkey", "Key is already in the DB!");
-                    return;
-                }
-
-                final Firebase echoRef = mFirebaseRef.child(key).child("echo");
-                echoRef.addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Long echoValue = (Long) dataSnapshot.getValue();
-                                Log.e("Echo update:", "" + echoValue);
-
-                                echoRef.setValue(echoValue + 1);
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
-                            }
-                        }
-                );
-
-                final Firebase orderRef = mFirebaseRef.child(key).child("order");
-                orderRef.addListenerForSingleValueEvent(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                Long orderValue = (Long) dataSnapshot.getValue();
-                                Log.e("Order update:", "" + orderValue);
-
-                                orderRef.setValue(orderValue - 1);
-                            }
-
-                            @Override
-                            public void onCancelled(FirebaseError firebaseError) {
-
-                            }
-                        }
-                );
-
-                // Update SQLite DB
-                dbutil.put(key);
-            }
-
-            public void Close (View view){
-                finish();
-            }
-
-            public void shareQuestion (String key)
-            {
-                if (dbutil.contains(key)) {
-                    Log.e("Dupkey", "Key is already in the DB!");
-                    return;
-                }
-
-                final String[] msg = new String[1];
-                Firebase msgRef = mFirebaseRef.child(key).child("wholeMsg");
-                msgRef.addValueEventListener(new ValueEventListener() {
+        final Firebase echoRef = mFirebaseRef.child(key).child("echo");
+        echoRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        msg[0] = (String) dataSnapshot.getValue();
+                        Long echoValue = (Long) dataSnapshot.getValue();
+                        Log.e("Echo update:", "" + echoValue);
+
+                        echoRef.setValue(echoValue + 1);
                     }
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
 
                     }
-                });
-
-                Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-                sharingIntent.setType("text/plain");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "A Question from QuestionRoom");
-                sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg[0]);
-                startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
-            }
-
-            private void popUpEmailForm ()
-            {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-                final EditText userEmail = new EditText(this);
-                userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-                userEmail.setHint("Enter email");
-                if (emailAddress != "") {
-                    userEmail.setText(emailAddress, null);
                 }
+        );
 
+        final Firebase orderRef = mFirebaseRef.child(key).child("order");
+        orderRef.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Long orderValue = (Long) dataSnapshot.getValue();
+                        Log.e("Order update:", "" + orderValue);
 
-                //Set layout of email input box programmatically
-                TableLayout.LayoutParams emailParams = new TableLayout.LayoutParams();
-                emailParams.setMargins(5, 5, 5, 5);
-                userEmail.setLayoutParams(emailParams);
+                        orderRef.setValue(orderValue - 1);
+                    }
 
-                builder.setTitle("Subscribe the question");
-                builder.setView(userEmail)
-                        .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-                                emailAddress = userEmail.getText().toString();
-                                emailTextView.setText(emailAddress);
-                                emailTextView.setVisibility(View.VISIBLE);
-                            }
-                        })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-                            }
-                        })
-                ;
-
-                AlertDialog subscribeAlert = builder.create();
-                subscribeAlert.show();
-            }
-
-
-            public void openGallery ( int req_code)
-            {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select file to upload "), req_code);
-            }
-            public void onActivityResult ( int requestCode, int resultCode, Intent data)
-            {
-
-                if (resultCode == RESULT_OK) {
-                    Uri selectedImageUri = data.getData();
-                    if (requestCode == 1)
-
-                    {
-                        String selectedPath1 = getPath(selectedImageUri);
-                        File file = new File(selectedPath1);
-                        long size = file.length();
-                        if (size > 5 << 20) {
-                            Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
-                            return;
-
-                        }
-                        try {
-                            FileInputStream ip = new FileInputStream(file);
-                            byte[] b = new byte[(int) file.length()];
-                            ip.read(b);
-                            ip.close();
-                            image = Base64.encodeToString(b, Base64.DEFAULT);
-
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
 
                     }
                 }
+        );
+
+        // Update SQLite DB
+        dbutil.put(key);
+    }
+
+    public void Close (View view){
+        finish();
+    }
+
+    public void shareQuestion (String key)
+    {
+        if (dbutil.contains(key)) {
+            Log.e("Dupkey", "Key is already in the DB!");
+            return;
+        }
+
+        final String[] msg = new String[1];
+        Firebase msgRef = mFirebaseRef.child(key).child("wholeMsg");
+        msgRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                msg[0] = (String) dataSnapshot.getValue();
             }
 
-            public String getPath (Uri uri)
-            {
-                String[] projection = {MediaStore.Images.Media.DATA};
-                Cursor cursor = managedQuery(uri, projection, null, null, null);
-                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-                cursor.moveToFirst();
-                return cursor.getString(column_index);
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
             }
+        });
+
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "A Question from QuestionRoom");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg[0]);
+        startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
+    }
+
+    private void popUpEmailForm ()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final EditText userEmail = new EditText(this);
+        userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        userEmail.setHint("Enter email");
+        if (emailAddress != "") {
+            userEmail.setText(emailAddress, null);
+        }
+
+
+        //Set layout of email input box programmatically
+        TableLayout.LayoutParams emailParams = new TableLayout.LayoutParams();
+        emailParams.setMargins(5, 5, 5, 5);
+        userEmail.setLayoutParams(emailParams);
+
+        builder.setTitle("Subscribe the question");
+        builder.setView(userEmail)
+                .setPositiveButton("Subscribe", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        emailAddress = userEmail.getText().toString();
+                        emailTextView.setText(emailAddress);
+                        emailTextView.setVisibility(View.VISIBLE);
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+        ;
+
+        AlertDialog subscribeAlert = builder.create();
+        subscribeAlert.show();
+    }
+
+
+    public void openGallery ( int req_code)
+    {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select file to upload "), req_code);
+    }
+    public void onActivityResult ( int requestCode, int resultCode, Intent data)
+    {
+
+        if (resultCode == RESULT_OK) {
+            Uri selectedImageUri = data.getData();
+            if (requestCode == 1)
+
+            {
+                String selectedPath1 = getPath(selectedImageUri);
+                File file = new File(selectedPath1);
+                long size = file.length();
+                if (size > 5 << 20) {
+                    Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+                try {
+                    FileInputStream ip = new FileInputStream(file);
+                    byte[] b = new byte[(int) file.length()];
+                    ip.read(b);
+                    ip.close();
+                    image = Base64.encodeToString(b, Base64.DEFAULT);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+    }
+
+    public String getPath (Uri uri)
+    {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(uri, projection, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
 }

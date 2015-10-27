@@ -10,9 +10,11 @@ import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Base64;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.firebase.client.Query;
@@ -59,6 +61,13 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
+
+        if(echo < -15) {
+            //dbUtil.delete(question.getKey());
+            view.findViewById(R.id.questionLinearLayout).setVisibility(View.GONE);
+            return;
+        }
+
         TextView echoText = (TextView) view.findViewById(R.id.echo_count);
         echoText.setText("" + echo);
 
