@@ -115,7 +115,6 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             ImageView im = (ImageView) view.findViewById(R.id.image);
             im.setImageBitmap(bitmap);
-            question.resetImage();
         }
 
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
