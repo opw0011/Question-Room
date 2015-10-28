@@ -19,9 +19,11 @@ import android.os.Handler;
 import android.provider.MediaStore;
 
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -253,11 +255,6 @@ public class MainActivity extends ListActivity {
 
     public void updateEcho (String key, final boolean like)
     {
-        if (dbutil.contains(key)) {
-            Log.e("Dupkey", "Key is already in the DB!");
-            return;
-        }
-
         final Firebase echoRef = mFirebaseRef.child(key).child("echo");
         echoRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -310,11 +307,6 @@ public class MainActivity extends ListActivity {
 
     public void shareQuestion (String key)
     {
-        if (dbutil.contains(key)) {
-            Log.e("Dupkey", "Key is already in the DB!");
-            return;
-        }
-
         final String[] msg = new String[1];
         Firebase msgRef = mFirebaseRef.child(key).child("wholeMsg");
         msgRef.addValueEventListener(new ValueEventListener() {
@@ -375,33 +367,27 @@ public class MainActivity extends ListActivity {
 
     public void popUpLikeDialog(final String key) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.activity_like, null);
+        builder.setView(dialogView);
 
-        builder.setPositiveButton("Like", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        updateEcho(key, true);
-                    }
-                })
-                .setNeutralButton("Dislike", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        updateEcho(key, false);
-                    }
-                })
-        ;
+        final AlertDialog likeAlert = builder.create();
 
-        final AlertDialog subscribeAlert = builder.create();
-        /*subscribeAlert.setOnShowListener(new DialogInterface.OnShowListener() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        dialogView.findViewById(R.id.likeButton).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button likeButton = subscribeAlert.getButton(AlertDialog.BUTTON_POSITIVE);
-                Drawable likeDrawable = getDrawable(R.drawable.like24);
-
-                Button dislikeButton = subscribeAlert.getButton(AlertDialog.BUTTON_NEUTRAL);
-                Drawable dislikeDrawable = getDrawable(R.drawable.dislike24);
+            public void onClick(View view) {
+                updateEcho(key, true);
             }
-        });*/
-        subscribeAlert.show();
+        });
+
+        dialogView.findViewById(R.id.dislikeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateEcho(key, false);
+            }
+        });
+
+        likeAlert.show();
     }
 
     public void openGallery ( int req_code)
