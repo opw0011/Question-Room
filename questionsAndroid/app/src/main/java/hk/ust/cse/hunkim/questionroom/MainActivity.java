@@ -419,6 +419,7 @@ public class MainActivity extends ListActivity {
                     ip.read(b);
                     ip.close();
                     image = Base64.encodeToString(b, Base64.DEFAULT);
+                    Toast.makeText(MainActivity.this, "image uploaded.", Toast.LENGTH_SHORT).show();
 
                 } catch (IOException e) {
                     e.printStackTrace();

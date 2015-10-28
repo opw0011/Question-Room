@@ -106,14 +106,16 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         if (question.isNewQuestion()) {
             msgString += "<font color=red>NEW </font>";
         }
-
         msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
+
+        //download image
         if(question.getImage()!=null&& !question.getImage().equals(""))
         {
             byte[] data = Base64.decode(question.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             ImageView im = (ImageView) view.findViewById(R.id.image);
             im.setImageBitmap(bitmap);
+            question.resetImage();
         }
 
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));
