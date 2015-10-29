@@ -220,7 +220,8 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 			tags: tag,
 			email: todoID,
 			echo: 0,
-			order: 0
+			order: 0,
+			image:''
 		});
 		// remove the posted question and email address in the input
 		$scope.input.wholeMsg = '';
