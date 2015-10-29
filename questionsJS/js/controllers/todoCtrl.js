@@ -156,7 +156,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 			// set time
 			todo.time= todo.timestamp;
 			todo.dateString = new Date(todo.timestamp).toString();
-			todo.tags = todo.wholeMsg.match(/#\w+/g);
+			//todo.tags = todo.wholeMsg.match(/#\w+/g);
 			todo.trustedDesc = todo.linkedDesc;
 		});
 
@@ -202,6 +202,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 	$scope.addTodo = function () {
 		var newTodo = $scope.input.wholeMsg.trim();
 		var todoID = $scope.input.email;
+		var tag = "";
 
 		if (!newTodo.length) {
 			return;
@@ -211,6 +212,11 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 		var head = firstAndLast[0];
 		var desc = firstAndLast[1];
 
+		if (newTodo.indexOf("#")!=-1) {
+	    	tag = newTodo.split("#")[1];
+	    	newTodo = newTodo.split("#")[0];
+		} 
+
 		$scope.todos.$add({
 			wholeMsg: newTodo,
 			head: head,
@@ -219,7 +225,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 			linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
 			completed: false,
 			timestamp: new Date().getTime(),
-			tags: "...",
+			tags: tag,
 			email: todoID,
 			echo: 0,
 			order: 0
