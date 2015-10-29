@@ -13,6 +13,13 @@
     <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
     <meta http-equiv="pragma" content="no-cache" />
 
+    <!-- for Facebook sharing -->
+    <meta property="og:url"                content="https://comp3111-qroom.firebaseapp.com/" />
+    <meta property="og:type"               content="html" />
+    <meta property="og:title"              content="Questions Room" />
+    <meta property="og:description"        content="How much does culture influence creative thinking?" />
+    <meta property="og:image"              content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
+
     <title>Question Room: {{roomId}}</title>
 
     <link rel="shortcut icon" href="favicon.ico">
@@ -29,17 +36,45 @@
 
 </head>
 <body ng-controller="TodoCtrl">
+
+    <!-- Facebook -->
+    <div id="fb-root"></div>
+    <script type="text/javascript" src="https://connect.facebook.net/en_US/sdk.js">
+    window.fbAsyncInit = function() {
+        FB.init({
+            appId      : '1074795829199506',
+            xfbml      : true,
+            version    : 'v2.5'
+        });
+    };
+
+    (function(d, s, id){
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) {return;}
+        js = d.createElement(s); js.id = id;
+        //js.src = "https://connect.facebook.net/en_US/sdk.js";
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+    <!-- END -->
+
+    <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" 
+                 data-layout="standard" 
+                data-action="like" 
+                data-show-faces="true" 
+                data-share="true">
+      </div>
+
+
     <div class="container">
         <div class="input-group pull-right">
             <a class="btn btn-default" href="./index.html">Main</a>
-            <button ng-hide="$authData" class="btn btn-primary left" ng-click="login()" ng-disabled="loginStatus.status == 'connected'">Connect with Facebook</button>
-            &nbsp;
-            <button class="btn btn-danger" ng-click="logout()" ng-disabled="!loginStatus || loginStatus.status != 'connected'">Logout</button>
         </div>
+
         <!-- <div class="clearfix"></div>         -->
         <div class="page-header">
             <h1>Questions for {{roomId}}?</h1>
-            <small>Share room url: {{absurl}}</small>
+            <!--small>Share room url: {{absurl}}</small-->
         </div>
 
         <div class="well well-sm" id="question_box">
@@ -65,7 +100,7 @@
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <!-- input email address -->
-                                    <label>Email:</label>
+                                    <label class="glyphicon glyphicon-envelope"> Email:</label>
                                     <div ng-init="input.email=''">
                                         <input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
                                     </div>
@@ -111,43 +146,41 @@
                     <span class="label label-danger" ng-show="todo.new">New</span>
                     <span class="badge">{{todo.echo}}</span>
                     <!-- switch -->
-                    <span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
-                    <span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
+                    <span ng-switch-when="?glyphicon glyphicon-envelope" class="glyphicon glyphicon-question-sign"></span>
+                    <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
                     <span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
                 </h4>
                 <!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
                 <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
                 <p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
- 
+                <br>
                 <p>created: {{timeAgo(todo.time)}}<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
 
-                <button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)">Like</button>
-                &nbsp;
-                <button class="btn btn-default btn-xs glyphicon glyphicon-hand-down" ng-click="subEcho(todo)">Dislike</button>
-                &nbsp;
-                <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank"><img src="fb.png"/></a>
-            </span>
-        </di    
-    </div>
-<!--             <div class="example">
-            <h2>Plain-Text</h2>
-            <form><textarea rows="5" class="emojis-plain">Hello :neckbeard:</textarea></form>
-        </div> -->
-<!--     <div class="example">
-            <h2>WYSIWYG</h2>
-            <form><textarea rows="5" class="emojis-wysiwyg">Hello :neckbeard:</textarea></form>
-            <h3>Value:</h3>
-            <div class="value"><pre id="emojis-wysiwyg-value"></pre></div>
-        </div> -->
-
-    <!--
-
-    <div id="toTop" class="btn btn-info"><span class="fa fa-arrow-up">Back to Top</span></div>
-
-    <button ng-hide="totalCount<=maxQuestion"
-    class="pull-right btn btn-default glyphicon glyphicon-arrow-down"
-    type="button" ng-click="increaseMax()"> Show more</button>
--->
+                <div id="likeContainer">
+                    <button type="button" ng-class="{'btn btn-success': $storage[todo.$id]=='echoed', 'btn btn-default': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
+                    </button>
+                    &nbsp;
+                    <button type="button" ng-class="{'btn btn-danger': $storage[todo.$id]=='d_echoed', 'btn btn-default': $storage[todo.$id]!='d_echoed'}" ng-click="subEcho(todo)">Dislike
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Reply
+                    </button>
+                    &nbsp;
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank"><img src="fb.png"/></a>
+                    <!-- after entering the correct email, editing is available -->
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Manage your post
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="glyphicon glyphicon-pencil" ng-click="editTodo(todo)"> Edit</a></li>
+                            <li><a class="glyphicon glyphicon-trash" ng-click="removeTodo(todo)"> Delete</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+        </div>    
 
 <!-- jquery -->
 <script src="js/lib/jquery.min.js"></script>
@@ -159,14 +192,15 @@
 <script src="js/lib/Autolinker.min.js"></script>
 
 <!-- Angular -->
-<script src="js/lib/firebase.js"></script>
 <script src="js/lib/angular.min.js"></script>
-<script src="js/lib/angularfire.min.js"></script>
 <script src="js/lib/angular-sanitize.min.js"></script>
-<script src="js/lib/angular-easyfb.min.js"></script>
 
 <!-- Ng storage 0.3.6  -->
 <script src="js/lib/ngStorage.min.js"></script>
+
+<!-- Firebase -->
+<script src="js/lib/firebase.js"></script>
+<script src="js/lib/angularfire.min.js"></script>
 
 <script src="js/main.js"></script>
 <script src="js/app.js"></script>
