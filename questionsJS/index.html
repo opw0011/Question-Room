@@ -47,7 +47,7 @@
         <div class="container">
           <form name="form" ng-submit="join()" class="navbar-form navbar-left" role="search">
                 <input type="text" id="suggestBox" name = "input" class="form-control large text-uppercase" ng-model="roomId" required ng-trim="true" aria-describedby="sizing-addon1" placeholder="Room name" autocomplete="on" autofocus ng-change="roomId=roomId.toUpperCase();">
-                <a href="#" class="btn btn-lg btn-default" ng-hide="form.input.$error.required || !checkRoom()" ng-click="join()">Join</a>
+                <button type="button" class="btn btn-lg btn-default" ng-hide="form.input.$error.required || !checkRoom()" ng-click="join()">Join</button>
           </form>  
         <div class="alert alert-danger" role="alert" ng-show="form.input.$error.required">
           Room name is required!</div>
