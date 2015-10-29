@@ -9,57 +9,8 @@
 * - exposes the model to the template and provides event handlers
 */
 todomvc.controller('TodoCtrl',
-['$scope', 'ezfb', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$timeout',
-function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window, $timeout) {
-
-/*	updateLoginStatus(updateApiMe);
-
-  $scope.login = function () {
-
-    ezfb.login(function (res) {
-      if (res.authResponse) {
-        updateLoginStatus(updateApiMe);
-      }
-    }, {scope: 'email,user_likes'});
-  };
-
-  $scope.logout = function () {
-    ezfb.logout(function () {
-      updateLoginStatus(updateApiMe);
-    });
-  };
-
-  $scope.share = function () {
-    ezfb.ui(
-      {
-        method: 'share',
-        name: 'question room questions',
-        picture: '../../favicon.png',
-        href: 'https://comp3111-qroom.firebaseapp.com/',
-        description: 'Nicee post in Question Room!' +
-                     'Please take a look.'
-      },
-      function (res) {
-        // res: share response
-      }
-    );
-  };
-
- 
-  function updateLoginStatus (more) {
-    ezfb.getLoginStatus(function (res) {
-      $scope.loginStatus = res;
-
-      (more || angular.noop)();
-    });
-  }
-
-  function updateApiMe () {
-    ezfb.api('/me', function (res) {
-      $scope.apiMe = res;
-    });
-  }
-*/
+['$scope', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$timeout',
+function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $timeout) {
 
 	// set local storage
 	$scope.$storage = $localStorage;
@@ -236,24 +187,36 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 
 	$scope.addEcho = function (todo) {
 		$scope.editedTodo = todo;
-		todo.echo = todo.echo + 1;
-		// Hack to order using this order.
-		todo.order = todo.order -1;
 		$scope.todos.$save(todo);
-
-		// Disable the button
-		$scope.$storage[todo.$id] = true;
+		if ($scope.$storage[todo.$id]=="echoed")
+		{
+			todo.echo = todo.echo - 1;
+			// Hack to order using this order.
+			$scope.$storage[todo.$id] = "";
+		}
+		else 
+		{
+			todo.echo = todo.echo + 1;
+			// Hack to order using this order.
+			$scope.$storage[todo.$id] = "echoed";
+		}
 	};
 
 	$scope.subEcho = function (todo) {
 		$scope.editedTodo = todo;
-		todo.echo = todo.echo - 1;
-		// Hack to order using this order.
-		todo.order = todo.order +1;
 		$scope.todos.$save(todo);
-
-		// Disable the button
-		$scope.$storage[todo] = true;
+		if ($scope.$storage[todo.$id]=="d_echoed")
+		{
+			todo.echo = todo.echo + 1;
+			// Hack to order using this order.
+			$scope.$storage[todo.$id] = "";
+		}
+		else 
+		{
+			todo.echo = todo.echo - 1;
+			// Hack to order using this order.
+			$scope.$storage[todo.$id] = "d_echoed";
+		}
 	};
 
 	$scope.doneEditing = function (todo) {
