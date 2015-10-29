@@ -191,13 +191,14 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 		if ($scope.$storage[todo.$id]=="echoed")
 		{
 			todo.echo = todo.echo - 1;
-			// Hack to order using this order.
 			$scope.$storage[todo.$id] = "";
 		}
-		else 
+		else if ($scope.$storage[todo.$id]=="d_echoed")
 		{
+			todo.echo = todo.echo + 2;
+			$scope.$storage[todo.$id] = "echoed";
+		} else {
 			todo.echo = todo.echo + 1;
-			// Hack to order using this order.
 			$scope.$storage[todo.$id] = "echoed";
 		}
 	};
@@ -208,14 +209,15 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 		if ($scope.$storage[todo.$id]=="d_echoed")
 		{
 			todo.echo = todo.echo + 1;
-			// Hack to order using this order.
 			$scope.$storage[todo.$id] = "";
 		}
-		else 
+		else if ($scope.$storage[todo.$id]=="echoed")
 		{
-			todo.echo = todo.echo - 1;
-			// Hack to order using this order.
+			todo.echo = todo.echo - 2;
 			$scope.$storage[todo.$id] = "d_echoed";
+		} else {
+			todo.echo = todo.echo - 1;
+			$scope.$storage[todo.$id] = "d_echoed";			
 		}
 	};
 
