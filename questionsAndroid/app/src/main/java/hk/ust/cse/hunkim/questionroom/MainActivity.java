@@ -223,6 +223,7 @@ public class MainActivity extends ListActivity {
                 // Create a new, auto-generated child of that chat location, and save our chat data there
                 mFirebaseRef.push().setValue(question);
                 inputText.setText("");
+                image="";
             }
             else {
                 CharSequence message = "Please wait 5 seconds before posting next time...";
@@ -419,6 +420,7 @@ public class MainActivity extends ListActivity {
                     ip.read(b);
                     ip.close();
                     image = Base64.encodeToString(b, Base64.DEFAULT);
+                    Toast.makeText(MainActivity.this, "image uploaded", Toast.LENGTH_SHORT).show();
 
                 } catch (IOException e) {
                     e.printStackTrace();

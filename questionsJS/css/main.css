@@ -22,6 +22,8 @@
     position: absolute;
 }
 
+#tag-label {font-size: 15px;}
+
 #toTop {
 	position: fixed;
 	bottom: 95px;
