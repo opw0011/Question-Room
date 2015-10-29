@@ -110,31 +110,31 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 		var interval= delta-delta%1;
 
 		if(interval<60){
-			$scope.result="just";
+			return"just";
 		}
 		else if(interval>59 && interval<3600){
 			var x= interval/60;
 			var min = x-x%1;
-			if(min==1){$scope.result= min+" min"+" ago";}
+			if(min==1){return min+" min"+" ago";}
 			else
-				$scope.result= min+" mins"+" ago";
+				return min+" mins"+" ago";
 		}
 		else if(interval>3599 && interval<86400){
 			var x= interval/3600;
 			var hr = x-x%1;
-			if(hr==1){$scope.result= hr+" hour"+" ago";}
+			if(hr==1){return hr+" hour"+" ago";}
 			else
-				$scope.result= hr+" hours"+" ago";
+				return hr+" hours"+" ago";
 		}
 		else if(interval>86399 && interval<604800){
 			var x= interval/86400;
 			var day = x-x%1;
-			if(day==1){$scope.result= day+" day"+" ago";}
+			if(day==1){return day+" day"+" ago";}
 			else
-				$scope.result= day+" days"+" ago";
+				return day+" days"+" ago";
 		}
 		else{
-			$scope.result= new Date(past).toString();
+			return new Date(past).toString();
 		}
   }
 

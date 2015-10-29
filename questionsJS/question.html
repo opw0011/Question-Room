@@ -119,7 +119,11 @@
                 <!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
                 <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
                 <p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
-                <p>created: {{todo.time}} <span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
+<<<<<<< HEAD
+                <p>created: {{timeAgo(todo.time)}}<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
+=======
+                <p>created: {{timeAgo(todo.time)}} <span ng-show="todo.tags">tags: {{todo.tags}}</span></p>
+>>>>>>> e50800aab26559e1b76fe9d821a72c1568534af7
 
                 <button class="btn btn-default btn-xs glyphicon glyphicon-hand-up" ng-click="addEcho(todo)" ng-disabled="$storage[todo.$id]">Like</button>
                 &nbsp;
