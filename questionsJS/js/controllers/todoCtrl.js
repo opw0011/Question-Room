@@ -12,17 +12,11 @@ todomvc.controller('TodoCtrl',
 ['$scope', 'ezfb', '$location', '$firebaseArray', '$sce', '$localStorage', '$window', '$timeout',
 function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window, $timeout) {
 
-	updateLoginStatus(updateApiMe);
+/*	updateLoginStatus(updateApiMe);
 
   $scope.login = function () {
-    /**
-     * Calling FB.login with required permissions specified
-     * https://developers.facebook.com/docs/reference/javascript/FB.login/v2.5
-     */
+
     ezfb.login(function (res) {
-      /**
-       * no manual $scope.$apply, I got that handled
-       */
       if (res.authResponse) {
         updateLoginStatus(updateApiMe);
       }
@@ -30,10 +24,6 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
   };
 
   $scope.logout = function () {
-    /**
-     * Calling FB.logout
-     * https://developers.facebook.com/docs/reference/javascript/FB.logout
-     */
     ezfb.logout(function () {
       updateLoginStatus(updateApiMe);
     });
@@ -55,9 +45,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
     );
   };
 
-  /**
-   * Update loginStatus result
-   */
+ 
   function updateLoginStatus (more) {
     ezfb.getLoginStatus(function (res) {
       $scope.loginStatus = res;
@@ -66,14 +54,12 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
     });
   }
 
-  /**
-   * Update api('/me') result
-   */
   function updateApiMe () {
     ezfb.api('/me', function (res) {
       $scope.apiMe = res;
     });
   }
+*/
 
 	// set local storage
 	$scope.$storage = $localStorage;
@@ -167,6 +153,11 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 		$scope.absurl = $location.absUrl();
 	}, true);
 
+	//clear input.wholeMsg
+	$scope.clearMsg = function() {
+		$scope.input = {wholeMsg: ""};
+	};
+
 	//filter words detector, return true is detected
 	$scope.filterWord = function($string) {
 		var str = $string;
@@ -213,8 +204,9 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 		var desc = firstAndLast[1];
 
 		if (newTodo.indexOf("#")!=-1) {
-	    	tag = newTodo.split("#")[1];
-	    	newTodo = newTodo.split("#")[0];
+			var values = newTodo.split("#"); 
+	    	tag = values[1];
+	    	newTodo = values[0];
 		} 
 
 		$scope.todos.$add({
@@ -261,7 +253,7 @@ function ($scope, ezfb, $location, $firebaseArray, $sce, $localStorage, $window,
 		$scope.todos.$save(todo);
 
 		// Disable the button
-		$scope.$storage[todo.$id] = false;
+		$scope.$storage[todo] = true;
 	};
 
 	$scope.doneEditing = function (todo) {
