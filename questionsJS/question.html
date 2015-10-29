@@ -100,7 +100,7 @@
                             <ul class="list-group">
                                 <li class="list-group-item">
                                     <!-- input email address -->
-                                    <label>Email:</label>
+                                    <label class="glyphicon glyphicon-envelope"> Email:</label>
                                     <div ng-init="input.email=''">
                                         <input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
                                     </div>
@@ -146,24 +146,38 @@
                     <span class="label label-danger" ng-show="todo.new">New</span>
                     <span class="badge">{{todo.echo}}</span>
                     <!-- switch -->
-                    <span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
-                    <span ng-switch-when="!" class="glyphicon glyphicon-ice-lolly"></span>
+                    <span ng-switch-when="?glyphicon glyphicon-envelope" class="glyphicon glyphicon-question-sign"></span>
+                    <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
                     <span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
                 </h4>
                 <!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
                 <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
                 <p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
- 
+                <br>
                 <p>created: {{timeAgo(todo.time)}}<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
 
                 <div id="likeContainer">
-                    <button type="button" ng-class="{'btn btn-default': $storage[todo.$id]=='echoed', 'btn btn-success': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
+                    <button type="button" ng-class="{'btn btn-success': $storage[todo.$id]=='echoed', 'btn btn-default': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
                     </button>
                     &nbsp;
-                    <button type="button" ng-class="{'btn btn-default': $storage[todo.$id]=='d_echoed', 'btn btn-danger': $storage[todo.$id]!='d_echoed'}" ng-click="subEcho(todo)">Dislike
+                    <button type="button" ng-class="{'btn btn-danger': $storage[todo.$id]=='d_echoed', 'btn btn-default': $storage[todo.$id]!='d_echoed'}" ng-click="subEcho(todo)">Dislike
+                    </button>
+                    &nbsp;
+                    <button type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Reply
                     </button>
                     &nbsp;
                     <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank"><img src="fb.png"/></a>
+                    <!-- after entering the correct email, editing is available -->
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Manage your post
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="glyphicon glyphicon-pencil" ng-click="editTodo(todo)"> Edit</a></li>
+                            <li><a class="glyphicon glyphicon-trash" ng-click="removeTodo(todo)"> Delete</a></li>
+                        </ul>
+                    </div>
                 </div>
                 
         </div>    
