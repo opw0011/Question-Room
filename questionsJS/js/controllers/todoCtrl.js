@@ -89,11 +89,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             if (todo.completed === false) {
                 remaining++;
             }
-
-            // set time
-            //todo.time= todo.timestamp;
-            //todo.tags = todo.wholeMsg.match(/#\w+/g);
-            //todo.trustedDesc = todo.linkedDesc;
         });
 
         $scope.totalCount = total;
