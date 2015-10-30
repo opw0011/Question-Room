@@ -39,7 +39,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	//$scope.input.wholeMsg = '';
 	$scope.editedTodo = null;
 
-
 	$scope.timeAgo = function(past){
 		var now = new Date().getTime();
 		var ts= past;
@@ -91,7 +90,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 			}
 
 			// set time
-			todo.time= todo.timestamp;
 			todo.dateString = new Date(todo.timestamp).toString();
 			//todo.tags = todo.wholeMsg.match(/#\w+/g);
 			todo.trustedDesc = todo.linkedDesc;
@@ -108,6 +106,50 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	$scope.clearMsg = function() {
 		$scope.input = {wholeMsg: ""};
 	};
+
+	$scope.encodeImageFileAsURL = function(cb){
+		return function(){
+        var file = this.files[0];
+        var reader  = new FileReader();
+        reader.onloadend = function () {
+            cb(reader.result);
+        }
+        reader.readAsDataURL(file);
+    	}
+	}
+
+	$scope.dencodeImg = function(s){
+    var e = {}, i, k, v = [], r = '', w = String.fromCharCode;
+    var n = [[65, 91], [97, 123], [48, 58], [43, 44], [47, 48]];
+
+    for (z in n)
+    {
+        for (i = n[z][0]; i < n[z][1]; i++)
+        {
+            v.push(w(i));
+        }
+    }
+    for (i = 0; i < 64; i++)
+    {
+        e[v[i]] = i;
+    }
+
+    for (i = 0; i < s.length; i+=72)
+    {
+        var b = 0, c, x, l = 0, o = s.substring(i, i+72);
+        for (x = 0; x < o.length; x++)
+        {
+            c = e[o.charAt(x)];
+            b = (b << 6) + c;
+            l += 6;
+            while (l >= 8)
+            {
+                r += w((b >>> (l -= 8)) % 256);
+            }
+         }
+    }
+    return r;
+}
 
 	//filter words detector, return true is detected
 	$scope.filterWord = function($string) {
@@ -144,6 +186,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	$scope.addTodo = function () {
 		var newTodo = $scope.input.wholeMsg.trim();
 		var todoID = $scope.input.email;
+		var todoImg= $scope.input.image;
 		var tag = "";
 
 		if (!newTodo.length) {
@@ -172,7 +215,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 			email: todoID,
 			echo: 0,
 			order: 0,
-			image:''
+			image: ''
 		});
 		// remove the posted question and email address in the input
 		$scope.input.wholeMsg = '';
