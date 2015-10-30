@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
 import android.text.InputType;
@@ -40,10 +41,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -51,9 +53,11 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
 
+    public static final String Dirtywords[]={"fuck","asshole","shit","wtf"};
+
+
+
     private static final String FIREBASE_URL = "https://comp3111-qroom.firebaseio.com/";
-    // TODO: should use a clever way to store the dirtyWords in one place, sync with Web version
-    private static final String[] dirtyWords = {"shit", "fuck", "asshole", "diu", "wtf"};
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -104,7 +108,9 @@ public class MainActivity extends ListActivity {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
+
+                        sendMessage();
+
                 }
                 return true;
             }
@@ -113,7 +119,10 @@ public class MainActivity extends ListActivity {
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+
+                    sendMessage();
+
+
             }
         });
 
@@ -194,7 +203,7 @@ public class MainActivity extends ListActivity {
         mChatListAdapter.cleanup();
     }
 
-    private void sendMessage() {
+    private void sendMessage()  {
         // Helper countdown for implementing: require post time interval > 5 second
         final CountDownTimer countdown = new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -213,6 +222,18 @@ public class MainActivity extends ListActivity {
         String input = inputText.getText().toString();
 
         if (!input.equals("") && (input.length() >= 5)) {
+
+
+                for (int i = 0; i < Dirtywords.length; i++) {
+                    if (input.contains(Dirtywords[i])) {
+                        Toast.makeText(MainActivity.this, "contains Dirty Word ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+
+
+
             if (sendMessageIntervalEnded) {
                 // Start the counter to count for 5 seconds
                 countdown.start();
@@ -238,6 +259,7 @@ public class MainActivity extends ListActivity {
                     }
                 }, 1000);
             }
+
         }
         else {
             CharSequence message = "Your message is too short, please re-enter!";
@@ -252,7 +274,9 @@ public class MainActivity extends ListActivity {
                 }
             }, 1000);
         }
+
     }
+
 
     public void updateEcho (String key, final boolean like)
     {
