@@ -38,33 +38,16 @@
 <body ng-controller="TodoCtrl">
 
     <!-- Facebook -->
-    <div id="fb-root"></div>
-    <script type="text/javascript" src="https://connect.facebook.net/en_US/sdk.js">
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : '1074795829199506',
-            xfbml      : true,
-            version    : 'v2.5'
-        });
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        //js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-    </script>
+    <div id="fb-root">
+    <button class='btn' ng-click="Facebook.login()">Connect with Facebook</button>
+    <div ng-show="Facebook.getAuth()">
+        <h4>Access Token:</h4>
+        <p ng-bind="Facebook.getAuth().accessToken"></p>
+        <button class='btn btn-small' ng-click="Facebook.logout()">Logout</button>
+    </div>
+    <div id='fb-root'></div>
+    </div>
     <!-- END -->
-
-    <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/"
-                 data-layout="standard"
-                data-action="like"
-                data-show-faces="true"
-                data-share="true">
-      </div>
-
 
     <div class="container">
         <div class="input-group pull-right">
