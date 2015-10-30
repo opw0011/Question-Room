@@ -332,24 +332,22 @@ public class MainActivity extends ListActivity {
 
     public void shareQuestion (String key)
     {
-        final String[] msg = new String[1];
-        Firebase msgRef = mFirebaseRef.child(key).child("wholeMsg");
-        msgRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                msg[0] = (String) dataSnapshot.getValue();
+        TextView headText = (TextView) findViewById(R.id.head_desc);
+        String msg = "" + headText.getText();
+        if(msg.startsWith("<font color=red>NEW </font>")) {
+            StringBuilder stringBuilder = new StringBuilder(msg);
+            for (int i=0; i<27;i++) {
+                stringBuilder.deleteCharAt(i);
             }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+            msg = stringBuilder.toString();
+        }
+        msg = "A Question from QuestionRoom - " + msg;
+        System.out.println(msg);
 
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "A Question from QuestionRoom");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg[0]);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg);
         startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
     }
 
