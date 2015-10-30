@@ -88,6 +88,8 @@
                                     <label class="glyphicon glyphicon-envelope"> Email:</label>
                                     <div ng-init="input.email=''">
                                         <input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
+                                        <!-- better inside the inputbox -->
+                                        <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                                     </div>
                                 </li>
                             </ul>
@@ -126,12 +128,20 @@
         <div class="list-group" id="todo-list" >
             <span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
                 <h4 class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
+                    <span id="todo-sign" ng-hide="editing">
                     <span class="label label-danger" ng-show="todo.new">New</span>
                     <span class="badge">{{todo.echo}}</span>
                     <!-- switch -->
                     <span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
                     <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
-                    <span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
+                    </span>
+                    <td>
+                        <!-- editing box, not fully implemented-->
+                        <span ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
+                        <input ng-show="editing" type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-model="input.wholeMsg" style="height:50px" autofocus required ng-minlength="5"/>
+                        <span ng-show="editing" class="input-group-addon" smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+                        <!-- END -->
+                    </td>
                 </h4>
                 <!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
                 <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
@@ -140,29 +150,35 @@
                 <p>created: {{timeAgo(todo.timestamp)}}&nbsp<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
 
                 <div id="likeContainer">
-                    <button type="button" ng-class="{'btn btn-success': $storage[todo.$id]=='echoed', 'btn btn-default': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
+                    <button ng-hide="editing" type="button" ng-class="{'btn btn-success': $storage[todo.$id]=='echoed', 'btn btn-default': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
+                    </button>
+                    <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing = false">
+                    <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
                     </button>
                     &nbsp;
-                    <button type="button" ng-class="{'btn btn-danger': $storage[todo.$id]=='d_echoed', 'btn btn-default': $storage[todo.$id]!='d_echoed'}" ng-click="subEcho(todo)">Dislike
+                    <button ng-hide="editing" type="button" ng-class="{'btn btn-danger': $storage[todo.$id]=='d_echoed', 'btn btn-default': $storage[todo.$id]!='d_echoed'}" ng-click="subEcho(todo)">Dislike
+                    </button>
+                    <button class="btn btn-default" ng-hide="!editing" ng-click="editing = false">
+                    <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"> Cancel</span>
                     </button>
                     &nbsp;
-                    <button type="button" class="btn btn-default">
+                    <button ng-hide="editing" type="button" class="btn btn-default">
                         <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Reply
                     </button>
                     &nbsp;
-                    <a href="https://www.facebook.com/dialog/share?
-                             app_id=145634995501895
-                            &display=popup
-                            &href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F
-                            &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank"><img src="fb.png"/>
+                    <a ng-hide="editing" href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F&redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank"><img src="fb.png"/>
                     </a>
+                    <button class="btn btn-default" ng-hide="!editing" ng-click="removeTodo(todo)">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"> Delete</span>
+                    </button>
                     <!-- after entering the correct email, editing is available -->
-                    <div class="dropdown">
+                    <div class="dropdown" ng-hide="editing">
                         <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.email!=todo.email || todo.email==''">Manage your post
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
-                            <li><a class="glyphicon glyphicon-pencil" ng-click="editTodo(todo)"> Edit</a></li>
+                            <li><a class="glyphicon glyphicon-pencil" ng-click="editing = true" ng-hide="editing"> Edit</a></li>
+                            <li><a class="glyphicon glyphicon-repeat" ng-click="revertEditing" ng-hide="editing"> Revert</a></li>
                             <li><a class="glyphicon glyphicon-trash" ng-click="removeTodo(todo)"> Delete</a></li>
                         </ul>
                     </div>
