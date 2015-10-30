@@ -150,15 +150,15 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 			return;
 		}
 
-		var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
-		var head = firstAndLast[0];
-		var desc = firstAndLast[1];
-
 		if (newTodo.indexOf("#")!=-1) {
 			var values = newTodo.split("#"); 
 	    	tag = values[1];
 	    	newTodo = values[0];
 		} 
+
+		var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
+		var head = firstAndLast[0];
+		var desc = firstAndLast[1];
 
 		$scope.todos.$add({
 			wholeMsg: newTodo,
