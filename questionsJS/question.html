@@ -58,10 +58,10 @@
     </script>
     <!-- END -->
 
-    <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/" 
-                 data-layout="standard" 
-                data-action="like" 
-                data-show-faces="true" 
+    <div class="fb-like" data-href="https://developers.facebook.com/docs/plugins/"
+                 data-layout="standard"
+                data-action="like"
+                data-show-faces="true"
                 data-share="true">
       </div>
 
@@ -94,7 +94,8 @@
                             <input type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters" ng-model="input.wholeMsg" style="height:50px" autofocus required ng-minlength="5"/>
                             <div class="input-group-btn">
                                 <button id="btn_post" class="btn btn-default" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
-                            </div><!-- /input-group -->
+                            </div>
+                        </div><!-- /input-group -->
                         <!-- collapsable list -->
                         <div id="collapse_list" class="panel-collapse collapse">
                             <ul class="list-group">
@@ -115,7 +116,7 @@
                         <a id="toggle_advanced" data-toggle="collapse" href="#collapse_list"><span class="glyphicon glyphicon-collapse-down"></span> Show advanced options</a>
                     </div>
                     <div class="clearfix"></div>
-                </div><!-- /#tab_post -->  
+                </div><!-- /#tab_post -->
 
                 <!-- Search Tab -->
                 <div id="tab_search" class="tab-pane fade">
@@ -134,7 +135,7 @@
         </div><!-- /.well -->
 
         <!-- Error messages -->
-        <div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.minlength && showError"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a><strong>Error!</strong> Your question must be longer than 5 characters!</div>
+        <!--div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.minlength"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a><strong>Error!</strong> Your question must be longer than 5 characters!</div-->
         <div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.required && showError"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> Your question cannot be empty! </div>
         <div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.email"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> Invalid email! </div>
         <div class="alert alert-danger fade in" role="alert" ng-show="filterWord(input.wholeMsg)"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> No foul word! </div>
@@ -155,7 +156,7 @@
                 <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
                 <p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
                 <br>
-                <p>created: {{timeAgo(todo.time)}}&nbsp;<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
+                <p>created: {{timeAgo(todo.timestamp)}}&nbsp<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
 
                 <div id="likeContainer">
                     <button type="button" ng-class="{'btn btn-success': $storage[todo.$id]=='echoed', 'btn btn-default': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
@@ -180,8 +181,8 @@
                         </ul>
                     </div>
                 </div>
-                
-        </div>    
+
+        </div>
 
 <!-- jquery -->
 <script src="js/lib/jquery.min.js"></script>
