@@ -106,8 +106,9 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         if (question.isNewQuestion()) {
             msgString += "<font color=red>NEW </font>";
         }
-
         msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
+
+        //download image
         if(question.getImage()!=null&& !question.getImage().equals(""))
         {
             byte[] data = Base64.decode(question.getImage(), Base64.DEFAULT);

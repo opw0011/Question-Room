@@ -16,12 +16,15 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 
 import android.os.Handler;
+import android.provider.ContactsContract;
 import android.provider.MediaStore;
 
 import android.text.InputType;
+import android.text.Layout;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -38,10 +41,11 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -49,9 +53,11 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
 
+    public static final String Dirtywords[]={"fuck","asshole","shit","wtf"};
+
+
+
     private static final String FIREBASE_URL = "https://comp3111-qroom.firebaseio.com/";
-    // TODO: should use a clever way to store the dirtyWords in one place, sync with Web version
-    private static final String[] dirtyWords = {"shit", "fuck", "asshole", "diu", "wtf"};
 
     private String roomName;
     private Firebase mFirebaseRef;
@@ -102,7 +108,9 @@ public class MainActivity extends ListActivity {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-                    sendMessage();
+
+                        sendMessage();
+
                 }
                 return true;
             }
@@ -111,7 +119,10 @@ public class MainActivity extends ListActivity {
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                sendMessage();
+
+                    sendMessage();
+
+
             }
         });
 
@@ -192,7 +203,7 @@ public class MainActivity extends ListActivity {
         mChatListAdapter.cleanup();
     }
 
-    private void sendMessage() {
+    private void sendMessage()  {
         // Helper countdown for implementing: require post time interval > 5 second
         final CountDownTimer countdown = new CountDownTimer(5000, 1000) {
             public void onTick(long millisUntilFinished) {
@@ -211,6 +222,18 @@ public class MainActivity extends ListActivity {
         String input = inputText.getText().toString();
 
         if (!input.equals("") && (input.length() >= 5)) {
+
+
+                for (int i = 0; i < Dirtywords.length; i++) {
+                    if (input.contains(Dirtywords[i])) {
+                        Toast.makeText(MainActivity.this, "contains Dirty Word ", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+
+
+
+
             if (sendMessageIntervalEnded) {
                 // Start the counter to count for 5 seconds
                 countdown.start();
@@ -221,6 +244,7 @@ public class MainActivity extends ListActivity {
                 // Create a new, auto-generated child of that chat location, and save our chat data there
                 mFirebaseRef.push().setValue(question);
                 inputText.setText("");
+                image="";
             }
             else {
                 CharSequence message = "Please wait 5 seconds before posting next time...";
@@ -235,6 +259,7 @@ public class MainActivity extends ListActivity {
                     }
                 }, 1000);
             }
+
         }
         else {
             CharSequence message = "Your message is too short, please re-enter!";
@@ -249,15 +274,12 @@ public class MainActivity extends ListActivity {
                 }
             }, 1000);
         }
+
     }
+
 
     public void updateEcho (String key, final boolean like)
     {
-        if (dbutil.contains(key)) {
-            Log.e("Dupkey", "Key is already in the DB!");
-            return;
-        }
-
         final Firebase echoRef = mFirebaseRef.child(key).child("echo");
         echoRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -310,29 +332,22 @@ public class MainActivity extends ListActivity {
 
     public void shareQuestion (String key)
     {
-        if (dbutil.contains(key)) {
-            Log.e("Dupkey", "Key is already in the DB!");
-            return;
+        TextView headText = (TextView) findViewById(R.id.head_desc);
+        String msg = "" + headText.getText();
+        if(msg.startsWith("<font color=red>NEW </font>")) {
+            StringBuilder stringBuilder = new StringBuilder(msg);
+            for (int i=0; i<27;i++) {
+                stringBuilder.deleteCharAt(i);
+            }
+            msg = stringBuilder.toString();
         }
-
-        final String[] msg = new String[1];
-        Firebase msgRef = mFirebaseRef.child(key).child("wholeMsg");
-        msgRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                msg[0] = (String) dataSnapshot.getValue();
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });
+        msg = "A Question from QuestionRoom - " + msg;
+        System.out.println(msg);
 
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "A Question from QuestionRoom");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg[0]);
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg);
         startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
     }
 
@@ -375,33 +390,27 @@ public class MainActivity extends ListActivity {
 
     public void popUpLikeDialog(final String key) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.activity_like, null);
+        builder.setView(dialogView);
 
-        builder.setPositiveButton("Like", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int id) {
-                        updateEcho(key, true);
-                    }
-                })
-                .setNeutralButton("Dislike", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        updateEcho(key, false);
-                    }
-                })
-        ;
+        final AlertDialog likeAlert = builder.create();
 
-        final AlertDialog subscribeAlert = builder.create();
-        /*subscribeAlert.setOnShowListener(new DialogInterface.OnShowListener() {
-            @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        dialogView.findViewById(R.id.likeButton).setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button likeButton = subscribeAlert.getButton(AlertDialog.BUTTON_POSITIVE);
-                Drawable likeDrawable = getDrawable(R.drawable.like24);
-
-                Button dislikeButton = subscribeAlert.getButton(AlertDialog.BUTTON_NEUTRAL);
-                Drawable dislikeDrawable = getDrawable(R.drawable.dislike24);
+            public void onClick(View view) {
+                updateEcho(key, true);
             }
-        });*/
-        subscribeAlert.show();
+        });
+
+        dialogView.findViewById(R.id.dislikeButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateEcho(key, false);
+            }
+        });
+
+        likeAlert.show();
     }
 
     public void openGallery ( int req_code)
@@ -433,6 +442,7 @@ public class MainActivity extends ListActivity {
                     ip.read(b);
                     ip.close();
                     image = Base64.encodeToString(b, Base64.DEFAULT);
+                    Toast.makeText(MainActivity.this, "image uploaded", Toast.LENGTH_SHORT).show();
 
                 } catch (IOException e) {
                     e.printStackTrace();
