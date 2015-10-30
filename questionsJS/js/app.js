@@ -46,11 +46,6 @@ var todomvc = angular.module('todomvc', ['firebase', 'ngStorage', 'ngSanitize', 
           }
         })
       }
-
-      FB.ui({
-  		method: 'share',
-  		href: 'https://developers.facebook.com/docs/',
-		}, function(response){});
     
     }
   })
@@ -63,6 +58,12 @@ window.fbAsyncInit = function() {
     xfbml  : true,
     version: 'v2.5'
   });
+
+  FB.ui({
+  method: 'share',
+  href: 'https://developers.facebook.com/docs/',
+  }, function(response){});
+
 };
 
 // Load the SDK Asynchronously

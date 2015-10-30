@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en" ng-app="todomvc" scroll data-framework="firebase">
-<head>
+<head ng-controller="TodoCtrl">
     <meta charset="utf-8">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -14,13 +14,14 @@
     <meta http-equiv="pragma" content="no-cache" />
 
     <!-- for Facebook sharing -->
-    <meta property="og:url"                content="https://comp3111-qroom.firebaseapp.com/" />
-    <meta property="og:type"               content="html" />
-    <meta property="og:title"              content="Questions Room" />
-    <meta property="og:description"        content="How much does culture influence creative thinking?" />
-    <meta property="og:image"              content="http://static01.nyt.com/images/2015/02/19/arts/international/19iht-btnumbers19A/19iht-btnumbers19A-facebookJumbo-v2.jpg" />
+    <meta property="og:url" content="https://comp3111-qroom.firebaseapp.com/" />
+    <meta property="fb:app_id" content="1074795829199506" />
+    <meta property="og:type" content="article" />
+    <meta property="og:title" content="Questions Room" />
+    <meta property="og:description" content="Ask your questions here!" />
+    <meta property="og:image" content="favicon.ico" />
 
-    <title>Question Room: {{roomId}}</title>
+    <title>{{roomId}}</title>
 
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -106,13 +107,10 @@
                     <div class="input-group">
                         <input type="text" id="new-search" class="form-control"    placeholder="Search Question"    ng-model="input.searchMsg" />
                         <div class="input-group-btn">
-                            <button id="btn_reset" class="btn btn-danger" ng-click="input.wholeMsg='';input.email='';input.searchMsg='';input.searchMail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
+                            <button id="btn_reset" class="btn btn-danger" ng-click="input.wholeMsg='';input.email='';input.searchMsg='';">Reset <i class="fa fa-commenting fa-lg"></i></button>
                         </div>
                     </div><!-- /input-group -->
-                    <label>Email:</label>
-                    <div ng-init="input.searchMail=''">
-                        <input type="email" name="input" class="form-control" placeholder="Search by mail" ng-model="input.searchMail" />
-                    </div>
+
                 </div>
             </div>
         </div><!-- /.well -->
@@ -126,7 +124,7 @@
         <hr>
 
         <div class="list-group" id="todo-list" >
-            <span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | filter:input.searchMail:true |questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
+            <span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
                 <h4 class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
                     <span class="label label-danger" ng-show="todo.new">New</span>
                     <span class="badge">{{todo.echo}}</span>
@@ -152,10 +150,15 @@
                         <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Reply
                     </button>
                     &nbsp;
-                    <a href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank"><img src="fb.png"/></a>
+                    <a href="https://www.facebook.com/dialog/share?
+                             app_id=145634995501895
+                            &display=popup
+                            &href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F
+                            &redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank"><img src="fb.png"/>
+                    </a>
                     <!-- after entering the correct email, editing is available -->
                     <div class="dropdown">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Manage your post
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.email!=todo.email || todo.email==''">Manage your post
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
