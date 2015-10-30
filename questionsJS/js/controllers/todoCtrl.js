@@ -294,10 +294,10 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	// set post time interval to prevent user repeating post questions
 	$scope.setPostTimeInterval = function () {
 		// disable the button after post button clicked
-		angular.element(document.getElementById('btn_post'))[0].disabled = true;
+		$scope.disableTimeInterval = true;
 		// console.log("Post Time interval start");
 
-		// time count donw
+		// time count down
 		$scope.postTimeCounter = 5;
 
 		// refresh and display the time count
@@ -312,7 +312,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 		$timeout(function() {
 			$timeout.cancel(mytimeout);
 			// console.log("Post Time interval end");
-			angular.element(document.getElementById('btn_post'))[0].disabled = false;
+			$scope.disableTimeInterval = false;
 			$scope.postTimeCounter = 0;
 		}, 5000);
 	}
