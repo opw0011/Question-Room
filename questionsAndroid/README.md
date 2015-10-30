@@ -15,6 +15,5 @@ Download: http://developer.android.com/tools/studio/index.html
 - MainActivity class
 - Please change this firebase URL to your app URL. Otherwise, it won't work.
 ```
- // TODO: change this to your own Firebase URL
-    private static final String FIREBASE_URL = "https://classquestion.firebaseio.com/";
+    private static final String FIREBASE_URL = "https://comp3111-qroom.firebaseio.com/";
 ```
