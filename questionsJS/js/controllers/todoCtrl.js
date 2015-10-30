@@ -178,37 +178,45 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.originalTodo = angular.extend({}, $scope.editedTodo);
     };
 
+    //for like button
     $scope.addEcho = function (todo) {
         $scope.editedTodo = todo;
         if ($scope.$storage[todo.$id]=="echoed")
         {
             todo.echo = todo.echo - 1;
+            todo.order = todo.order +1;
             $scope.$storage[todo.$id] = "";
         }
         else if ($scope.$storage[todo.$id]=="d_echoed")
         {
             todo.echo = todo.echo + 2;
+            todo.order = todo.order -2;
             $scope.$storage[todo.$id] = "echoed";
         } else {
             todo.echo = todo.echo + 1;
+            todo.order = todo.order -1;
             $scope.$storage[todo.$id] = "echoed";
         }
         $scope.todos.$save(todo);
     };
 
+    //for dislike button
     $scope.subEcho = function (todo) {
         $scope.editedTodo = todo;
         if ($scope.$storage[todo.$id]=="d_echoed")
         {
             todo.echo = todo.echo + 1;
+            todo.order = todo.order -1;
             $scope.$storage[todo.$id] = "";
         }
         else if ($scope.$storage[todo.$id]=="echoed")
         {
             todo.echo = todo.echo - 2;
+            todo.order = todo.order +2;
             $scope.$storage[todo.$id] = "d_echoed";
         } else {
             todo.echo = todo.echo - 1;
+            todo.order = todo.order +1;
             $scope.$storage[todo.$id] = "d_echoed";
         }
         $scope.todos.$save(todo);
