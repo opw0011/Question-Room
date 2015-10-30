@@ -91,10 +91,9 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             }
 
             // set time
-            todo.time= todo.timestamp;
-            todo.dateString = new Date(todo.timestamp).toString();
+            //todo.time= todo.timestamp;
             //todo.tags = todo.wholeMsg.match(/#\w+/g);
-            todo.trustedDesc = todo.linkedDesc;
+            //todo.trustedDesc = todo.linkedDesc;
         });
 
         $scope.totalCount = total;
@@ -163,9 +162,8 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.todos.$add({
             wholeMsg: newTodo,
             head: head,
-            headLastChar: head.slice(-1),
             desc: desc,
-            linkedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
+            trustedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
             completed: false,
             timestamp: new Date().getTime(),
             tags: tag,
@@ -187,7 +185,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
     $scope.addEcho = function (todo) {
         $scope.editedTodo = todo;
-        $scope.todos.$save(todo);
         if ($scope.$storage[todo.$id]=="echoed")
         {
             todo.echo = todo.echo - 1;
@@ -201,11 +198,11 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             todo.echo = todo.echo + 1;
             $scope.$storage[todo.$id] = "echoed";
         }
+        $scope.todos.$save(todo);
     };
 
     $scope.subEcho = function (todo) {
         $scope.editedTodo = todo;
-        $scope.todos.$save(todo);
         if ($scope.$storage[todo.$id]=="d_echoed")
         {
             todo.echo = todo.echo + 1;
@@ -219,6 +216,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             todo.echo = todo.echo - 1;
             $scope.$storage[todo.$id] = "d_echoed";
         }
+        $scope.todos.$save(todo);
     };
 
     $scope.doneEditing = function (todo) {

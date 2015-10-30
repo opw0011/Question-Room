@@ -144,11 +144,11 @@
 
         <div class="list-group" id="todo-list" >
             <span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | filter:input.searchMail:true |questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
-                <h4 class="list-group-item-heading" ng-switch on="todo.headLastChar">
+                <h4 class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
                     <span class="label label-danger" ng-show="todo.new">New</span>
                     <span class="badge">{{todo.echo}}</span>
                     <!-- switch -->
-                    <span ng-switch-when="?glyphicon glyphicon-envelope" class="glyphicon glyphicon-question-sign"></span>
+                    <span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
                     <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
                     <span ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
                 </h4>
