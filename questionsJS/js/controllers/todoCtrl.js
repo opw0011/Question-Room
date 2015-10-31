@@ -317,7 +317,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         }, 5000);
     }
 }]);
-=======
+
 	// pre-precessing for collection
 	$scope.$watchCollection('todos', function () {
 		var total = 0;
