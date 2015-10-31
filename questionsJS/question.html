@@ -34,7 +34,6 @@
     <!-- need this for comlted ones. TODO: can I do this in bootstrap -->
     <link rel="stylesheet" href="css/main.css">
 
-
 </head>
 <body ng-controller="TodoCtrl">
 
@@ -76,8 +75,10 @@
                         <div class="input-group">
                             <span class="input-group-addon" smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
                             <input type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-model="input.wholeMsg" style="height:50px" autofocus required ng-minlength="5"/>
+                            <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" />
+                            <div id="imgTest"></div>
                             <div class="input-group-btn">
-                                <button id="btn_post" class="btn btn-default" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i></button>
+                                <button id="btn_post" class="btn btn-default" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-commenting fa-lg" style="height:55px"></i></button>
                             </div>
                         </div><!-- /input-group -->
                         <!-- collapsable list -->
@@ -147,8 +148,7 @@
                 <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
                 <p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
                 <br>
-                <p>created: {{timeAgo(todo.timestamp)}}&nbsp<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
-
+                <p>created: {{timeAgo(todo.timestamp)}}<span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span></p>
                 <div id="likeContainer">
                     <button ng-hide="editing" type="button" ng-class="{'btn btn-success': $storage[todo.$id]=='echoed', 'btn btn-default': $storage[todo.$id]!='echoed'}" ng-click="addEcho(todo)">Like
                     </button>
@@ -219,6 +219,33 @@
 
 <!-- angular smilies -->
 <script src="plugins/emoji/dist/angular-smilies.js"></script>
+
+<script type='text/javascript'>
+function encodeImageFileAsURL(){
+
+    var filesSelected = document.getElementById("inputFileToLoad").files;
+    if (filesSelected.length > 0)
+    {
+        var fileToLoad = filesSelected[0];
+
+        var fileReader = new FileReader();
+
+        fileReader.onload = function(fileLoadedEvent) {
+            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+
+            var newImage = document.createElement('img');
+            newImage.src = srcData;
+
+            document.getElementById("imgTest").innerHTML = newImage.outerHTML;
+            alert(document.getElementById("imgTest").innerHTML);
+            console.log("Converted Base64 version is "+document.getElementById("imgTest").innerHTML);
+        }
+        fileReader.readAsDataURL(fileToLoad);
+    }
+}
+</script>
+
+<div id="fb-root"></div>
 
 </body>
 </html>
