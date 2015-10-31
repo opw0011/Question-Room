@@ -8,7 +8,7 @@ jQuery(function() {
 	}
 	$('input#suggestBox').jsonSuggest({
 		data: courses,
-		maxResults: 20,
+		maxResults: 5,
 		onSelect: fill
 	});
 });
