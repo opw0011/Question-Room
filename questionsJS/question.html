@@ -108,12 +108,20 @@
                 <!-- Search Tab -->
                 <div id="tab_search" class="tab-pane fade">
                     <div class="input-group">
-                        <input type="text" id="new-search" class="form-control"    placeholder="Search Question"    ng-model="input.searchMsg" />
+                        <input type="text" id="new-search" class="form-control" placeholder="Search Question" ng-model="input.searchMsg" />
                         <div class="input-group-btn">
-                            <button id="btn_reset" class="btn btn-danger" ng-click="input.wholeMsg='';input.email='';input.searchMsg='';">Reset <i class="fa fa-commenting fa-lg"></i></button>
+                            <button id="btn_reset" class="btn btn-danger" ng-click="input.wholeMsg='';input.email='';input.searchMsg='';input.searchEmail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
                         </div>
                     </div><!-- /input-group -->
-
+                    <!-- search by email -->
+                    <form name="myForm" ng-submit="searchByMail()">
+                            <label>Email:
+                                <div ng-init="input.searchMail=''">
+                                    <input type="email" name="input" class="form-control" placeholder="Search by mail and manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
+                                </div>
+                            </label>
+                            <span class="error" ng-show="myForm.input.$error.email">Not valid email!</span>
+                    </form>
                 </div>
             </div>
         </div><!-- /.well -->
@@ -127,7 +135,7 @@
         <hr>
 
         <div class="list-group" id="todo-list" >
-            <span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
+            <span class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | filter:input.searchEmail:true | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
                 <h4 class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
                     <span id="todo-sign" ng-hide="editing">
                     <span class="label label-danger" ng-show="todo.new">New</span>
@@ -173,7 +181,7 @@
                     </button>
                     <!-- after entering the correct email, editing is available -->
                     <div class="dropdown" ng-hide="editing">
-                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.email!=todo.email || todo.email==''">Manage your post
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.searchEmail!=todo.email || todo.email==''">Manage your post
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu">
