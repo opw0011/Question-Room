@@ -986,4 +986,14 @@ ul li.ui-menu-item {
 	max-width: 500px;
 }
 
+#home .btn-default[disabled] {
+  background: rgba(193, 42, 42, 0.8);
+  color: #FFF;
+  opacity: 100;
+}
+
+#home .btn-default {
+  background: rgba(28, 165, 31, 0.8);
+}
+
 
