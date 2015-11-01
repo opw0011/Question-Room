@@ -1,3 +1,6 @@
+body {
+	background: #EFEFEF;
+}
 .completed {
 	color: #d9d9d9;
 	text-decoration: line-through;
@@ -32,3 +35,14 @@
 	display: none;
 }
 #toTop .fa {margin-right: 5px;}
+
+#question_box {
+	background: #FFF;
+	padding: 20px;
+	border: 1px solid #ddd;
+	margin-bottom: 20px;
+}
+
+#main-container {
+		margin-top: 51px;
+}

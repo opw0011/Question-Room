@@ -16,4 +16,12 @@ var main = function() {
   });
 }
 
+// shift + enter to submit
+$('textarea').on('keydown', function(event) {  
+  if (event.keyCode == 13)
+      if (event.shiftKey)
+        $('#btn_post').click(); 
+        // use click instead of form submit cuz there is validation on click
+});
+
 $(document).ready(main);

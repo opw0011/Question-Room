@@ -362,7 +362,8 @@ textarea.form-control {
     height: 100%;
     left: 0;
     position: absolute;
-    top: 0;
+    top: 51px;	
+    /*51px for nav bar, default is 0px*/
     width: 100%;
     z-index: 0;
 }
@@ -968,4 +969,31 @@ figure.effect-bubba:hover p {
 	}
 
 }
+
+/*auto complete css*/
+ul.jsonSuggest {
+	background: #EEE;   
+  font-size: 16px;
+  padding-left: 15px;
+  text-align: left;
+}
+
+ul li.ui-menu-item {
+  list-style-type: none;  
+}
+
+#home form {
+	max-width: 500px;
+}
+
+#home .btn-default[disabled] {
+  background: rgba(193, 42, 42, 0.8);
+  color: #FFF;
+  opacity: 100;
+}
+
+#home .btn-default {
+  background: rgba(28, 165, 31, 0.8);
+}
+
 
