@@ -29,5 +29,19 @@
         android:text="@string/action_join"
         android:textStyle="bold" />
 
+    <Button
+        android:id="@+id/suggest_button"
+        style="?android:textAppearanceSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:background="@android:color/transparent"
+        android:onClick="showSuggestedRooms"
+        android:text="@string/show_suggested_rooms"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
 </LinearLayout>
 
