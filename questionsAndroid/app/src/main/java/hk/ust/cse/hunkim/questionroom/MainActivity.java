@@ -460,4 +460,37 @@ public class MainActivity extends ListActivity {
         cursor.moveToFirst();
         return cursor.getString(column_index);
     }
+
+    public void findPostByEmail(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        String postEmail = "";
+
+        builder.setTitle(R.string.find_post);
+
+        EditText userEmail = new EditText(this);
+        userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
+        userEmail.setHint("Enter email");
+
+        TableLayout.LayoutParams emailParams = new TableLayout.LayoutParams();
+        emailParams.setMargins(5, 5, 5, 5);
+        userEmail.setLayoutParams(emailParams);
+
+        builder.setView(userEmail)
+                .setPositiveButton("Find Posts", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                })
+        ;
+
+        AlertDialog findPostAlert = builder.create();
+        findPostAlert.show();
+    }
 }
