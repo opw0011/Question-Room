@@ -163,7 +163,8 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             tags: tag,
             email: todoID,
             echo: 0,
-            order: 0
+            order: 0,
+            newQuestion: true
         });
         // remove the posted question and email address in the input
         $scope.input.wholeMsg = '';
