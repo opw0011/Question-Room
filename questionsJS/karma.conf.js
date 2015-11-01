@@ -27,6 +27,8 @@ module.exports = function(config) {
 
     // list of files to exclude
     exclude: [
+		'js/suggest.js',
+		'js/lib/custom.js'
     ],
 
 
@@ -81,6 +83,6 @@ module.exports = function(config) {
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    // singleRun: true
   })
 }
