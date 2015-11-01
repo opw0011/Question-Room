@@ -13,7 +13,22 @@ Download: http://developer.android.com/tools/studio/index.html
 #### Configuration
 - In package hk.ust.cse.hunkim.questionroom
 - MainActivity class
-- Please change this firebase URL to your app URL. Otherwise, it won't work.
-```
-    private static final String FIREBASE_URL = "https://comp3111-qroom.firebaseio.com/";
-```
+- JoinActivity class
+- FirebaseListAdapter class
+- QuestionListAdapter class
+
+### Functionality
+In "Join" step, can:
+- enter room name
+- view auto filled room name
+- click and view all preset rooms (to be implemented...)
+In "Main" step, can:
+- send questions
+- view questions
+- vote for a question
+- share question content as simple text to other apps
+- upload image
+- add emoji in questions
+- subscribe users' own questions by email
+
+
