@@ -12,4 +12,6 @@
     <string name="share_to">Share question to ...</string>
     <string name="email_hint">Email Address</string>
     <string name="dialog_subscribe_email">Subscribe your question</string>
+    <string name="show_suggested_rooms">View suggested rooms</string>
+    <string name="find_post">Enter email address to find posts</string>
 </resources>
