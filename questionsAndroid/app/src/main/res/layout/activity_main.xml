@@ -9,11 +9,34 @@
     <Button
         android:id="@+id/close"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:onClick="Close"
         android:text = "Quit Room"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        />
+
+    <Button
+        android:id="@+id/findByEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:onClick="findPostByEmail"
+        android:text = "Search&#10;Posts"
+        android:textSize="12sp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/close"
+        />
+
+    <Button
+        android:id="@+id/exitFindByEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:text = "Exit&#10;search"
+        android:textSize="12sp"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/findByEmail"
+        android:visibility="gone"
+        android:clickable="false"
         />
 
     <ListView
