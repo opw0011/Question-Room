@@ -439,30 +439,34 @@ public class MainActivity extends ListActivity {
     {
 
         if (resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
             if (requestCode == 1)
 
             {
-                String selectedPath1 = getPath(selectedImageUri);
-                File file = new File(selectedPath1);
-                long size = file.length();
-                if (size > 5 << 20) {
-                    Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
-                    return;
-
-                }
                 try {
-                    FileInputStream ip = new FileInputStream(file);
-                    byte[] b = new byte[(int) file.length()];
-                    ip.read(b);
-                    ip.close();
-                    image = Base64.encodeToString(b, Base64.DEFAULT);
-                    Toast.makeText(MainActivity.this, "image uploaded", Toast.LENGTH_SHORT).show();
+                    Uri selectedImageUri = data.getData();
+                    String selectedPath1 = getPath(selectedImageUri);
+                    File file = new File(selectedPath1);
+                    long size = file.length();
+                    if (size > 5 << 20) {
+                        Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
+                        return;
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    }
+                    try {
+                        FileInputStream ip = new FileInputStream(file);
+                        byte[] b = new byte[(int) file.length()];
+                        ip.read(b);
+                        ip.close();
+                        image = Base64.encodeToString(b, Base64.DEFAULT);
+                        Toast.makeText(MainActivity.this, "image uploaded", Toast.LENGTH_SHORT).show();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                } catch (NullPointerException e){
+                    Toast.makeText(MainActivity.this, "failed to load image", Toast.LENGTH_SHORT).show();
                 }
-
             }
         }
     }
