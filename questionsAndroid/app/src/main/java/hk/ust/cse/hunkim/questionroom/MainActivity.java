@@ -70,7 +70,8 @@ public class MainActivity extends ListActivity {
     private String image= "";
     private TextView emailTextView;
     private boolean sendMessageIntervalEnded = true;
-    private String searchPostEmail;
+    private String emailForSearch;
+    private Button exitSearchButton;
 
     private ImageButton iuButton;
 
@@ -154,6 +155,14 @@ public class MainActivity extends ListActivity {
                 openGallery(1);
             }
         });
+
+        exitSearchButton = (Button) findViewById(R.id.exitFindByEmail);
+        exitSearchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                resumeAllQuestions();
+            }
+        });
+
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
@@ -468,6 +477,12 @@ public class MainActivity extends ListActivity {
     }
 
     public void findPostByEmail(final View view) {
+        // First resume to list all questions
+        mChatListAdapter.setInputEmail("");
+        mChatListAdapter.setSelectPostByEmail(false);
+        mChatListAdapter.notifyDataSetChanged();
+
+        // Pop up dialog to get user's email
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(R.string.find_post);
@@ -484,13 +499,18 @@ public class MainActivity extends ListActivity {
                 .setPositiveButton("Find Posts", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        searchPostEmail = userEmail.getText().toString();
-                        userEmail.setText(searchPostEmail);
-                        System.out.println(searchPostEmail);
+                        emailForSearch = userEmail.getText().toString();
+                        userEmail.setText(emailForSearch);
+                        System.out.println(emailForSearch);
 
-                        mChatListAdapter.setInputEmail(searchPostEmail);
+                        // Display questions with same email
+                        mChatListAdapter.setInputEmail(emailForSearch);
                         mChatListAdapter.setSelectPostByEmail(true);
                         mChatListAdapter.notifyDataSetChanged();
+
+                        // Add exit button to show all questions again
+                        exitSearchButton.setVisibility(View.VISIBLE);
+                        exitSearchButton.setClickable(true);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -502,5 +522,14 @@ public class MainActivity extends ListActivity {
 
         AlertDialog findPostAlert = builder.create();
         findPostAlert.show();
+    }
+
+    public void resumeAllQuestions() {
+        mChatListAdapter.setInputEmail("");
+        mChatListAdapter.setSelectPostByEmail(false);
+        getListView().setAdapter(mChatListAdapter);
+
+        exitSearchButton.setVisibility(View.GONE);
+        exitSearchButton.setClickable(false);
     }
 }
