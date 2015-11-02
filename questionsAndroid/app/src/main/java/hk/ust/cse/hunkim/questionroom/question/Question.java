@@ -181,7 +181,7 @@ public class Question implements Comparable<Question> {
 
     public String getImage(){return image;}
 
-    public void resetImage(){image="";}
+
 
 
     public boolean isNewQuestion() {

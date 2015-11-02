@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
+import android.test.suitebuilder.annotation.SmallTest;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -89,7 +90,7 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
     }
 
 
-    @MediumTest
+    @SmallTest
     public void testDirtyWord() {
         assertTrue("Fuck you contains dirty word", MainActivity.containsDirtyWord("Fuck you"));
         assertFalse("Love you does not contain dirty word", MainActivity.containsDirtyWord("Love you"));
