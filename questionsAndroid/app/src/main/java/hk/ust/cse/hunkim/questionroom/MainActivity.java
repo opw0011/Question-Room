@@ -53,7 +53,7 @@ import hk.ust.cse.hunkim.questionroom.question.Question;
 
 public class MainActivity extends ListActivity {
 
-    public static final String Dirtywords[]={"fuck","asshole","shit","wtf"};
+    public static final String Dirtywords[]={"fuck","ass","shit","wtf"};
 
 
 
@@ -226,7 +226,7 @@ public class MainActivity extends ListActivity {
 
                 for (int i = 0; i < Dirtywords.length; i++) {
                     if (input.contains(Dirtywords[i])) {
-                        Toast.makeText(MainActivity.this, "contains Dirty Word ", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(MainActivity.this, "contains Dirty Word", Toast.LENGTH_SHORT).show();
                         return;
                     }
                 }
