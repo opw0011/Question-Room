@@ -8,6 +8,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import java.lang.reflect.Method;
+
 /**
  * Created by hunkim on 7/20/15.
  */
@@ -85,4 +87,12 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         // TODO: How to confirm a new text is posted?
         // assertEquals("Child count: ", lView.getChildCount(), 10);
     }
+
+
+    @MediumTest
+    public void testDirtyWord() {
+        assertTrue("Fuck you contains dirty word", MainActivity.containsDirtyWord("Fuck you"));
+        assertFalse("Love you does not contain dirty word", MainActivity.containsDirtyWord("Love you"));
+    }
+
 }

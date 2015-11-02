@@ -238,13 +238,11 @@ public class MainActivity extends ListActivity {
 
         if (!input.equals("") && (input.length() >= 5)) {
 
-
-                for (int i = 0; i < Dirtywords.length; i++) {
-                    if (input.contains(Dirtywords[i])) {
-                        Toast.makeText(MainActivity.this, "contains Dirty Word", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
+            if(containsDirtyWord(input)){
+                Toast.makeText(MainActivity.this, "contains Dirty Word", Toast.LENGTH_SHORT).show();
+                return;
+            }
+                
 
 
 
@@ -290,6 +288,15 @@ public class MainActivity extends ListActivity {
             }, 1000);
         }
 
+    }
+
+    public static boolean containsDirtyWord(String input) {
+        for (int i = 0; i < Dirtywords.length; i++) {
+            if (input.contains(Dirtywords[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
