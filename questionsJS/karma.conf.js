@@ -28,7 +28,8 @@ module.exports = function(config) {
     // list of files to exclude
     exclude: [
 		'js/suggest.js',
-		'js/lib/custom.js'
+		'js/lib/custom.js',
+    'js/main.js'
     ],
 
 
@@ -71,7 +72,7 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome'],
+    browsers: ['PhantomJS'],
 
     //
     client: {

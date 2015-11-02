@@ -59,10 +59,16 @@ describe('TodoCtrl', function() {
       expect("1").toEqual("1"); // dummpy assert
     });
 
-
+    it('Test todoEscape', function() {
+      var scope = $rootScope.$new();
+      var elem = angular.element('<input todo-escape="escapeCallback">');
+      element = $compile(elem)(scope);        
+    
+      var givenEvent = { keyCode: 27 };
+      element.triggerHandler('keydown', givenEvent);
+      scope.$digest();
+      expect(scope.escape).toHaveBeenCalled();
+    });
 
   });
 });
-
-
-

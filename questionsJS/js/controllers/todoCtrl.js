@@ -98,9 +98,9 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
     }, true);
 
     //clear input.wholeMsg
-    $scope.clearMsg = function() {
+    /*$scope.clearMsg = function() {
         $scope.input = {wholeMsg: ""};
-    };
+    };*/
 
     //filter words detector, return true is detected
     $scope.filterWord = function($string) {

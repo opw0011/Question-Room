@@ -71,7 +71,6 @@ describe('TodoCtrl', function() {
       });
 
       it('toTop Testing', function() {
-
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
           $location: location,
@@ -86,13 +85,37 @@ describe('TodoCtrl', function() {
         expect(window.scrollY).toBe(0);
       });
 
-      it('addToDo Testing', function() {
+      it('timeAgo Testing', function() {
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
 
+        var now = new Date().getTime();
+        var pastTime = [{t:now-5, res:0}, {t:now-30, res:0}, {t:now-50000, res:0}, {t:now-80000, res:0}, {t:now-3000000, res:0}, {t:now-1000000, res:0}];
+        for (var i in pastTime) {
+        	var result = scope.timeAgo(pastTime[i].t);
+        	expect(result).toEqual(pastTime[i].res);
+        }
+      });
+
+      it('filterWord Testing', function() {
+        var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
+
+      	var words = [{str:"fuck", res:true}, {str:"hello", res:false}];
+      	for (var i in words) {
+      		var result = scope.filterWord(words[i].str);
+      		expect(result).toEqual(words[i].res);
+      	}
+      });
+
+      it('addToDo Testing', function() {
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
 
-        scope.input = {wholeMsg: "test"};
+        scope.input = {wholeMsg: "test#tag"};
         scope.addTodo();
 
         scope.input = {wholeMsg: ""};
@@ -101,7 +124,6 @@ describe('TodoCtrl', function() {
       });
 
       it('increaseMax Testing', function() {
-
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
           $window: window
@@ -117,27 +139,7 @@ describe('TodoCtrl', function() {
 
       });
 
-      // it('FBLogout testing', function() {
-
-      //   var ctrl = controller('TodoCtrl', {
-      //     $scope: scope,
-      //   });
-
-      //   scope.FBLogout();
-      //   expect(scope.isAdmin).toBeFalsy();
-      // });
-
-
-      // it('FBLogin Testing', function() {
-      //   var ctrl = controller('TodoCtrl', {
-      //     $scope: scope,
-      //   });
-        
-      //   scope.FBLogin();
-      // });
-
       it('markAll testing', function() {
-
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
@@ -171,7 +173,6 @@ describe('TodoCtrl', function() {
       });
 
       it('removeTodo testing', function() {
-
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
@@ -181,8 +182,7 @@ describe('TodoCtrl', function() {
         //expect(scope.todos).toEqual(empty_arr); 
       });
 
-      it('revertEditing testing', function() {
-        
+      it('revertEditing testing', function() {  
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
@@ -192,7 +192,6 @@ describe('TodoCtrl', function() {
       });
 
       it('doneEditing testing', function() {
-        
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
@@ -205,7 +204,6 @@ describe('TodoCtrl', function() {
       });
 
       it('clearCompletedTodos testing', function() {
-        
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
@@ -262,7 +260,6 @@ describe('TodoCtrl', function() {
       });
 
       it('addEcho testing', function() {
-        
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
         });
@@ -274,6 +271,21 @@ describe('TodoCtrl', function() {
         scope.addEcho(test_todo);
         expect(test_todo.echo).toBe(3);
         expect(test_todo.order).toBe(2);
+
+      });
+
+      it('subEcho testing', function() {
+      	var ctrl = controller('TodoCtrl', {
+        	$scope: scope,
+        });
+
+        var test_todo = {
+          echo: 2,
+          order: 3
+        };  
+        scope.subEcho(test_todo);
+        expect(test_todo.echo).toBe(1);
+        expect(test_todo.order).toBe(4);
 
       });
 
