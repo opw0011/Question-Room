@@ -20,6 +20,7 @@ import android.widget.TextView;
 import com.firebase.client.Query;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -136,6 +137,43 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
                                 }
 
         );
+
+        String timeAgo = "";
+        long ts = question.getTimestamp();
+        long currentTime = new Date().getTime();
+        long interval = (currentTime-ts)/1000;
+
+        if(interval < 60){
+            timeAgo += "just";
+        }
+        else if(interval > 59 && interval < 3600) {
+            long x = interval/60;
+            long min = x - x % 1;
+            if(min==1){
+                timeAgo += min + " min" + " ago";
+            }
+            else
+                timeAgo += min+" mins"+" ago";
+        }
+        else if(interval>3599 && interval<86400){
+            long x = interval/3600;
+            long hr = x - x % 1;
+            if(hr==1){timeAgo += hr+ " hour" + " ago";}
+            else
+                timeAgo += hr + " hours" + " ago";
+        }
+        else if(interval>86399 && interval<604800){
+            long x= interval/86400;
+            long day = x - x % 1;
+            if(day==1){timeAgo += day+" day"+" ago";}
+            else
+                timeAgo += day+" days" + " ago";
+        }
+        else{
+            timeAgo += new Date(ts).toString();
+        }
+
+        ((TextView) view.findViewById(R.id.timestamp)).setText(timeAgo);
 
         // check if we already clicked
         /*boolean clickable = !dbUtil.contains(question.getKey());
