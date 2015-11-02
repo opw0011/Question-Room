@@ -37,6 +37,8 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     // The mUsername for this client. We use this to indicate which messages originated from this user
     private String roomName;
     MainActivity activity;
+    private String inputEmail;
+    private boolean selectPostByEmail;
 
     public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
         super(ref, Question.class, layout, activity);
@@ -59,14 +61,20 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     protected void populateView(View view, final Question question) {
         DBUtil dbUtil = activity.getDbutil();
 
+        // In "find posts by email" mode,
+        // posts with different email attributes will be hidden
+        if(selectPostByEmail) {
+            if( ! question.getEmail().equals(inputEmail)) {
+                view.findViewById(R.id.questionLinearLayout).setVisibility(View.GONE);
+                return;
+            }
+        }
+
         // Map a Chat object to an entry in our listview
         int echo = question.getEcho();
 
         if(echo < -15) {
             view.findViewById(R.id.questionLinearLayout).setVisibility(View.GONE);
-            //LinearLayout linearLayout = (LinearLayout) view.findViewById(R.id.questionLinearLayout);
-            //ViewGroup viewGroup = (ViewGroup) linearLayout.getParent();
-            //viewGroup.removeView(linearLayout);
             return;
         }
 
@@ -158,4 +166,8 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     protected void setKey(String key, Question model) {
         model.setKey(key);
     }
+
+    protected void setSelectPostByEmail(boolean value) { selectPostByEmail = value; }
+
+    protected void setInputEmail(String email) { inputEmail = new String(email); }
 }

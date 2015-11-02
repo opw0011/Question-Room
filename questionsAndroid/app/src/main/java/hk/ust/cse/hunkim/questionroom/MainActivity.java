@@ -69,6 +69,7 @@ public class MainActivity extends ListActivity {
     private String image= "";
     private TextView emailTextView;
     private boolean sendMessageIntervalEnded = true;
+    private String searchPostEmail;
 
     private ImageButton iuButton;
 
@@ -461,14 +462,12 @@ public class MainActivity extends ListActivity {
         return cursor.getString(column_index);
     }
 
-    public void findPostByEmail(View view) {
+    public void findPostByEmail(final View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        String postEmail = "";
 
         builder.setTitle(R.string.find_post);
 
-        EditText userEmail = new EditText(this);
+        final EditText userEmail = new EditText(this);
         userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         userEmail.setHint("Enter email");
 
@@ -480,7 +479,13 @@ public class MainActivity extends ListActivity {
                 .setPositiveButton("Find Posts", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        searchPostEmail = userEmail.getText().toString();
+                        userEmail.setText(searchPostEmail);
+                        System.out.println(searchPostEmail);
 
+                        mChatListAdapter.setInputEmail(searchPostEmail);
+                        mChatListAdapter.setSelectPostByEmail(true);
+                        mChatListAdapter.notifyDataSetChanged();
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
