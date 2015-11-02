@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
 import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -156,6 +157,10 @@ public class MainActivity extends ListActivity {
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
+        
+        //we override the onCreate method and add the following code snippet:
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
     }
 
     @Override
