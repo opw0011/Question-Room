@@ -60,7 +60,7 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
      */
     @Override
     protected void populateView(View view, final Question question) {
-        DBUtil dbUtil = activity.getDbutil();
+       // DBUtil dbUtil = activity.getDbutil();
 
         // In "find posts by email" mode,
         // posts with different email attributes will be hidden
@@ -118,13 +118,18 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
 
         //download image
-        if(question.getImage()!=null&& !question.getImage().equals(""))
+        ImageView im = (ImageView) view.findViewById(R.id.image);
+        if(question.getImage()!=null && !question.getImage().equals(""))
         {
             byte[] data = Base64.decode(question.getImage(), Base64.DEFAULT);
             Bitmap bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
-            ImageView im = (ImageView) view.findViewById(R.id.image);
             im.getLayoutParams().height = 600;
             im.setImageBitmap(bitmap);
+        }
+        else
+        {
+            im.getLayoutParams().height = 0;
+            im.setImageBitmap(null);
         }
 
         ((TextView) view.findViewById(R.id.head_desc)).setText(Html.fromHtml(msgString));

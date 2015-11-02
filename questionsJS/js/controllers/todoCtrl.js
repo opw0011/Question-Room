@@ -46,7 +46,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 		var interval= delta-delta%1;
 
 		if(interval<60){
-			return"just";
+			return"just now";
 		}
 		else if(interval>59 && interval<3600){
 			var x= interval/60;
