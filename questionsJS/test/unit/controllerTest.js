@@ -91,7 +91,7 @@ describe('TodoCtrl', function() {
         });
 
         var now = new Date().getTime();
-        var pastTime = [{t:now-5, res:0}, {t:now-30, res:0}, {t:now-50000, res:0}, {t:now-80000, res:0}, {t:now-3000000, res:0}, {t:now-1000000, res:0}];
+        var pastTime = [{t:now-5, res:0}, {t:now-30, res:0}, {t:50000, res:0}, {t:now-80000, res:0}, {t:now-3000000, res:0}, {t:now-1000000, res:0}];
         for (var i in pastTime) {
         	var result = scope.timeAgo(pastTime[i].t);
         	expect(result).toEqual(pastTime[i].res);
@@ -187,7 +187,7 @@ describe('TodoCtrl', function() {
           $scope: scope,
         });
         var test_todo = {wholeMsg: "test321"};  
-        scope.originalTodo = {wholeMsg: "test321"};
+        scope.originalTodo = {wholeMsg: "test"};
         scope.revertEditing(test_todo);     
       });
 
@@ -196,10 +196,10 @@ describe('TodoCtrl', function() {
           $scope: scope,
         });
 
-        var test_todo = {wholeMsg: ""};        
+        var test_todo = {wholeMsg: ""};       
         scope.doneEditing(test_todo);  
 
-        var test_todo = {wholeMsg: "this is a testing msg"};        
+        var test_todo = {wholeMsg: "this is a testing msg"};    
         scope.doneEditing(test_todo);      
       });
 
@@ -262,12 +262,14 @@ describe('TodoCtrl', function() {
       it('addEcho testing', function() {
         var ctrl = controller('TodoCtrl', {
           $scope: scope,
+          $localStorage: localStorage
         });
 
         var test_todo = {
           echo: 2,
           order: 3
-        };  
+        }; 
+
         scope.addEcho(test_todo);
         expect(test_todo.echo).toBe(3);
         expect(test_todo.order).toBe(2);
@@ -355,6 +357,14 @@ describe('TodoCtrl', function() {
         // window.scroll(100,200);
         // $(mock_window).scroll();
         scope.$apply();
+      });
+
+      it('setPostTimeInterval Testing', function() {
+      	var ctrl = controller('TodoCtrl', {
+          $scope: scope
+        });
+
+        scope.setPostTimeInterval();
       });
 
     });
