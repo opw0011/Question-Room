@@ -104,7 +104,7 @@
                   <!-- input email address -->
                   <label class="glyphicon glyphicon-envelope"> Email:</label>
                   <div ng-init="input.email=''">
-                    <input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
+                    <input type="email" onblur="this.focus()" name="input" class="form-control" ng-model="input.email" focus>
                     <!-- better inside the inputbox -->
                     <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                   </div>
@@ -138,7 +138,7 @@
           <form name="myForm" ng-submit="searchByMail()">
             <label>Email:
               <div ng-init="input.searchMail=''">
-                <input type="email" name="input" class="form-control" placeholder="Search by mail and manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
+                <input type="email" onblur="this.focus()" name="input" class="form-control" placeholder="Search by mail and manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
               </div>
             </label>
             <span class="error" ng-show="myForm.input.$error.email">Not valid email!</span>
@@ -212,6 +212,7 @@
 
           <!-- after entering the correct email, editing is available -->
           <div class="dropdown" ng-hide="editing">
+          <br>
             <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.searchEmail!=todo.email || todo.email==''">Manage your post
               <span class="caret"></span>
             </button>
