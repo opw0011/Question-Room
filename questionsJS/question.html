@@ -169,9 +169,9 @@
           </div>          
           <td>
             <!-- editing box, not fully implemented-->
-            <span ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
-            <input ng-show="editing" type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.editMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-init="todo.editMsg" ng-model="input.editMsg" style="height:50px" autofocus required ng-minlength="5"/>
-            <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+            <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
+<!--             <input ng-show="editing" type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.editMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-init="todo.editMsg" ng-model="input.editMsg" style="height:50px" autofocus required ng-minlength="5"/>
+            <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span> -->
 
 
             <!-- END -->
