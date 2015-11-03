@@ -61,13 +61,19 @@ describe('TodoCtrl', function() {
 
     it('Test todoEscape', function() {
       var scope = $rootScope.$new();
+      scope.escapeCallback = jasmine.createSpy('escapeCallback');
       var elem = angular.element('<input todo-escape="escapeCallback">');
-      element = $compile(elem)(scope);        
+      element = $compile(elem)(scope);  
+
+      spyOn(element, 'unbind');      
     
       var givenEvent = { keyCode: 27 };
-      element.triggerHandler('keydown', givenEvent);
-      scope.$digest();
-      expect(scope.escape).toHaveBeenCalled();
+			element.triggerHandler('keydown', givenEvent);
+    	scope.$digest();
+    	expect(scope.escapeCallback).toHaveBeenCalled();
+
+    	scope.$destroy();
+    	expect(element.unbind).toHaveBeenCalledWith('keydown');
     });
 
   });
