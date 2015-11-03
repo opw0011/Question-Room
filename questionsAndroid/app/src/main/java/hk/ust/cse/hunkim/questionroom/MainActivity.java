@@ -373,7 +373,7 @@ public class MainActivity extends ListActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
     }
 
-    private void popUpEmailForm ()
+    public void popUpEmailForm ()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
