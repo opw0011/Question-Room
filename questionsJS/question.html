@@ -104,7 +104,7 @@
                   <!-- input email address -->
                   <label class="glyphicon glyphicon-envelope"> Email:</label>
                   <div ng-init="input.email=''">
-                    <input type="email" onblur="this.focus()" name="input" class="form-control" ng-model="input.email" focus>
+                    <input type="email" name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.email" ng-model="input.email" autofocus>
                     <!-- better inside the inputbox -->
                     <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                   </div>
@@ -135,26 +135,24 @@
             </div>
           </div><!-- /input-group -->
           <!-- search by email -->
-          <form name="myForm" ng-submit="searchByMail()">
+          <div name="searchByMail">
             <label>Email:
               <div ng-init="input.searchMail=''">
-                <input type="email" onblur="this.focus()" name="input" class="form-control" placeholder="Search by mail and manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
+                <input type="email" name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.searchEmail" placeholder="Manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
               </div>
             </label>
-            <span class="error" ng-show="myForm.input.$error.email">Not valid email!</span>
-          </form>
+            </div>
         </div>
       </div>
     </div><!-- /#question-box -->
 
     <!-- Error messages -->
-    <!--div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.minlength"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a><strong>Error!</strong> Your question must be longer than 5 characters!</div-->
     <div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.required && showError"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> Your question cannot be empty! </div>
     <div class="alert alert-danger fade in" role="alert" ng-show="todoForm.$error.email"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> Invalid email! </div>
     <div class="alert alert-danger fade in" role="alert" ng-show="filterWord(input.wholeMsg)"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> No foul word! </div>
 
     <div class="list-group" id="todo-list" >
-      <div class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | filter:input.searchEmail:true | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
+      <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
         <div class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
           <div id="todo-sign" ng-hide="editing" class="question-heading-sign">           
             <span ng-class="{'badge badge-success': todo.echo > 0, 'badge': todo.echo == 0, 'badge badge-danger': todo.echo < 0}">{{todo.echo}}</span>
@@ -169,10 +167,10 @@
           </div>          
           <td>
             <!-- editing box, not fully implemented-->
-            <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
-<!--             <input ng-show="editing" type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.editMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-init="todo.editMsg" ng-model="input.editMsg" style="height:50px" autofocus required ng-minlength="5"/>
-            <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span> -->
 
+            <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
+            <input ng-show="editing" type="text" id="edit-todo" name="edit-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" ng-model="input.editMsg" style="height:50px" autofocus ng-minlength="5"/>
+            <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
 
             <!-- END -->
           </td>          
@@ -194,7 +192,7 @@
           </div>
        
           <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing = false">
-            <span class="glyphicon glyphicon-floppy-saved" ng-click="doneEditing(todo)" aria-hidden="true"> Save</span>
+            <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
           </button>
           &nbsp;
           <button ng-hide="editing" type="button" class="btn btn-default btn-xs">
@@ -204,9 +202,8 @@
           <button class="btn btn-default" ng-hide="!editing" ng-click="editing = false">
             <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"> Cancel</span>
           </button>
-          &nbsp;
-
-          <button class="btn btn-default" ng-hide="!editing" ng-click="removeTodo(todo)">
+          &nbsp; 		
+          <button class="btn btn-default" ng-hide="!editing" ng-click="removeTodo(todo); editing=false">
             <span class="glyphicon glyphicon-trash" aria-hidden="true"> Delete</span>
           </button>
 
@@ -218,14 +215,13 @@
             </button>
             <ul class="dropdown-menu">
               <li><a class="glyphicon glyphicon-pencil" ng-click="editing = true;editTodo(todo)" ng-hide="editing"> Edit</a></li>
-              <li><a class="glyphicon glyphicon-repeat" ng-click="revertEditing" ng-hide="editing"> Revert</a></li>
+              <li><a class="glyphicon glyphicon-repeat" ng-click="revertEditing(todo)" ng-hide="editing"> Revert</a></li>
               <li><a class="glyphicon glyphicon-trash" ng-click="removeTodo(todo)"> Delete</a></li>
             </ul>
           </div>
         </div> 
       </div>
     </div><!-- /#main-container -->
-
 
     <!-- jquery -->
     <script src="js/lib/jquery.min.js"></script>
@@ -236,7 +232,7 @@
     <!-- Autolink from https://github.com/gregjacobs/Autolinker.js> -->
     <script src="js/lib/Autolinker.min.js"></script>
 
-    <!-- Angular -->
+    <!-- Angular 1.4.7 -->
     <script src="js/lib/angular.min.js"></script>
     <script src="js/lib/angular-sanitize.min.js"></script>
 
