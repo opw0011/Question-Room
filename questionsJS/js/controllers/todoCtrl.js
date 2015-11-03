@@ -21,7 +21,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	var splits = $location.path().trim().split("/");
 	var roomId = angular.uppercase(splits[1]);
 	if (!roomId || roomId.length === 0) {
-		roomId = "all";
+		roomId = "TEST";
 	}
 
 	// TODO: Please change this URL for your app
@@ -224,8 +224,9 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
     $scope.doneEditing = function (todo) {
         $scope.editedTodo = null;
-        var wholeMsg = todo.wholeMsg.trim();
+        var wholeMsg = $scope.input.editMsg.trim();
         if (wholeMsg) {
+            
             $scope.todos.$save(todo);
         } else {
             $scope.removeTodo(todo);

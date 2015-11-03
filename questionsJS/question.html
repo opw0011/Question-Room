@@ -48,13 +48,13 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" >Question Room [<span ng-bind="roomId"></span>]</a>          
+        <a class="navbar-brand" >Question Room <span ng-bind="roomId"></span></a>          
       </div><!-- /.navbar-header -->
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse navbar-ex1-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="./index.html">Return to Main</a></li>
+          <li><a href="./index.html">Main</a></li>
         </ul>
       </div><!-- /.navbar-collapse -->        
     </div><!-- /.navbar-container -->
@@ -63,14 +63,10 @@
   <!-- navigation bar end -->
 
   <div class="container" id="main-container">
-    <!-- <div class="clearfix"></div>         -->
-    <!-- <div class="page-header"> -->
-    <!-- <h1>Questions for {{roomId}}?</h1> -->
-    <!--small>Share room url: {{absurl}}</small-->
-    <!-- </div> -->
+
     <!-- Facebook -->
     <div id="fb-root">
-      <button class='btn' ng-click="Facebook.login()">Connect with Facebook</button>
+      <button class='btn btn-success' ng-click="Facebook.login()">Connect with Facebook</button>
       <div ng-show="Facebook.getAuth()">
         <h4>Access Token:</h4>
         <p ng-bind="Facebook.getAuth().accessToken"></p>
@@ -108,7 +104,7 @@
                   <!-- input email address -->
                   <label class="glyphicon glyphicon-envelope"> Email:</label>
                   <div ng-init="input.email=''">
-                    <input type="email" name="input" class="form-control" ng-model="input.email" autofocus>
+                    <input type="email" onblur="this.focus()" name="input" class="form-control" ng-model="input.email" focus>
                     <!-- better inside the inputbox -->
                     <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                   </div>
@@ -125,7 +121,7 @@
             <span ng-style="{visibility: (postTimeCounter>0) && 'visible' || 'hidden'}"><small>Please wait for {{postTimeCounter}}    second to post again...</small></span>
           </div>
           <div class="pull-right">
-            <a id="toggle_advanced" data-toggle="collapse" href="#collapse_list"><span class="glyphicon glyphicon-collapse-down"></span> Show advanced options</a>
+            <a id="toggle_advanced" data-toggle="collapse" href="#collapse_list"><span class="glyphicon glyphicon-collapse-down"></span> Advanced options</a>
           </div>
           <div class="clearfix"></div>
         </div><!-- /#tab_post -->
@@ -142,7 +138,7 @@
           <form name="myForm" ng-submit="searchByMail()">
             <label>Email:
               <div ng-init="input.searchMail=''">
-                <input type="email" name="input" class="form-control" placeholder="Search by mail and manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
+                <input type="email" onblur="this.focus()" name="input" class="form-control" placeholder="Search by mail and manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
               </div>
             </label>
             <span class="error" ng-show="myForm.input.$error.email">Not valid email!</span>
@@ -168,15 +164,16 @@
             <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
             <span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span>
             <small class="text-muted"> Asked {{timeAgo(todo.timestamp)}}</small>
-            <a ng-hide="editing" href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F&redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank" class="btn btn-primary btn-xs pull-right">
-              Share to Facebook
+            <a ng-hide="editing" href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F&redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank" class="btn btn-primary btn-xs pull-right">Share to Facebook
           </a>
           </div>          
           <td>
             <!-- editing box, not fully implemented-->
-            <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
-            <input ng-show="editing" type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-model="input.wholeMsg" style="height:50px" autofocus required ng-minlength="5"/>
-            <span ng-show="editing" class="input-group-addon" smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+            <span ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies">{{}}</span>
+            <input ng-show="editing" type="text" id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.editMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag" ng-init="todo.editMsg" ng-model="input.editMsg" style="height:50px" autofocus required ng-minlength="5"/>
+            <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+
+
             <!-- END -->
           </td>          
         </div>
@@ -197,7 +194,7 @@
           </div>
        
           <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing = false">
-            <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
+            <span class="glyphicon glyphicon-floppy-saved" ng-click="doneEditing(todo)" aria-hidden="true"> Save</span>
           </button>
           &nbsp;
           <button ng-hide="editing" type="button" class="btn btn-default btn-xs">
@@ -215,11 +212,12 @@
 
           <!-- after entering the correct email, editing is available -->
           <div class="dropdown" ng-hide="editing">
+          <br>
             <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.searchEmail!=todo.email || todo.email==''">Manage your post
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-              <li><a class="glyphicon glyphicon-pencil" ng-click="editing = true" ng-hide="editing"> Edit</a></li>
+              <li><a class="glyphicon glyphicon-pencil" ng-click="editing = true;editTodo(todo)" ng-hide="editing"> Edit</a></li>
               <li><a class="glyphicon glyphicon-repeat" ng-click="revertEditing" ng-hide="editing"> Revert</a></li>
               <li><a class="glyphicon glyphicon-trash" ng-click="removeTodo(todo)"> Delete</a></li>
             </ul>
