@@ -9,6 +9,8 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
+
 import java.lang.reflect.Method;
 
 /**
@@ -89,6 +91,45 @@ public class MainActivityTest extends ActivityUnitTestCase<MainActivity> {
         // assertEquals("Child count: ", lView.getChildCount(), 10);
     }
 
+    @SmallTest
+    public void testUpdateEcho() {
+        startActivity(mStartIntent, null, null);
+        String key = "K22MChB9IXi7vRSV99M";
+        Firebase echoRef = new Firebase(new String ("https://comp3111-qroom.firebaseio.com/"))
+                .child("ACCT1010").child("questions")
+                .child(key).child("echo");
+
+        getActivity().updateEcho(key, true);
+        // assertTrue("update echo like", echoRef.setValue);
+
+        getActivity().updateEcho(key, false);
+        // assertEquals("update echo dislike", echoRef.);
+    }
+
+    @SmallTest
+    public void testPopUpEmailForm() {
+        startActivity(mStartIntent, null, null);
+        getActivity().popUpEmailForm();
+        getActivity().setEmailAddress("a@b.c");
+        getActivity().popUpEmailForm();
+    }
+
+    @SmallTest
+    public void testPopUpLikeDialog() {
+        startActivity(mStartIntent, null, null);
+        String key = "K22MChB9IXi7vRSV99M";
+        getActivity().popUpLikeDialog(key);
+        // Add assert
+    }
+
+    @SmallTest
+    public void testOnAcitivityResult() {
+        startActivity(mStartIntent, null, null);
+        Intent intent= new Intent();
+        getActivity().onActivityResult(Activity.RESULT_OK,1,intent);
+        getActivity().onActivityResult(Activity.RESULT_OK,0,intent);
+        getActivity().onActivityResult(Activity.RESULT_CANCELED,1,intent);
+    }
 
     @SmallTest
     public void testDirtyWord() {

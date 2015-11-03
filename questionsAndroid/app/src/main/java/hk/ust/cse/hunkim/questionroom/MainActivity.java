@@ -543,4 +543,8 @@ public class MainActivity extends ListActivity {
         exitSearchButton.setVisibility(View.GONE);
         exitSearchButton.setClickable(false);
     }
+
+    public void setEmailAddress(String newEmail) {
+        this.emailAddress = newEmail;
+    }
 }
