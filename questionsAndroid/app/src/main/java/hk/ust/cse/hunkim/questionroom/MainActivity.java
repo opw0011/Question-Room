@@ -35,6 +35,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ImageButton;
 import android.graphics.drawable.Drawable;
+import android.graphics.Typeface;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -69,6 +70,8 @@ public class MainActivity extends ListActivity {
     private String image= "";
     private TextView emailTextView;
     private boolean sendMessageIntervalEnded = true;
+    private String emailForSearch;
+    private Button exitSearchButton;
 
     private ImageButton iuButton;
 
@@ -152,9 +155,21 @@ public class MainActivity extends ListActivity {
                 openGallery(1);
             }
         });
+
+        exitSearchButton = (Button) findViewById(R.id.exitFindByEmail);
+        exitSearchButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                resumeAllQuestions();
+            }
+        });
+
         // get the DB Helper
         DBHelper mDbHelper = new DBHelper(this);
         dbutil = new DBUtil(mDbHelper);
+        
+        //we override the onCreate method and add the following code snippet:
+        Typeface iconFont = FontManager.getTypeface(getApplicationContext(), FontManager.FONTAWESOME);
+        FontManager.markAsIconContainer(findViewById(R.id.icons_container), iconFont);
     }
 
     @Override
@@ -223,13 +238,11 @@ public class MainActivity extends ListActivity {
 
         if (!input.equals("") && (input.length() >= 5)) {
 
-
-                for (int i = 0; i < Dirtywords.length; i++) {
-                    if (input.contains(Dirtywords[i])) {
-                        Toast.makeText(MainActivity.this, "contains Dirty Word", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
+            if(containsDirtyWord(input)){
+                Toast.makeText(MainActivity.this, "contains Dirty Word", Toast.LENGTH_SHORT).show();
+                return;
+            }
+                
 
 
 
@@ -275,6 +288,15 @@ public class MainActivity extends ListActivity {
             }, 1000);
         }
 
+    }
+
+    public static boolean containsDirtyWord(String input) {
+        for (int i = 0; i < Dirtywords.length; i++) {
+            if (input.contains(Dirtywords[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 
 
@@ -424,30 +446,34 @@ public class MainActivity extends ListActivity {
     {
 
         if (resultCode == RESULT_OK) {
-            Uri selectedImageUri = data.getData();
             if (requestCode == 1)
 
             {
-                String selectedPath1 = getPath(selectedImageUri);
-                File file = new File(selectedPath1);
-                long size = file.length();
-                if (size > 5 << 20) {
-                    Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
-                    return;
-
-                }
                 try {
-                    FileInputStream ip = new FileInputStream(file);
-                    byte[] b = new byte[(int) file.length()];
-                    ip.read(b);
-                    ip.close();
-                    image = Base64.encodeToString(b, Base64.DEFAULT);
-                    Toast.makeText(MainActivity.this, "image uploaded", Toast.LENGTH_SHORT).show();
+                    Uri selectedImageUri = data.getData();
+                    String selectedPath1 = getPath(selectedImageUri);
+                    File file = new File(selectedPath1);
+                    long size = file.length();
+                    if (size > 5 << 20) {
+                        Toast.makeText(MainActivity.this, "file should not greater than 5mb", Toast.LENGTH_SHORT).show();
+                        return;
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    }
+                    try {
+                        FileInputStream ip = new FileInputStream(file);
+                        byte[] b = new byte[(int) file.length()];
+                        ip.read(b);
+                        ip.close();
+                        image = Base64.encodeToString(b, Base64.DEFAULT);
+                        Toast.makeText(MainActivity.this, "image uploaded", Toast.LENGTH_SHORT).show();
+
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                } catch (NullPointerException e){
+                    Toast.makeText(MainActivity.this, "failed to load image", Toast.LENGTH_SHORT).show();
                 }
-
             }
         }
     }
@@ -461,14 +487,18 @@ public class MainActivity extends ListActivity {
         return cursor.getString(column_index);
     }
 
-    public void findPostByEmail(View view) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    public void findPostByEmail(final View view) {
+        // First resume to list all questions
+        mChatListAdapter.setInputEmail("");
+        mChatListAdapter.setSelectPostByEmail(false);
+        mChatListAdapter.notifyDataSetChanged();
 
-        String postEmail = "";
+        // Pop up dialog to get user's email
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         builder.setTitle(R.string.find_post);
 
-        EditText userEmail = new EditText(this);
+        final EditText userEmail = new EditText(this);
         userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
         userEmail.setHint("Enter email");
 
@@ -480,7 +510,18 @@ public class MainActivity extends ListActivity {
                 .setPositiveButton("Find Posts", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
+                        emailForSearch = userEmail.getText().toString();
+                        userEmail.setText(emailForSearch);
+                        System.out.println(emailForSearch);
 
+                        // Display questions with same email
+                        mChatListAdapter.setInputEmail(emailForSearch);
+                        mChatListAdapter.setSelectPostByEmail(true);
+                        mChatListAdapter.notifyDataSetChanged();
+
+                        // Add exit button to show all questions again
+                        exitSearchButton.setVisibility(View.VISIBLE);
+                        exitSearchButton.setClickable(true);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -492,5 +533,14 @@ public class MainActivity extends ListActivity {
 
         AlertDialog findPostAlert = builder.create();
         findPostAlert.show();
+    }
+
+    public void resumeAllQuestions() {
+        mChatListAdapter.setInputEmail("");
+        mChatListAdapter.setSelectPostByEmail(false);
+        getListView().setAdapter(mChatListAdapter);
+
+        exitSearchButton.setVisibility(View.GONE);
+        exitSearchButton.setClickable(false);
     }
 }

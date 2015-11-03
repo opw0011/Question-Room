@@ -65,6 +65,7 @@ public class Question implements Comparable<Question> {
 
         this.email = "";
         this.image=null;
+        this.completed = false;
     }
 
     public Question(String message, String email) {
@@ -83,6 +84,7 @@ public class Question implements Comparable<Question> {
 
         this.email = email;
         this.image=null;
+        this.completed = false;
     }
 
     public Question(String message, String email, String image) {
@@ -101,6 +103,7 @@ public class Question implements Comparable<Question> {
 
         this.email = email;
         this.image = image;
+        this.completed = false;
     }
 
     /**
@@ -178,7 +181,7 @@ public class Question implements Comparable<Question> {
 
     public String getImage(){return image;}
 
-    public void resetImage(){image="";}
+
 
 
     public boolean isNewQuestion() {

@@ -25,7 +25,7 @@ body {
     position: absolute;
 }
 
-#tag-label {font-size: 15px;}
+/*#tag-label {font-size: 15px;}*/
 
 #toTop {
 	position: fixed;
@@ -44,5 +44,34 @@ body {
 }
 
 #main-container {
-		margin-top: 51px;
+	margin-top: 51px;
+}
+
+/*--------------*/
+/*question itmes*/
+/*--------------*/
+.question-heading-sign {
+
+}
+
+h4.question-heading:first-letter {
+	text-transform: uppercase;
+}
+
+h4.question-heading {
+	/*display: inline-block;*/
+	word-wrap: break-word;
+}
+
+.badge-danger {
+background-color: #d9534f;
+}
+
+.badge-success {
+background-color: #5cb85c;
+}
+
+textarea:focus {
+  outline: none !important;
+  box-shadow: none !important;
 }

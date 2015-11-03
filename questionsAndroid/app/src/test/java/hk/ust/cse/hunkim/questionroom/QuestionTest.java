@@ -43,4 +43,17 @@ public class QuestionTest  extends TestCase {
         assertEquals("Head", "Hello?", q.getHead());
     }
 
+    @SmallTest
+    public void testGetters() {
+        assertEquals("Desc", "This is very nice", q.getDesc());
+        assertEquals("Echo", 0, q.getEcho());
+        assertEquals("wholeMsg", "Hello? This is very nice", q.getWholeMsg());
+        assertEquals("HeadLastChar", "?", q.getHeadLastChar());
+        assertEquals("Completed", false, q.isCompleted());
+        assertEquals("Order", 0, q.getOrder());
+        assertEquals("Email", "", q.getEmail());
+        assertEquals("Image", "", q.getImage());
+
+    }
+
 }
