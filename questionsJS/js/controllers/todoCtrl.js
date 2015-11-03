@@ -97,11 +97,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.absurl = $location.absUrl();
     }, true);
 
-    //clear input.wholeMsg
-    /*$scope.clearMsg = function() {
-        $scope.input = {wholeMsg: ""};
-    };*/
-
     //filter words detector, return true is detected
     $scope.filterWord = function($string) {
         var str = $string;
@@ -166,6 +161,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             order: 0,
             newQuestion: true
         });
+        
         // remove the posted question and email address in the input
         $scope.input.wholeMsg = '';
         $scope.input.email = '';
