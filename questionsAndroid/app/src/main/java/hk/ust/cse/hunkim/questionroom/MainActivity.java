@@ -332,9 +332,9 @@ public class MainActivity extends ListActivity {
                         Log.e("Order update:", "" + orderValue);
 
                         if(like)
-                            orderRef.setValue(orderValue + 1);
-                        else
                             orderRef.setValue(orderValue - 1);
+                        else
+                            orderRef.setValue(orderValue + 1);
                     }
 
                     @Override
