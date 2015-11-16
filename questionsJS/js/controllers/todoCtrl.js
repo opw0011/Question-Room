@@ -24,7 +24,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 		roomId = "TEST";
 	}
 
-	// TODO: Please change this URL for your app
+	// change this URL for your app
 	var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
 
 	$scope.roomId = roomId;
@@ -32,11 +32,9 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	var echoRef = new Firebase(url);
 
 	var query = echoRef.orderByChild("order");
-	// Should we limit?
-	//.limitToFirst(1000);
+
 	$scope.todos = $firebaseArray(query);
 
-	//$scope.input.wholeMsg = '';
 	$scope.editedTodo = null;
 
 	$scope.timeAgo = function(past){
@@ -171,6 +169,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
     $scope.editTodo = function (todo) {
         $scope.editedTodo = todo;
+        $scope.input.editMsg = todo.wholeMsg;
         $scope.originalTodo = angular.extend({}, $scope.editedTodo);
     };
 
@@ -219,14 +218,14 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
     };
 
     $scope.doneEditing = function (todo) {
-        $scope.editedTodo = null;
-        var wholeMsg = $scope.input.editMsg.trim();
-        if (wholeMsg) {
-            
-            $scope.todos.$save(todo);
-        } else {
-            $scope.removeTodo(todo);
-        }
+        $scope.editedTodo = null; 
+        var wholeMsg = todo.wholeMsg.trim(); 
+        if (wholeMsg) { 
+            $scope.todos.$save(todo); 
+        } else { 
+            $scope.removeTodo(todo); 
+        } 
+
     };
 
     $scope.revertEditing = function (todo) {

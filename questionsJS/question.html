@@ -191,7 +191,7 @@
             </button>
           </div>
        
-          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing = false">
+          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing = false" ng-disabled="filterWord(input.editMsg)">
             <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
           </button>
           &nbsp;
