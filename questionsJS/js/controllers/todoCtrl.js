@@ -75,33 +75,24 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
     // pre-precessing for collection
     $scope.$watchCollection('todos', function () {
         var total = 0;
-        var remaining = 0;
         $scope.todos.forEach(function (todo) {
             // Skip invalid entries so they don't break the entire app.
             if (!todo || !todo.head ) {
                 return;
             }
-
             total++;
-            if (todo.completed === false) {
-                remaining++;
-            }
         });
 
         $scope.totalCount = total;
-        $scope.remainingCount = remaining;
-        $scope.completedCount = total - remaining;
-        $scope.allChecked = remaining === 0;
         $scope.absurl = $location.absUrl();
     }, true);
 
     //filter words detector, return true is detected
     $scope.filterWord = function($string) {
         var str = $string;
-        //filtered words library
-        var filterWords = ["shit", "fuck", "asshole","diu","wtf"];
-        //"i" is to ignore case and "g" for global
-        var wRegExp = new RegExp(filterWords.join("|"), "gi");
+        //foul words library of regular expressions
+        var filterRule = /\bass\b|\bfuck\b|\bshit\b|\bbitch\b/gi;
+        var wRegExp = new RegExp(filterRule);
         return wRegExp.test(str);
     };
 
@@ -151,7 +142,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             head: head,
             desc: desc,
             trustedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
-            completed: false,
+            //completed: false,
             timestamp: new Date().getTime(),
             tags: tag,
             email: todoID,
@@ -165,12 +156,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.input.email = '';
         // set time interval to 5s to prevent user keep posting questions
         $scope.setPostTimeInterval();
-    };
-
-    $scope.editTodo = function (todo) {
-        $scope.editedTodo = todo;
-        $scope.input.editMsg = todo.wholeMsg;
-        $scope.originalTodo = angular.extend({}, $scope.editedTodo);
     };
 
     //for like button
@@ -217,20 +202,20 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.todos.$save(todo);
     };
 
+
+    $scope.editTodo = function (todo) {
+        $scope.editedTodo = todo;
+        $scope.input.editMsg = todo.wholeMsg;
+        $scope.originalTodo = angular.extend({}, $scope.editedTodo);
+    };
+
     $scope.doneEditing = function (todo) {
-	$scope.editing = false;
-        var wholeMsg = $scope.input.editMsg.trim();
-        if (wholeMsg) {
-	    $scope.editedTodo = todo;
-	    var firstAndLast = getFirstAndRestSentence(wholeMsg);;
-            var head = firstAndLast[0];
-            var desc = firstAndLast[1];
-	    todo.wholeMsg = wholeMsg;
-	    todo.head = head;
-	    todo.desc = desc;
+
+        if (todo.wholeMsg) {
+	        $scope.editedTodo = todo;
             $scope.todos.$save(todo);
         } else {
-	    $scope.editedTodo = null;
+	       $scope.editedTodo = null;
 	}
 
     };
@@ -244,26 +229,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.todos.$remove(todo);
     };
 
-    $scope.clearCompletedTodos = function () {
-        $scope.todos.forEach(function (todo) {
-            if (todo.completed) {
-                $scope.removeTodo(todo);
-            }
-        });
-    };
-
-    $scope.toggleCompleted = function (todo) {
-        todo.completed = !todo.completed;
-        $scope.todos.$save(todo);
-    };
-
-    $scope.markAll = function (allCompleted) {
-        $scope.todos.forEach(function (todo) {
-            todo.completed = allCompleted;
-            $scope.todos.$save(todo);
-        });
-    };
-
     $scope.increaseMax = function () {
         if ($scope.maxQuestion < $scope.totalCount) {
             $scope.maxQuestion+=scrollCountDelta;
@@ -274,7 +239,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $window.scrollTo(0,0);
     };
 
-    // Not sure what is this code. Todel
+    
     if ($location.path() === '') {
         $location.path('/');
     }

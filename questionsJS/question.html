@@ -166,7 +166,7 @@
           </a>
           </div>          
           <td>
-            <!-- editing box, not fully implemented-->
+            <!-- editing box-->
 
             <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
             <input ng-show="editing" type="text" id="edit-todo" name="edit-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" ng-model="input.editMsg" style="height:50px" autofocus  ng-minlength="5"/>
@@ -190,7 +190,8 @@
             <button ng-hide="editing" type="button" ng-class="{'btn btn-danger': $storage[todo.$id]=='d_echoed', 'btn btn-default': $storage[todo.$id]!='d_echoed'}" ng-click="subEcho(todo)"><i class="fa fa-thumbs-o-down"></i> Dislike
             </button>
           </div>      
-          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo)" ng-disabled="filterWord(input.editMsg)">
+          <!--Save the edited message-->
+          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing=false" ng-disabled="filterWord(input.editMsg)">
             <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
           </button>
           &nbsp;
@@ -210,11 +211,11 @@
           <!-- after entering the correct email, editing is available -->
           <div class="dropdown" ng-hide="editing">
           <br>
-            <button class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.searchEmail!=todo.email || todo.email==''">Manage your post
+            <button id="mg-button" class="btn btn-primary btn-xs dropdown-toggle" type="button" data-toggle="dropdown" ng-hide="input.searchEmail!=todo.email || todo.email==''">Manage your post
               <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">
-              <li><a class="glyphicon glyphicon-pencil" ng-click="editing = true;editTodo(todo)" ng-hide="editing"> Edit</a></li>
+              <li><a class="glyphicon glyphicon-pencil" ng-click="editing=true;editTodo(todo)" ng-hide="editing"> Edit</a></li>
               <li><a class="glyphicon glyphicon-repeat" ng-click="revertEditing(todo)" ng-hide="editing"> Revert</a></li>
               <li><a class="glyphicon glyphicon-trash" ng-click="removeTodo(todo)"> Delete</a></li>
             </ul>
