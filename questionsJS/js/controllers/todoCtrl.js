@@ -219,14 +219,21 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
     };
 
     $scope.doneEditing = function (todo) {
-        $scope.editedTodo = null;
+	$scope.editing = false;
         var wholeMsg = $scope.input.editMsg.trim();
         if (wholeMsg) {
-            
+	    $scope.editedTodo = todo;
+	    var firstAndLast = getFirstAndRestSentence(wholeMsg);;
+            var head = firstAndLast[0];
+            var desc = firstAndLast[1];
+	    todo.wholeMsg = wholeMsg;
+	    todo.head = head;
+	    todo.desc = desc;
             $scope.todos.$save(todo);
         } else {
-            $scope.removeTodo(todo);
-        }
+	    $scope.editedTodo = null;
+	}
+	
     };
 
     $scope.revertEditing = function (todo) {

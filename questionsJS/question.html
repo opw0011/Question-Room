@@ -169,7 +169,7 @@
             <!-- editing box, not fully implemented-->
 
             <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
-            <input ng-show="editing" type="text" id="edit-todo" name="edit-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" ng-model="input.editMsg" style="height:50px" autofocus ng-minlength="5"/>
+            <input ng-show="editing" type="text" id="edit-todo" name="edit-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" ng-model="input.editMsg" style="height:50px" autofocus  ng-minlength="5"/>
             <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
 
             <!-- END -->
@@ -191,7 +191,7 @@
             </button>
           </div>
        
-          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing = false">
+          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo)">
             <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
           </button>
           &nbsp;
@@ -203,7 +203,8 @@
             <span class="glyphicon glyphicon-floppy-remove" aria-hidden="true"> Cancel</span>
           </button>
           &nbsp; 		
-          <button class="btn btn-default" ng-hide="!editing" ng-click="removeTodo(todo); editing=false">
+          <button class="btn btn-default" ng-hide="!editing" ng-click="removeTodo
+(todo); editing=false">
             <span class="glyphicon glyphicon-trash" aria-hidden="true"> Delete</span>
           </button>
 
