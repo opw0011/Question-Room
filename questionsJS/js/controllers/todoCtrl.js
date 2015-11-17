@@ -140,9 +140,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.todos.$add({
             wholeMsg: newTodo,
             head: head,
-            desc: desc,
-            trustedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
-            //completed: false,
+            desc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
             timestamp: new Date().getTime(),
             tags: tag,
             email: todoID,
@@ -205,24 +203,38 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
     $scope.editTodo = function (todo) {
         $scope.editedTodo = todo;
-        $scope.input.editMsg = todo.wholeMsg;
+        $scope.$storage.editMsg[todo.$id] = todo.wholeMsg + "#" + todo.tags;
         $scope.originalTodo = angular.extend({}, $scope.editedTodo);
     };
 
     $scope.doneEditing = function (todo) {
+	var editTodo = $scope.$storage.editMsg[todo.$id].trim();
+	if (editTodo) {
+	    $scope.editedTodo = todo;
+	    var tag = todo.tags;
+	
+	    if (editTodo.indexOf("#")!=-1) {
+		var values = editTodo.split("#");
+		tag = values[1];
+		editTodo = values[0];
+            }
+	    var wholeMsg = $scope.getFirstAndRestSentence(editTodo);
+	    var head = wholeMsg[0];
+	    var desc = wholeMsg[1];
+	    
 
-        if (todo.wholeMsg) {
-	        $scope.editedTodo = todo;
-            $scope.todos.$save(todo);
-        } else {
-	       $scope.editedTodo = null;
+	    todo.wholeMsg = wholeMsg;
+	    todo.head = head;
+	    todo.desc = desc;
+	    todo.tags = tag;
+	    $scope.todos.$save(todo);
+	} else {
+	    $scope.editedTodo = null;
 	}
-
-    };
+     };
 
     $scope.revertEditing = function (todo) {
         todo.wholeMsg = $scope.originalTodo.wholeMsg;
-        $scope.doneEditing(todo);
     };
 
     $scope.removeTodo = function (todo) {

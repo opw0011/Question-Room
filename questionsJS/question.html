@@ -152,7 +152,7 @@
     <div class="alert alert-danger fade in" role="alert" ng-show="filterWord(input.wholeMsg)"><a class="close" data-dismiss="alert" aria-label="close" ng-click="submitted = false">&times;</a> <strong>Error!</strong> No foul word! </div>
 
     <div class="list-group" id="todo-list" >
-      <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion" ng-class="{completed: todo.completed, editing: todo == editedTodo}" ng-hide="todo.echo < -15">
+      <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion" ng-class="editing: todo == editedTodo" ng-hide="todo.echo < -15">
         <div class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
           <div id="todo-sign" ng-hide="editing" class="question-heading-sign">           
             <span ng-class="{'badge badge-success': todo.echo > 0, 'badge': todo.echo == 0, 'badge badge-danger': todo.echo < 0}">{{todo.echo}}</span>
@@ -168,9 +168,9 @@
           <td>
             <!-- editing box-->
 
-            <h4 ng-hide="editing" ng-class="{completed: todo.completed}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
-            <input ng-show="editing" type="text" id="edit-todo" name="edit-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" ng-model="input.editMsg" style="height:50px" autofocus  ng-minlength="5"/>
-            <span ng-show="editing" class="input-group-addon" smilies-selector="input.editMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+            <h4 ng-hide="editing" ng-class="{editing: todo == editedTodo}" ng-bind-html="todo.head | smilies" class="question-heading"></h4>
+            <input ng-show="editing" type="text" id="edit-todo" name="edit-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" ng-model="$storage.editMsg[todo.$id]" style="height:50px" autofocus ng-minlength="5"/>
+            <span ng-show="editing" class="input-group-addon" smilies-selector="$storage.editMsg[todo.$id]" smilies-placement="bottom" smilies-title="Smilies"></span>
 
             <!-- END -->
           </td>          
@@ -179,7 +179,7 @@
         <!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
         <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
 
-        <p class="list-group-item-text"><span ng-bind-html="todo.trustedDesc | smilies"></span></p>
+        <p class="list-group-item-text"><span ng-bind-html="todo.desc | smilies"></span></p>
      
         <br>
         
@@ -191,7 +191,7 @@
             </button>
           </div>      
           <!--Save the edited message-->
-          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing=false" ng-disabled="filterWord(input.editMsg)">
+          <button class="btn btn-default" ng-hide="!editing" ng-click="doneEditing(todo);editing=false" ng-disabled="filterWord($storage.editMsg[todo.$id])">
             <span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"> Save</span>
           </button>
           &nbsp;
