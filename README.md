@@ -16,8 +16,7 @@ Framework:`Jasmine`
 ```
 
 #### Features
-
-(for team members to add)
+Real-time classroom
 
 ----
 ```

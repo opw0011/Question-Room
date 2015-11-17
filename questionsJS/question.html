@@ -64,18 +64,6 @@
 
   <div class="container" id="main-container">
 
-    <!-- Facebook -->
-    <div id="fb-root">
-      <button class='btn btn-success' ng-click="Facebook.login()">Connect with Facebook</button>
-      <div ng-show="Facebook.getAuth()">
-        <h4>Access Token:</h4>
-        <p ng-bind="Facebook.getAuth().accessToken"></p>
-        <button class='btn btn-small' ng-click="Facebook.logout()">Logout</button>
-      </div>
-      <div id='fb-root'></div>
-    </div>
-    <!-- END -->
-
     <div id="question_box">
       <!-- tab navigation bar -->
       <ul class="nav nav-pills" id="tabs">
