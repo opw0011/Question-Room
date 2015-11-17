@@ -14,9 +14,6 @@ questionsroom
 -------------------
 Framework:`Jasmine`
 ```
-$ karmaTest.sh
-Or you can directly double-click the bash .sh file
-```
 
 #### Features
 
