@@ -221,10 +221,13 @@
             <!-- reply collapse start -->
             <div id="reply_box" ng-show="isReplyOpen">
               <div class="well well-sm">
-                <div contenteditable="true" style="border: 1px solid #DDD; max-height: 250px; min-height: 30px; background-color: #fff;"><p><br></p></div> 
-                <button type="button" class="btn btn-success btn-sm" style="position:absolute; bottom:40px; right:25px;">Reply</button>
-              </div>
+                <div class="input-group">
+                  <textarea class="form-control custom-control" rows="3" style="resize:none; overflow: auto" ng-model="input.replyMsg" autofocus required ng-minlength="5" maxlength="500"></textarea> 
+                  <span class="input-group-addon btn btn-success">Send</span>
+                </div>
+              </div>             
             </div>
+
             <!-- reply collapse end -->
           </div>
         </div><!--  /.list-group -->
