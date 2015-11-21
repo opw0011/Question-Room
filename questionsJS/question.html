@@ -110,9 +110,12 @@
                   </div>
                 </li>
                 <li class="list-group-item">
-                  upload image
-                  <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /> 
-                  <div id="imgTest"></div>
+                  <div ng-init= "inpuy.image=''">
+                    <label for="filePicker">Choose Image:</label>
+                      <input type="file" id="filePicker">
+                      <textarea id="base64textarea" placeholder="Base64 will appear here" style="min-height:100px; resize: vertical; border-style:none none dashed none;" focus-on-change="input.image" ng-model="input.image" autofocus></textarea>
+                    <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.image!=''" ng-click="input.image=''"></button>
+                </div>
                 </li>
               </ul>
             </div>
@@ -257,29 +260,31 @@
     <!-- angular smilies -->
     <script src="plugins/emoji/dist/angular-smilies.js"></script>
 
-    <script type='text/javascript'>
-    function encodeImageFileAsURL(){
 
-      var filesSelected = document.getElementById("inputFileToLoad").files;
-      if (filesSelected.length > 0)
-      {
-        var fileToLoad = filesSelected[0];
+  <script type='text/javascript'>
+    var handleFileSelect = function(evt) {
+    var files = evt.target.files;
+    var file = files[0];
 
-        var fileReader = new FileReader();
+    if (files && file) {
+        var reader = new FileReader();
 
-        fileReader.onload = function(fileLoadedEvent) {
-            var srcData = fileLoadedEvent.target.result; // <--- data: base64
+        reader.onload = function(readerEvt) {
+            var binaryString = readerEvt.target.result;
+            document.getElementById("base64textarea").value = btoa(binaryString);
+            return btoa(binaryString);
+        };
 
-            var newImage = document.createElement('img');
-            newImage.src = srcData;
+        reader.readAsBinaryString(file);
+    }
+};
 
-            document.getElementById("imgTest").innerHTML = newImage.outerHTML;
-            alert(document.getElementById("imgTest").innerHTML);
-            console.log("Converted Base64 version is "+document.getElementById("imgTest").innerHTML);
-          }
-          fileReader.readAsDataURL(fileToLoad);
-        }
-      }
+if (window.File && window.FileReader && window.FileList && window.Blob) {
+    document.getElementById('filePicker').addEventListener('change', handleFileSelect, false);
+} else {
+    alert('The File APIs are not fully supported in this browser.');
+}
+
     </script>
 
     <div id="fb-root"></div>
