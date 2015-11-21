@@ -24,7 +24,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 		roomId = "TEST";
 	}
 
-	// TODO: Please change this URL for your app
+	// change this URL for your app
 	var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
 
 	$scope.roomId = roomId;
@@ -32,11 +32,9 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	var echoRef = new Firebase(url);
 
 	var query = echoRef.orderByChild("order");
-	// Should we limit?
-	//.limitToFirst(1000);
+
 	$scope.todos = $firebaseArray(query);
 
-	//$scope.input.wholeMsg = '';
 	$scope.editedTodo = null;
 
     //calculate post time
@@ -92,33 +90,24 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
     // pre-precessing for collection
     $scope.$watchCollection('todos', function () {
         var total = 0;
-        var remaining = 0;
         $scope.todos.forEach(function (todo) {
             // Skip invalid entries so they don't break the entire app.
             if (!todo || !todo.head ) {
                 return;
             }
-
             total++;
-            if (todo.completed === false) {
-                remaining++;
-            }
         });
 
         $scope.totalCount = total;
-        $scope.remainingCount = remaining;
-        $scope.completedCount = total - remaining;
-        $scope.allChecked = remaining === 0;
         $scope.absurl = $location.absUrl();
     }, true);
 
     //filter words detector, return true is detected
     $scope.filterWord = function($string) {
         var str = $string;
-        //filtered words library
-        var filterWords = ["shit", "fuck", "asshole","diu","wtf"];
-        //"i" is to ignore case and "g" for global
-        var wRegExp = new RegExp(filterWords.join("|"), "gi");
+        //foul words library of regular expressions
+        var filterRule = /\bass\b|\bfuck\b|\bshit\b|\bbitch\b|\bfucking\b/gi;
+        var wRegExp = new RegExp(filterRule);
         return wRegExp.test(str);
     };
 
@@ -127,7 +116,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         var head = $string;
         var desc = '';
 
-        var separators = [". ", "? ", "! ", '\n'];
+        var separators = [".", "?", "!", '\n'];
 
         var firstIndex = -1;
         for (var i in separators) {
@@ -167,9 +156,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.todos.$add({
             wholeMsg: newTodo,
             head: head,
-            desc: desc,
-            trustedDesc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
-            completed: false,
+            desc: Autolinker.link(desc, {newWindow: false, stripPrefix: false}),
             timestamp: new Date().getTime(),
             tags: tag,
             email: todoID,
@@ -182,14 +169,10 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         // remove the posted question and email address in the input
         $scope.input.wholeMsg = '';
         $scope.input.email = '';
-        $scope.input.image = '';
+        $scope.input.searchMsg = '';
+        $scope.input.searchEmail = '';
         // set time interval to 5s to prevent user keep posting questions
         $scope.setPostTimeInterval();
-    };
-
-    $scope.editTodo = function (todo) {
-        $scope.editedTodo = todo;
-        $scope.originalTodo = angular.extend({}, $scope.editedTodo);
     };
 
     //for like button
@@ -236,44 +219,46 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $scope.todos.$save(todo);
     };
 
+
+    $scope.editTodo = function (todo) {
+        $scope.editedTodo = todo;
+        $scope.$storage.editMsg[todo.$id] = todo.wholeMsg + "#" + todo.tags;
+        $scope.originalTodo = angular.extend({}, $scope.editedTodo);
+    };
+
     $scope.doneEditing = function (todo) {
-        $scope.editedTodo = null;
-        var wholeMsg = $scope.input.editMsg.trim();
-        if (wholeMsg) {
-            
-            $scope.todos.$save(todo);
-        } else {
-            $scope.removeTodo(todo);
-        }
+	   var editTodo = ($scope.$storage.editMsg[todo.$id]).trim();
+	   if (editTodo) {
+	       $scope.editedTodo = todo;
+	       var tag = todo.tags;
+           var wholeMsg = editTodo;
+	
+	       if (editTodo.indexOf("#")!=-1) {
+		      var values = editTodo.split("#");
+		      tag = values[1];
+		      wholeMsg = values[0];
+           }
+
+	       var firstAndRest = $scope.getFirstAndRestSentence(wholeMsg);
+	       var head = firstAndRest[0];
+	       var desc = firstAndRest[1];
+
+	       todo.wholeMsg = wholeMsg;
+	       todo.head = head;
+	       todo.desc = desc;
+	       todo.tags = tag;
+	       $scope.todos.$save(todo);
+	   } else {
+	       $scope.editedTodo = null;
+	   }
     };
 
     $scope.revertEditing = function (todo) {
         todo.wholeMsg = $scope.originalTodo.wholeMsg;
-        $scope.doneEditing(todo);
     };
 
     $scope.removeTodo = function (todo) {
         $scope.todos.$remove(todo);
-    };
-
-    $scope.clearCompletedTodos = function () {
-        $scope.todos.forEach(function (todo) {
-            if (todo.completed) {
-                $scope.removeTodo(todo);
-            }
-        });
-    };
-
-    $scope.toggleCompleted = function (todo) {
-        todo.completed = !todo.completed;
-        $scope.todos.$save(todo);
-    };
-
-    $scope.markAll = function (allCompleted) {
-        $scope.todos.forEach(function (todo) {
-            todo.completed = allCompleted;
-            $scope.todos.$save(todo);
-        });
     };
 
     $scope.increaseMax = function () {
@@ -286,7 +271,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         $window.scrollTo(0,0);
     };
 
-    // Not sure what is this code. Todel
+    
     if ($location.path() === '') {
         $location.path('/');
     }
@@ -311,14 +296,12 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
     $scope.setPostTimeInterval = function () {
         // disable the button after post button clicked
         $scope.disableTimeInterval = true;
-        // console.log("Post Time interval start");
 
         // time count down
         $scope.postTimeCounter = 5;
 
         // refresh and display the time count
         $scope.onTimeout = function(){
-            // console.log($scope.postTimeCounter);
             $scope.postTimeCounter--;
             mytimeout = $timeout($scope.onTimeout,1000);
         }
@@ -327,7 +310,6 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         // terminal the timer after 5 seconds
         $timeout(function() {
             $timeout.cancel(mytimeout);
-            // console.log("Post Time interval end");
             $scope.disableTimeInterval = false;
             $scope.postTimeCounter = 0;
         }, 5000);

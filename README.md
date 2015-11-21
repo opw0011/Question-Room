@@ -11,18 +11,12 @@ questionsroom
 
 #### `Karma` Testing
 
-'karmaTest.sh' for Windows
-----
-
-Put the karmaTest.sh file at the same location with questionsJS folder
-```
-$ karmaTest.sh
-Or you can directly double-click the bash .sh file
+-------------------
+Framework:`Jasmine`
 ```
 
 #### Features
-
-(for team members to add)
+Real-time classroom
 
 ----
 ```
