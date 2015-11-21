@@ -65,7 +65,8 @@ public class MainActivity extends ListActivity {
     private ValueEventListener mConnectedListener;
 
     private QuestionListAdapter mChatListAdapter;
-    private ImageButton emailOptionButton;
+    private ImageButton msgOptionButton;
+    //private ImageButton emailOptionButton;    //TODO
     private String emailAddress = "";
     private String image= "";
     private TextView emailTextView;
@@ -73,7 +74,7 @@ public class MainActivity extends ListActivity {
     private String emailForSearch;
     private Button exitSearchButton;
 
-    private ImageButton iuButton;
+    //private ImageButton iuButton;             //TODO
 
     private DBUtil dbutil;
 
@@ -111,9 +112,7 @@ public class MainActivity extends ListActivity {
             @Override
             public boolean onEditorAction(TextView textView, int actionId, KeyEvent keyEvent) {
                 if (actionId == EditorInfo.IME_NULL && keyEvent.getAction() == KeyEvent.ACTION_DOWN) {
-
-                        sendMessage();
-
+                    sendMessage();
                 }
                 return true;
             }
@@ -122,20 +121,25 @@ public class MainActivity extends ListActivity {
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                     sendMessage();
-
-
             }
         });
 
-        emailOptionButton = (ImageButton) findViewById(R.id.emailOption);
+        msgOptionButton = (ImageButton) findViewById(R.id.msgOption);
+        msgOptionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showOptionDialog();
+            }
+        });
+
+        /*emailOptionButton = (ImageButton) findViewById(R.id.emailOption);
         emailOptionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 popUpEmailForm();
             }
-        });
+        });*/
 
         emailTextView = (TextView) findViewById(R.id.email);
         if(emailAddress == "") {
@@ -145,16 +149,16 @@ public class MainActivity extends ListActivity {
             emailTextView.setText(emailAddress);
         }
 
+        /*
         iuButton = (ImageButton)findViewById(R.id.imageupload);
         iuButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
-
             public void onClick(View v)
             {
                 openGallery(1);
             }
-        });
+        });*/
 
         exitSearchButton = (Button) findViewById(R.id.exitFindByEmail);
         exitSearchButton.setOnClickListener(new View.OnClickListener() {
@@ -242,10 +246,6 @@ public class MainActivity extends ListActivity {
                 Toast.makeText(MainActivity.this, "contains Dirty Word", Toast.LENGTH_SHORT).show();
                 return;
             }
-                
-
-
-
 
             if (sendMessageIntervalEnded) {
                 // Start the counter to count for 5 seconds
@@ -373,6 +373,36 @@ public class MainActivity extends ListActivity {
         startActivity(Intent.createChooser(sharingIntent, getResources().getText(R.string.share_to)));
     }
 
+    /* Pop up a dialog for the user to choose:
+    *   1. Enter identity code
+    *   2. Add image
+    *   3. Open LaTex
+    * */
+    public void showOptionDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        AlertDialog dialog = builder.create();
+
+        View dialogView = getLayoutInflater().inflate(R.layout.activity_option, null);
+        dialog.setView(dialogView);
+
+        dialogView.findViewById(R.id.emailOption).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                popUpEmailForm();
+            }
+        });
+
+        dialogView.findViewById(R.id.imageupload).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openGallery(1);
+            }
+        });
+
+        dialog.show();
+    }
+
     public void popUpEmailForm ()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -442,6 +472,7 @@ public class MainActivity extends ListActivity {
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select file to upload "), req_code);
     }
+
     public void onActivityResult ( int requestCode, int resultCode, Intent data)
     {
 
