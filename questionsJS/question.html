@@ -238,9 +238,9 @@
       </div><!-- /.col-sm-9 -->
       <div class="col-sm-3">
           <!-- suggestion room list start -->
-          <div class="list-group-item">
-	    <li href="#" class="list-group-item list-group-item-danger" align="center">Hot Rooms</li>
-	    <a href="#" class="list-group-item list-group-item-info" ng-repeat="room in rooms" align="center">{{room.id}}
+          <div class="list-group">
+	    <li class="list-group-item list-group-item-danger" align="center">Hot Rooms</li>
+	    <a href="{{room.ref}}" class="list-group-item list-group-item-info" ng-repeat="room in rooms" align="center">{{room.id}}
 	      <span class="glyphicon glyphicon-fire" ng-show="room.st"></span>
 	    </a>
 	  </div>
