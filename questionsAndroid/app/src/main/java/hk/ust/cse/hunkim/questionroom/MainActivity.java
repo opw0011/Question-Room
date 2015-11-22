@@ -66,7 +66,7 @@ public class MainActivity extends ListActivity {
 
     private QuestionListAdapter mChatListAdapter;
     private ImageButton msgOptionButton;
-    //private ImageButton emailOptionButton;    //TODO
+    private ImageButton emailOptionButton;
     private String emailAddress = "";
     private String image= "";
     private TextView emailTextView;
@@ -74,7 +74,7 @@ public class MainActivity extends ListActivity {
     private String emailForSearch;
     private Button exitSearchButton;
 
-    //private ImageButton iuButton;             //TODO
+    private ImageButton iuButton;
 
     private DBUtil dbutil;
 
@@ -133,14 +133,6 @@ public class MainActivity extends ListActivity {
             }
         });
 
-        /*emailOptionButton = (ImageButton) findViewById(R.id.emailOption);
-        emailOptionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                popUpEmailForm();
-            }
-        });*/
-
         emailTextView = (TextView) findViewById(R.id.email);
         if(emailAddress == "") {
             emailTextView.setVisibility(View.INVISIBLE);
@@ -148,17 +140,6 @@ public class MainActivity extends ListActivity {
         else {
             emailTextView.setText(emailAddress);
         }
-
-        /*
-        iuButton = (ImageButton)findViewById(R.id.imageupload);
-        iuButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                openGallery(1);
-            }
-        });*/
 
         exitSearchButton = (Button) findViewById(R.id.exitFindByEmail);
         exitSearchButton.setOnClickListener(new View.OnClickListener() {
