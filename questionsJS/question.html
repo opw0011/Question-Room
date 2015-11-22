@@ -11,8 +11,8 @@
   <meta http-equiv="cache-control" content="no-cache" />
   <meta http-equiv="expires" content="0" />
   <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-  <meta http-equiv="pragma" content="no-cache"
-	
+  <meta http-equiv="pragma" content="no-cache" />
+
   <!-- for Facebook sharing -->
   <meta property="og:url" content="https://comp3111-qroom.firebaseapp.com/" />
   <meta property="fb:app_id" content="1074795829199506" />
@@ -239,9 +239,9 @@
       <div class="col-sm-3"><h4>Hot Rooms</h4>
           <!-- suggestion room list start -->
           <ul class="list-group" ng-repeat="room in rooms">
-            <a class="list-group-item" href="{{room.ref}}">{{room.id}}
+            <div class="list-group-item">{{room.id}}
 	      <span class="label label-danger" ng-show="room.st">HOT</span>
-	    </a>
+	    </div>
           </ul>
           <!-- suggestion room list end -->
       </div>
