@@ -236,13 +236,14 @@
         </div><!--  /.list-group -->
         <!-- questions-list end -->
       </div><!-- /.col-sm-9 -->
-      <div class="col-sm-3"><h4>Hot Rooms</h4>
+      <div class="col-sm-3">
           <!-- suggestion room list start -->
-          <ul class="list-group" ng-repeat="room in rooms">
-            <div class="list-group-item">{{room.id}}
-	      <span class="label label-danger" ng-show="room.st">HOT</span>
-	    </div>
-          </ul>
+          <div class="list-group-item">
+	    <li href="#" class="list-group-item list-group-item-danger" align="center">Hot Rooms</li>
+	    <a href="#" class="list-group-item list-group-item-info" ng-repeat="room in rooms" align="center">{{room.id}}
+	      <span class="glyphicon glyphicon-fire" ng-show="room.st"></span>
+	    </a>
+	  </div>
           <!-- suggestion room list end -->
       </div>
     </div>
