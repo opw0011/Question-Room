@@ -121,7 +121,7 @@ public class MainActivity extends ListActivity {
         findViewById(R.id.sendButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                    sendMessage();
+                sendMessage();
             }
         });
 
@@ -362,7 +362,7 @@ public class MainActivity extends ListActivity {
     public void showOptionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        AlertDialog dialog = builder.create();
+        final AlertDialog dialog = builder.create();
 
         View dialogView = getLayoutInflater().inflate(R.layout.activity_option, null);
         dialog.setView(dialogView);
@@ -378,6 +378,13 @@ public class MainActivity extends ListActivity {
             @Override
             public void onClick(View view) {
                 openGallery(1);
+            }
+        });
+
+        dialogView.findViewById(R.id.latex).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startLatexActivity();
             }
         });
 
@@ -452,6 +459,11 @@ public class MainActivity extends ListActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select file to upload "), req_code);
+    }
+
+    public void startLatexActivity() {
+        Intent intent = new Intent(this, LatexActivity.class);
+        startActivity(intent);
     }
 
     public void onActivityResult ( int requestCode, int resultCode, Intent data)
