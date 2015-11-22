@@ -16,7 +16,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 	$scope.$storage = $localStorage;
 
 	var scrollCountDelta = 10;
-	$scope.maxQuestion = scrollCountDelta;
+        $scope.maxQuestion = scrollCountDelta;
 
 	var splits = $location.path().trim().split("/");
 	var roomId = angular.uppercase(splits[1]);
