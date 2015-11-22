@@ -107,10 +107,13 @@
                       </div>
                     </li>
                     <li class="list-group-item">
-                      upload image
-                      <input id="inputFileToLoad" type="file" onchange="encodeImageFileAsURL();" /> 
-                      <div id="imgTest"></div>
-                    </li>
+                  <div ng-init= "input.image=''">
+                    <label for="filePicker">Choose Image:</label>
+                      <input type="file" id="filePicker">
+                      <textarea id="base64textarea" placeholder="Base64 will appear here" style="min-height:100px; resize: vertical; border-style:none none dashed none;" focus-on-change="input.image" ng-model="input.image" autofocus></textarea>
+                    <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.image!=''" ng-click="input.image=''"></button>
+                </div>
+                </li>
                   </ul>
                 </div>
                 <!-- collapsable list end-->
@@ -139,16 +142,6 @@
                   <div ng-init="input.searchMail=''">
                     <input type="email" name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.searchEmail" placeholder="Manage your posts" ng-model="input.searchEmail" style="width:300px" autofocus/>
                   </div>
-
-                </li>
-                <li class="list-group-item">
-                  <div ng-init= "input.image=''">
-                    <label for="filePicker">Choose Image:</label>
-                      <input type="file" id="filePicker">
-                      <textarea id="base64textarea" placeholder="Base64 will appear here" style="min-height:100px; resize: vertical; border-style:none none dashed none;" focus-on-change="input.image" ng-model="input.image" autofocus></textarea>
-                    <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.image!=''" ng-click="input.image=''"></button>
-                </div>
-                </li>
               </ul>
 
                 </label>
