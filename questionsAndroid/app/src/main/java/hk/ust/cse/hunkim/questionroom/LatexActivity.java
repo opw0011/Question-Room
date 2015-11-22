@@ -2,15 +2,40 @@ package hk.ust.cse.hunkim.questionroom;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
+import android.widget.ImageView;
+
 
 public class LatexActivity extends AppCompatActivity {
+    private EditText latexInput;
+    private ImageView latexPreview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_latex);
+
+        latexPreview = (ImageView) findViewById(R.id.latex_preview);
+
+        latexInput = (EditText) findViewById(R.id.latex_input);
+        latexInput.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                latexPreview.setImageResource(R.drawable.tfboys);
+            }
+        });
     }
 
     @Override
@@ -34,4 +59,5 @@ public class LatexActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
