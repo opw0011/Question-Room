@@ -37,6 +37,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
 	$scope.editedTodo = null;
 
+    //calculate post time
 	$scope.timeAgo = function(past){
 		var now = new Date().getTime();
 		var ts= past;
@@ -71,6 +72,20 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 			return new Date(past).toString();
 		}
   }
+
+  $scope.getFileName=function() {
+    //this gets the full url
+    var url = document.location.href;
+    //this removes the anchor at the end, if there is one
+    url = url.substring(0, (url.indexOf("#") == -1) ? url.length : url.indexOf("#"));
+    //this removes the query after the file name, if there is one
+    url = url.substring(0, (url.indexOf("?") == -1) ? url.length : url.indexOf("?"));
+    //this removes everything before the last slash in the path
+    url = url.substring(url.lastIndexOf("/") + 1, url.length);
+    //return
+    alert (url);
+    return url;
+}
 
     // pre-precessing for collection
     $scope.$watchCollection('todos', function () {
@@ -136,6 +151,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
         var firstAndLast = $scope.getFirstAndRestSentence(newTodo);
         var head = firstAndLast[0];
         var desc = firstAndLast[1];
+        var image = null;
 
         $scope.todos.$add({
             wholeMsg: newTodo,
@@ -146,6 +162,7 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             email: todoID,
             echo: 0,
             order: 0,
+            image: image,
             newQuestion: true
         });
         
