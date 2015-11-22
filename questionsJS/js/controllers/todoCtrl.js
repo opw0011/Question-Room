@@ -25,6 +25,7 @@ todomvc.controller('TodoCtrl',['$scope', '$location', '$firebaseArray', '$sce', 
 
 	// change this URL for your app
 	var firebaseURL = "https://comp3111-qroom.firebaseio.com/";
+	var appURL = "https://comp3111-qroom.firebaseapp.com/";
 	$scope.roomId = roomId;
 	var url = firebaseURL + roomId + "/questions/";
 	var firebaseRef = new Firebase(firebaseURL);
@@ -46,7 +47,7 @@ todomvc.controller('TodoCtrl',['$scope', '$location', '$firebaseArray', '$sce', 
 		if (now - element.ts > 60000) {array[index].st = false;}
 	    });
 	    if (flag) {
-		rooms.push({id:room, ts:new Date().getTime(), st:true});
+		rooms.push({id:room, ts:new Date().getTime(), st:true, ref:appURL+room});
 		$scope.rooms = rooms;
 	    }
 	});
