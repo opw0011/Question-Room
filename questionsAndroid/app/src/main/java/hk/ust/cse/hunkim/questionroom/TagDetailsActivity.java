@@ -40,7 +40,7 @@ public class TagDetailsActivity extends Activity {
             roomName = "all";
         }
         mFirebaseRef = new Firebase(FIREBASE_URL).child("room").child(roomName).child("questions");
-        mChatListAdapter = new QuestionListAdapter(mFirebaseRef.orderByKey().limitToFirst(200), this, R.layout.question, roomName);
+        //mChatListAdapter = new QuestionListAdapter(mFirebaseRef.orderByKey().limitToFirst(200), this, R.layout.question, roomName);
         messagesWithTag = new ArrayList<String>();
         ListView messagesListView = (ListView) findViewById(R.id.messagesWithTag);
 

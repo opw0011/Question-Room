@@ -1,34 +1,29 @@
 package hk.ust.cse.hunkim.questionroom;
 
 import android.app.Activity;
+import android.database.DataSetObserver;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.text.Html;
 import android.util.Base64;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.Firebase;
 import com.firebase.client.Query;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import android.content.Intent;
 import android.text.util.Linkify;
-import android.widget.ArrayAdapter;
+
 import java.util.ArrayList;
 import java.util.regex.Pattern;
-import hk.ust.cse.hunkim.questionroom.db.DBUtil;
+
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
 /**
@@ -46,14 +41,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     private String inputEmail;
     private boolean selectPostByEmail;
     private static ArrayList<String> messagesWithTag;
+    private ReplyAdapter mReplyAdapter;
+    private Firebase mFirebaseRefReply;
 
-    public QuestionListAdapter(Query ref, Activity activity, int layout, String room_Name) {
+    public QuestionListAdapter(Query ref, Activity activity, int layout, String room_Name, Firebase replies) {
         super(ref, Question.class, layout, activity);
         roomName = room_Name;
         // Must be MainActivity
         assert (activity instanceof MainActivity);
 
         this.activity = (MainActivity) activity;
+        this.mFirebaseRefReply = replies;
     }
 
     /**
@@ -211,6 +209,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
 
         ((TextView) view.findViewById(R.id.timestamp)).setText(timeAgo);
 
+        final ListView replyListView = (ListView) view.findViewById(R.id.replyListView);
+        mReplyAdapter = new ReplyAdapter(
+                mFirebaseRefReply,
+                R.layout.reply, activity, question.getKey());
+        mReplyAdapter.registerDataSetObserver(new DataSetObserver() {
+            @Override
+            public void onChanged() {
+                super.onChanged();
+            }
+        });
+        replyListView.setAdapter(mReplyAdapter);
         // check if we already clicked
         /*boolean clickable = !dbUtil.contains(question.getKey());
 
