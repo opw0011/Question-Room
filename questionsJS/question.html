@@ -88,7 +88,7 @@
                 <div class="questionInputBox">
                   <textarea id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag, shift+enter to post" ng-model="input.wholeMsg" autofocus required ng-minlength="5" maxlength="500" style="min-height:100px; resize: none; border-style: dashed;"></textarea>
                   <div class="btn_ask">
-                    <button id="btn_post" class="btn btn-primary pull-right" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i> Ask Question</button> 
+                    <button id="btn_post" class="btn btn-primary pull-right" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-paper-plane"></i> Ask Question</button> 
                   </div>
                   <div class="btn_emoji">
                     <span smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
@@ -138,14 +138,12 @@
                   <button id="btn_reset" class="btn btn-danger" ng-click="input.wholeMsg='';input.email='';input.searchMsg='';input.searchEmail=''">Reset <i class="fa fa-commenting fa-lg"></i></button>
                 </div>
               </div><!-- /input-group -->
-              <!-- search by email -->
-              <div name="searchByMail">
-                <label>Manage your questions</label>
-                  <div ng-init="input.searchMail=''">
-                    <input name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.searchEmail" placeholder="Enter the passcode here to edit your posted questions" ng-model="input.searchEmail" style="width:300px" autofocus/>
-                  </div>              
-              </div>
 
+              <!-- search by email -->
+              <div name="searchByMail" ng-init="input.searchMail=''">
+                <label>Manage your questions</label>
+                <input type="text" class="form-control" focus-on-change="input.searchEmail" placeholder="Enter the passcode here to edit your posted questions" ng-model="input.searchEmail" autofocus/>         
+              </div>
           </div>
           <!-- Search Tab end-->
         </div>
