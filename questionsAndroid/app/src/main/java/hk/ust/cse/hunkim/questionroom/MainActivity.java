@@ -411,7 +411,7 @@ public class MainActivity extends ListActivity {
 
         final EditText userEmail = new EditText(this);
         userEmail.setInputType(InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS);
-        userEmail.setHint("Enter email");
+        userEmail.setHint("Enter a private passcode");
         if (emailAddress != "") {
             userEmail.setText(emailAddress, null);
         }
