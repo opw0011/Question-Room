@@ -76,7 +76,7 @@
         <div id="question_box">
           <!-- tab navigation bar -->
           <ul class="nav nav-pills" id="tabs">
-            <li class="active"><a data-toggle="tab" href="#tab_post"><i class="fa fa-commenting"></i> Post</a></li>
+            <li class="active"><a data-toggle="tab" href="#tab_post" ng-click="input.searchEmail=''"><i class="fa fa-commenting"></i> Post</a></li>
             <li><a data-toggle="tab" href="#tab_search"><i class="fa fa-search"></i> Search</a></li>
           </ul>
 
@@ -101,9 +101,9 @@
                   <ul class="list-group">
                     <li class="list-group-item">
                       <!-- input email address -->
-                      <label class="glyphicon glyphicon-envelope"> Email:</label>
+                      <label> Passcode:</label>
                       <div ng-init="input.email=''">
-                        <input type="email" name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.email" ng-model="input.email" autofocus>
+                        <input name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.email" ng-model="input.email" placeholder="Set a passcode here in order to further edit your question" autofocus>
                         <!-- better inside the inputbox -->
                         <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                       </div>
