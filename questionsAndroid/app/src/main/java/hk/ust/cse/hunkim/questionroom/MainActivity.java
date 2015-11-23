@@ -40,6 +40,7 @@ import android.graphics.Typeface;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 
@@ -55,6 +56,7 @@ import java.util.regex.Pattern;
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.question.Question;
+import hk.ust.cse.hunkim.questionroom.question.Reply;
 
 public class MainActivity extends ListActivity {
 
@@ -66,6 +68,7 @@ public class MainActivity extends ListActivity {
 
     private String roomName;
     private Firebase mFirebaseRef;
+    private Firebase replies;
     private ValueEventListener mConnectedListener;
 
     private QuestionListAdapter mChatListAdapter;
@@ -109,6 +112,7 @@ public class MainActivity extends ListActivity {
 
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
+        replies = new Firebase(FIREBASE_URL).child(roomName).child("replies");
 
         // give a header title for each room
         
@@ -181,7 +185,7 @@ public class MainActivity extends ListActivity {
         // Tell our list adapter that we only want 200 messages at a time
         mChatListAdapter = new QuestionListAdapter(
                 mFirebaseRef.orderByChild("echo").limitToFirst(200),
-                this, R.layout.question, roomName);
+                this, R.layout.question, roomName, replies);
         listView.setAdapter(mChatListAdapter);
 
         mChatListAdapter.registerDataSetObserver(new DataSetObserver() {
@@ -486,7 +490,10 @@ public class MainActivity extends ListActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String replyMsg = reply.getText().toString();
-
+                        Reply rep = new Reply();
+                        rep.setDesc(replyMsg);
+                        rep.setQuestionID(key);
+                        replies.push().setValue(rep);
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
