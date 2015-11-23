@@ -1,5 +1,7 @@
 package hk.ust.cse.hunkim.questionroom.renderer.android;
 
+import android.content.res.Configuration;
+import android.graphics.Canvas;
 import android.view.View;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -27,13 +29,14 @@ public class LatexImageView extends View {
     private Graphics2DA mGraphics;
 
     private String mLatexText = "";
-    private float mHeight = 20;
+    private int mHeight = 300;
+    private int mWidth = 300;
+    private int mFontSize = 12;
     private int mStyle = TeXConstants.STYLE_DISPLAY;
     private Color mForegroundColor = new ColorA(android.graphics.Color.BLACK);
     private int mBackgroundColor = android.graphics.Color.TRANSPARENT;
     private int mType = TeXFormula.SERIF;
-
-    private float mSizeScale;
+    private float mSizeScale = 1;
 
     public LatexImageView(Context context) {
         super(context);
@@ -62,6 +65,16 @@ public class LatexImageView extends View {
         }
     }
 
+    public void setLatexText(String latexText) {
+        mLatexText = latexText;
+        mFormula = null;
+        mTexIconBuilder = null;
+        mTexIcon = null;
+        ensureTeXIconExists();
+        invalidate();
+        requestLayout();
+    }
+
     private void readAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
         TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs,
@@ -70,11 +83,25 @@ public class LatexImageView extends View {
 
         try {
             mLatexText = a.getString(R.attr.latexText);
-            mHeight = a.getFloat(R.attr.layout_height, 20);
+            mHeight = a.getInt(R.attr.layout_height, 300);
+            mWidth = a.getInt(R.attr.layout_width, 300);
+            mFontSize = a.getInt(R.attr.fontSize, 12);
         } finally {
             a.recycle();
         }
         ensureTeXIconExists();
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        float newFontScale = newConfig.fontScale;
+        if (Math.abs(mSizeScale - newFontScale) > 0.001) {
+            mSizeScale = newConfig.fontScale;
+            mTexIcon = null;
+            ensureTeXIconExists();
+            invalidate();
+            requestLayout();
+        }
     }
 
     private void ensureTeXIconExists() {
@@ -89,7 +116,7 @@ public class LatexImageView extends View {
             mTexIconBuilder = mFormula.new TeXIconBuilder();
         }
         if (mTexIcon == null) {
-            mTexIconBuilder.setSize(mHeight * mSizeScale).setStyle(mStyle).setType(mType);  //TODO
+            mTexIconBuilder.setSize(mFontSize).setStyle(mStyle).setType(mType);
             mTexIcon = mTexIconBuilder.build();
         }
         mTexIcon.setInsets(new Insets(
@@ -98,5 +125,23 @@ public class LatexImageView extends View {
                 getPaddingBottom(),
                 getPaddingRight()
         ));
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if (mTexIcon == null) {
+            return;
+        }
+
+        if (mGraphics == null) {
+            mGraphics = new Graphics2DA();
+        }
+        // draw background
+        canvas.drawColor(mBackgroundColor);
+
+        // draw latex
+        mGraphics.setCanvas(canvas);
+        mTexIcon.setForeground(mForegroundColor);
+        mTexIcon.paintIcon(null, mGraphics, 0, 0);
     }
 }
