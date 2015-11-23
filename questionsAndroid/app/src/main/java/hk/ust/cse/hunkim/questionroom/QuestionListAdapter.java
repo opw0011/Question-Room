@@ -115,6 +115,18 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
             }
         });
 
+        ImageButton replyButton = (ImageButton) view.findViewById(R.id.replybutton);
+
+        replyButton.setTag(question.getKey());
+
+        replyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity m = (MainActivity) view.getContext();
+                m.popUpReplyDialog(question.getKey());
+            }
+        });
+
         String msgString = "";
 
         question.updateNewQuestion();

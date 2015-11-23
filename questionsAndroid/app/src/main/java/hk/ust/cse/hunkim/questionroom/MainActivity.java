@@ -467,6 +467,44 @@ public class MainActivity extends ListActivity {
         likeAlert.show();
     }
 
+
+    public void popUpReplyDialog(final String key) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        final EditText reply = new EditText(this);
+        reply.setInputType(InputType.TYPE_CLASS_TEXT);
+        reply.setHint("Enter reply message");
+
+        // Set layout of email input box programmatically
+        TableLayout.LayoutParams replyParams = new TableLayout.LayoutParams();
+        replyParams.setMargins(5, 5, 5, 5);
+        reply.setLayoutParams(replyParams);
+
+        builder.setTitle("Reply");
+        builder.setView(reply)
+                .setPositiveButton("Reply", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        String replyMsg = reply.getText().toString();
+
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        AlertDialog replyAlert = builder.create();
+        replyAlert.show();
+        
+
+    }
+    
+    
+    
+    
+    
     public void openGallery ( int req_code) {
         Intent intent = new Intent();
         intent.setType("image/*");
