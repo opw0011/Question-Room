@@ -155,7 +155,7 @@
 
         <!-- questions-list start -->
         <div class="list-group" id="todo-list" >
-          <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion" ng-class="editing: todo == editedTodo" ng-hide="todo.echo < -15">
+          <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion"  ng-hide="todo.echo < -15">
             <div class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
               <div id="todo-sign" ng-hide="editing" class="question-heading-sign">           
                 <span ng-class="{'badge badge-success': todo.echo > 0, 'badge': todo.echo == 0, 'badge badge-danger': todo.echo < 0}">{{todo.echo}}</span>
@@ -225,12 +225,26 @@
               </div>
             </div> 
             <!-- reply collapse start -->
-            <div id="reply_box" ng-show="isReplyOpen">
+            <div ng-show="isReplyOpen">
+              <div class="list-group" id="reply-list" >
+                <div class="list-group-item" ng-repeat="reply in todosReplies | filter:{'questionID':todo.$id} : true " ng-hide="todo.echo < -15">
+                  <div ng-bind="reply.desc"></div>
+                </div>
+              </div>      
+        
               <div class="well well-sm">
-                <div contenteditable="true" style="border: 1px solid #DDD; max-height: 250px; min-height: 30px; background-color: #fff;"><p><br></p></div> 
-                <button type="button" class="btn btn-success btn-sm" style="position:absolute; bottom:40px; right:25px;">Reply</button>
-              </div>
+                <form name="replyForm" id="replyForm" ng-submit="addReply(todo)" ng-init="input.replyMsg=''">
+                <div class="replyInputBox">
+                  <textarea class="form-control custom-control ng-valid ng-touched ng-dirty ng-valid-parse" style="resize:none; overflow: auto; height:100px;" ng-model="input.replyMsg" autofocus required ng-minlength="5" maxlength="500" ></textarea>
+                  <div class="btn_reply">
+                    <button class="btn btn-success" ng-submit="addReply(todo)" ng-disabled="filterWord(input.replyMsg)||replyForm.$error.minlength||replyForm.$error.required||disableTimeInterval">Reply</button>                    
+                  </div>
+                </div>
+                <span ng-style="{visibility: (postTimeCounter>0) && 'visible' || 'hidden'}"><small>Please wait for {{postTimeCounter}}    second to post again...</small></span>
+              </form>
+              </div>             
             </div>
+
             <!-- reply collapse end -->
           </div>
         </div><!--  /.list-group -->
