@@ -12,17 +12,17 @@ body {
 .icon + span {vertical-align: middle;}
 
 .icon.facebook {
-  background: url(../img/icon-facebook.png) no-repeat 0 0;
-  height: 29px;
-  width: 38px;
+	background: url(../img/icon-facebook.png) no-repeat 0 0;
+	height: 29px;
+	width: 38px;
 }
 
 .relative {
-    position: relative;
+	position: relative;
 }
 
 .absolute {
-    position: absolute;
+	position: absolute;
 }
 
 /*#tag-label {font-size: 15px;}*/
@@ -64,16 +64,16 @@ h4.question-heading {
 }
 
 .badge-danger {
-background-color: #d9534f;
+	background-color: #d9534f;
 }
 
 .badge-success {
-background-color: #5cb85c;
+	background-color: #5cb85c;
 }
 
 textarea:focus {
-  outline: none !important;
-  box-shadow: none !important;
+	outline: none !important;
+	box-shadow: none !important;
 }
 
 /*input reply question box*/
