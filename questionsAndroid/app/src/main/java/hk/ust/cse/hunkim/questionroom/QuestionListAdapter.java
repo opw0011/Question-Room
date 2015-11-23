@@ -23,6 +23,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import android.content.Intent;
+import android.text.util.Linkify;
+import android.widget.ArrayAdapter;
+import java.util.ArrayList;
+import java.util.regex.Pattern;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
 import hk.ust.cse.hunkim.questionroom.question.Question;
 
@@ -40,10 +45,11 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     MainActivity activity;
     private String inputEmail;
     private boolean selectPostByEmail;
+    private static ArrayList<String> messagesWithTag;
 
-    public QuestionListAdapter(Query ref, Activity activity, int layout, String roomName) {
+    public QuestionListAdapter(Query ref, Activity activity, int layout, String room_Name) {
         super(ref, Question.class, layout, activity);
-
+        roomName = room_Name;
         // Must be MainActivity
         assert (activity instanceof MainActivity);
 
@@ -115,7 +121,20 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
         if (question.isNewQuestion()) {
             msgString += "<font color=red>NEW </font>";
         }
-        msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
+        //msgString += "<B>" + question.getHead() + "</B>" + question.getDesc();
+        // escapeHTML for XSS protection
+        msgString += "<B>" + Html.escapeHtml(question.getHead()) + "</B>" + Html.escapeHtml(question.getDesc());
+        //Pattern to find if there's a hash tag in the message
+        //i.e. any word starting with a # and containing letter or numbers or _
+        Pattern tagMatcher = Pattern.compile("[#]+[A-Za-z0-9-_]+\\b");
+
+        //Scheme for Linkify, when a word matched tagMatcher pattern,
+        //that word is appended to this URL and used as content URI
+        String newActivityURL = "content://hk.ust.cse.hunkim.questionroom.tagdetailsactivity/";
+
+        //Attach Linkify to TextView
+        Linkify.addLinks(((TextView) view.findViewById(R.id.head_desc)), tagMatcher, newActivityURL);
+
 
         //download image
         ImageView im = (ImageView) view.findViewById(R.id.image);
@@ -213,4 +232,17 @@ public class QuestionListAdapter extends FirebaseListAdapter<Question> {
     protected void setSelectPostByEmail(boolean value) { selectPostByEmail = value; }
 
     protected void setInputEmail(String email) { inputEmail = new String(email); }
+
+    public Question getItem(int i) {
+        return mModels.get(i);
+    }
+
+    public ArrayList<String> GetAllTaggedQuestions(String tag){
+        for (int i = 0; i < getCount(); i++){
+            if (getItem(i).getWholeMsg().contains(tag))
+                messagesWithTag.add(getItem(i).getWholeMsg());
+        }
+        return messagesWithTag;
+    }
 }
+
