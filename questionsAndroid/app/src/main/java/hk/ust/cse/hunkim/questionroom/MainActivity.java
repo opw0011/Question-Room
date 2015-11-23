@@ -46,11 +46,7 @@ import com.firebase.client.ValueEventListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import android.content.Intent;
-import android.text.util.Linkify;
-import android.widget.ArrayAdapter;
-import java.util.ArrayList;
-import java.util.regex.Pattern;
+
 
 import hk.ust.cse.hunkim.questionroom.db.DBHelper;
 import hk.ust.cse.hunkim.questionroom.db.DBUtil;
@@ -79,7 +75,6 @@ public class MainActivity extends ListActivity {
     private Button exitSearchButton;
 
     private ImageButton iuButton;
-    private static ArrayList<String> messagesWithTag;
 
     private DBUtil dbutil;
 
@@ -120,7 +115,7 @@ public class MainActivity extends ListActivity {
         } else {
             p.setText(roomName);
         }
-
+        
         // Setup our input methods. Enter key on the keyboard or pushing the send button
         EditText inputText = (EditText) findViewById(R.id.messageInput);
         inputText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -296,7 +291,8 @@ public class MainActivity extends ListActivity {
     }
 
 
-    public void updateEcho(String key, final boolean like) {
+    public void updateEcho (String key, final boolean like)
+    {
         final Firebase echoRef = mFirebaseRef.child(key).child("echo");
         echoRef.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -305,7 +301,7 @@ public class MainActivity extends ListActivity {
                         Long echoValue = (Long) dataSnapshot.getValue();
                         Log.e("Echo update:", "" + echoValue);
 
-                        if (like)
+                        if(like)
                             echoRef.setValue(echoValue + 1);
                         else
                             echoRef.setValue(echoValue - 1);
@@ -326,7 +322,7 @@ public class MainActivity extends ListActivity {
                         Long orderValue = (Long) dataSnapshot.getValue();
                         Log.e("Order update:", "" + orderValue);
 
-                        if (like)
+                        if(like)
                             orderRef.setValue(orderValue - 1);
                         else
                             orderRef.setValue(orderValue + 1);
@@ -467,7 +463,8 @@ public class MainActivity extends ListActivity {
         likeAlert.show();
     }
 
-    public void openGallery ( int req_code) {
+    public void openGallery ( int req_code)
+    {
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
