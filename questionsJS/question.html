@@ -85,12 +85,14 @@
             <!-- Post tab start-->
             <div id="tab_post" class="tab-pane fade in active">
               <form name="todoForm" id="todoForm" ng-submit="addTodo()" ng-init="input.wholeMsg=''">
-                <div style="border: 1px solid #ddd;">
-                  <textarea id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag, shift+enter to post" ng-model="input.wholeMsg" autofocus required ng-minlength="5" maxlength="500" style="min-height:100px; resize: vertical; border-style:none none dashed none;"></textarea>  
-                  <div>
-                    <span smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+                <div class="questionInputBox">
+                  <textarea id="new-todo" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag, shift+enter to post" ng-model="input.wholeMsg" autofocus required ng-minlength="5" maxlength="500" style="min-height:100px; resize: none; border-style: dashed;"></textarea>
+                  <div class="btn_ask">
                     <button id="btn_post" class="btn btn-primary pull-right" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-commenting fa-lg"></i> Ask Question</button> 
                   </div>
+                  <div class="btn_emoji">
+                    <span smilies-selector="input.wholeMsg" smilies-placement="bottom" smilies-title="Smilies"></span>
+                  </div>  
                   <div class="clearfix"></div>           
                 </div>                         
 
@@ -235,7 +237,7 @@
           <div class="well well-sm">
             <form name="replyForm" id="replyForm" ng-submit="addReply(todo)" ng-init="input.replyMsg=''">
               <div class="replyInputBox">
-                <textarea class="form-control custom-control ng-valid ng-touched ng-dirty ng-valid-parse" style="resize:none; overflow: auto; height:100px;" ng-model="input.replyMsg" autofocus required ng-minlength="5" maxlength="500" ></textarea>
+                <textarea class="form-control custom-control ng-valid ng-touched ng-dirty ng-valid-parse" style="resize:none; overflow: auto; height:100px;" ng-model="input.replyMsg" autofocus required ng-minlength="5" maxlength="500" placeholder="Write your reply here ..."></textarea>
                 <div class="btn_reply">
                   <button class="btn btn-success" ng-submit="addReply(todo)" ng-disabled="filterWord(input.replyMsg)||replyForm.$error.minlength||replyForm.$error.required||disableTimeInterval">Reply</button>                    
                 </div>
