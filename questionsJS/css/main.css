@@ -105,3 +105,9 @@ textarea:focus {
 	bottom: 0px;
 	left: 0px;
 }
+
+/* reply btn badge*/
+.btn-default .badge {
+    color: #fff;
+    background-color: #337AB7;
+}

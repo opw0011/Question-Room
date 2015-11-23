@@ -108,14 +108,14 @@
                         <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                       </div>
                     </li>
-                    <li class="list-group-item">
+<!--                     <li class="list-group-item">
                       <div ng-init= "input.image=''">
                         <label for="filePicker">Choose Image:</label>
                         <input type="file" id="filePicker">
                         <textarea id="base64textarea" placeholder="Base64 will appear here" style="min-height:100px; resize: vertical; border-style:none none dashed none;" focus-on-change="input.image" ng-model="input.image" autofocus></textarea>
                         <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.image!=''" ng-click="input.image=''"></button>
                       </div>
-                    </li>
+                    </li> -->
                   </ul>
                 </div>
                 <!-- collapsable list end-->
@@ -167,8 +167,8 @@
               <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
               <span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span>
               <small class="text-muted"> Asked {{timeAgo(todo.timestamp)}}</small>
-              <a ng-hide="editing" href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F&redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank" class="btn btn-primary btn-xs pull-right">Share to Facebook
-              </a>
+<!--               <a ng-hide="editing" href="https://www.facebook.com/dialog/share?app_id=145634995501895&display=popup&href=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2F&redirect_uri=https%3A%2F%2Fdevelopers.facebook.com%2Ftools%2Fexplorer" target="_blank" class="btn btn-primary btn-xs pull-right">Share to Facebook
+              </a> -->
             </div>          
             <td>
               <!-- editing box-->
@@ -201,7 +201,9 @@
             </button>
             &nbsp;
             <button ng-hide="editing" type="button" class="btn btn-default btn-xs" ng-click="isReplyOpen = !isReplyOpen">
-              <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Reply
+              <!-- <span class="glyphicon glyphicon-send" aria-hidden="true"></span> -->
+              <span class="badge"> {{replyCount.length}}</span>
+              Reply
             </button>
             &nbsp;
             <button class="btn btn-default" ng-hide="!editing" ng-click="editing = false">
@@ -229,8 +231,10 @@
         <!-- reply collapse start -->
         <div ng-show="isReplyOpen">
           <div class="list-group" id="reply-list" >
-            <div class="list-group-item" ng-repeat="reply in todosReplies | filter:{'questionID':todo.$id} : true " ng-hide="todo.echo < -15">
-              <div ng-bind="reply.desc"></div>
+            <div class="list-group-item" ng-repeat="reply in todosReplies | filter:{'questionID':todo.$id} : true as replyCount" ng-hide="todo.echo < -15">
+              <div ng-bind="reply.desc" class="pull-left"></div>
+              <div class="pull-right"><small class="text-muted"><i class="fa fa-clock-o"></i> Replied {{timeAgo(reply.timestamp)}}</small></div>
+              <div class="clearfix"></div>
             </div>
           </div>      
           
@@ -239,7 +243,7 @@
               <div class="replyInputBox">
                 <textarea class="form-control custom-control ng-valid ng-touched ng-dirty ng-valid-parse" style="resize:none; overflow: auto; height:100px;" ng-model="input.replyMsg" autofocus required ng-minlength="5" maxlength="500" placeholder="Write your reply here ..."></textarea>
                 <div class="btn_reply">
-                  <button class="btn btn-success" ng-submit="addReply(todo)" ng-disabled="filterWord(input.replyMsg)||replyForm.$error.minlength||replyForm.$error.required||disableTimeInterval">Reply</button>                    
+                  <button class="btn btn-success" ng-submit="addReply(todo)" ng-disabled="filterWord(input.replyMsg)||replyForm.$error.minlength||replyForm.$error.required||disableTimeInterval">Reply</button>  
                 </div>
               </div>
               <span ng-style="{visibility: (postTimeCounter>0) && 'visible' || 'hidden'}"><small>Please wait for {{postTimeCounter}}    second to post again...</small></span>
@@ -299,7 +303,7 @@
 <!-- angular smilies -->
 <script src="plugins/emoji/dist/angular-smilies.js"></script>
 
-
+<!--
 <script type='text/javascript'>
 var handleFileSelect = function(evt) {
   var files = evt.target.files;
@@ -325,7 +329,7 @@ if (window.File && window.FileReader && window.FileList && window.Blob) {
 }
 
 </script>
-
+-->
 <div id="fb-root"></div>
 
 </body>
