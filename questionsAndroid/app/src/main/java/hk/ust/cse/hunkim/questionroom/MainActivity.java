@@ -110,15 +110,26 @@ public class MainActivity extends ListActivity {
         // Setup our Firebase mFirebaseRef
         mFirebaseRef = new Firebase(FIREBASE_URL).child(roomName).child("questions");
 
-        // Edit by Erez, give a header title for each room
-
+        // give a header title for each room
+        
         TextView p = (TextView) findViewById(R.id.roomname_View);
-
+        
         if(roomName.length() > 10){
             String q = roomName.substring(0,10) + "...";
             p.setText(q);
         } else {
             p.setText(roomName);
+        }
+        
+        // Edit by Erez, give a header title for each room
+
+        TextView head = (TextView) findViewById(R.id.roomname_View);
+
+        if(roomName.length() > 10){
+            String q = roomName.substring(0,10) + "...";
+            head.setText(q);
+        } else {
+            head.setText(roomName);
         }
 
         // Setup our input methods. Enter key on the keyboard or pushing the send button
