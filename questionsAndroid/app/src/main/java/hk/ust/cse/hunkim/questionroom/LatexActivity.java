@@ -53,6 +53,8 @@ public class LatexActivity extends AppCompatActivity {
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 mLatexText = findViewById(R.id.latex_input).toString();
                 ensureTexIconExists();
+                latexPreview.invalidate();
+                latexPreview.requestLayout();
             }
 
             @Override
@@ -87,15 +89,13 @@ public class LatexActivity extends AppCompatActivity {
         if (FactoryProvider.INSTANCE == null) {
             FactoryProvider.INSTANCE = new FactoryProviderAndroid(this.getAssets());
         }
-
-
     }
 
+    /*
     protected void readLatexInput(Context context) {
         mLatexText = findViewById(R.id.latex_input).toString();
-
-        //TODO
     }
+    */
 
     public void ensureTexIconExists() {
         if (mFormula == null) {
