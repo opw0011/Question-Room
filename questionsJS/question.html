@@ -76,7 +76,7 @@
         <div id="question_box">
           <!-- tab navigation bar -->
           <ul class="nav nav-pills" id="tabs">
-            <li class="active"><a data-toggle="tab" href="#tab_post" ng-click="input.searchEmail=''"><i class="fa fa-commenting"></i> Post</a></li>
+            <li class="active"><a data-toggle="tab" href="#tab_post"><i class="fa fa-commenting"></i> Post</a></li>
             <li><a data-toggle="tab" href="#tab_search"><i class="fa fa-search"></i> Search</a></li>
           </ul>
 
@@ -86,7 +86,7 @@
             <div id="tab_post" class="tab-pane fade in active">
               <form name="todoForm" id="todoForm" ng-submit="addTodo()" ng-init="input.wholeMsg=''">
                 <div class="questionInputBox">
-                  <textarea id="MathInput" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag, shift+enter to post" onkeyup="Preview.Update()" ng-model="input.wholeMsg" autofocus required ng-minlength="5" maxlength="500" style="min-height:100px; resize: none; border-style: dashed;"></textarea>
+                  <textarea id="MathInput" name="new-todo" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.wholeMsg" placeholder="Post Question at least 5 letters, add '#tag' at the end as a tag, shift+enter to post" ng-model="input.wholeMsg" autofocus required ng-minlength="5" maxlength="500" style="min-height:100px; resize: none; border-style: dashed;"></textarea>
                   <div class="btn_ask">
                     <button id="btn_post" class="btn btn-primary pull-right" type="submit" ng-disabled="filterWord(input.wholeMsg)||todoForm.$error.minlength||todoForm.$error.required||disableTimeInterval" ng-click="showError = todoForm.$invalid"><i class="fa fa-paper-plane"></i> Ask Question</button> 
                   </div>
@@ -101,9 +101,9 @@
                   <ul class="list-group">
                     <li class="list-group-item">
                       <!-- input email address -->
-                      <label> Passcode:</label>
+                      <label class="glyphicon glyphicon-envelope"> Email:</label>
                       <div ng-init="input.email=''">
-                        <input name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.email" ng-model="input.email" placeholder="Set a passcode here in order to further edit your question" autofocus>
+                        <input type="email" name="input" class="form-control ng-valid ng-touched ng-dirty ng-valid-parse" focus-on-change="input.email" ng-model="input.email" autofocus>
                         <!-- better inside the inputbox -->
                         <button type="button" class="glyphicon glyphicon-remove-sign" ng-show="input.email!=''" ng-click="input.email=''"></button>
                       </div>
@@ -142,13 +142,6 @@
       </div><!-- /#question-box -->
 <!-- question box end -->
 
-<!-- LaTex preview -->
-Preview is shown here:
-<div id="MathPreview" style="border:1px solid; padding: 3px; width:50%; margin-top:5px"></div>
-<div id="MathBuffer" style="border:1px solid; padding: 3px; width:50%; margin-top:5px; visibility:hidden; position:absolute; top:0; left: 0"></div>
-<br>
-<!-- LaTex preview end-->
-
       <!-- questions-list start -->
       <div class="list-group" id="todo-list" >
         <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion"  ng-hide="todo.echo < -15">
@@ -176,7 +169,7 @@ Preview is shown here:
           <!-- use $sce.trustAsHtml to show trused html code, use ng-bind to show escaped html -->
           <!-- Now the code is santized : Sanitizes an html string by stripping all potentially dangerous tokens; only keep <b><i>etc. To be tested -->
 
-          <p class="list-group-item-text"><span ng-bind-html="todo.desc | smilies"></span></p>
+          <p class="list-group-item-text"><span ng-bind-html="todo.desc | smilies"></span><span mathjax-bind="todo.wholeMsg"></span></p>
           
           <br>
           
@@ -296,99 +289,15 @@ Preview is shown here:
 <!-- angular smilies -->
 <script src="plugins/emoji/dist/angular-smilies.js"></script>
 
-<script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    extensions: ["tex2jax.js"],
-    jax: ["input/TeX","output/HTML-CSS"],
-    tex2jax: {inlineMath: [["$","$"],["\\(","\\)"]]}
-  });
-</script>
-
 <script>
-var Preview = {
-  delay: 150,        // delay after keystroke before updating
-
-  preview: null,     // filled in by Init below
-  buffer: null,      // filled in by Init below
-
-  timeout: null,     // store setTimout id
-  mjRunning: false,  // true when MathJax is processing
-  oldText: null,     // used to check if an update is needed
-
-  //
-  //  Get the preview and buffer DIV's
-  //
-  Init: function () {
-    this.preview = document.getElementById("MathPreview");
-    this.buffer = document.getElementById("MathBuffer");
-  },
-
-  //
-  //  Switch the buffer and preview, and display the right one.
-  //  (We use visibility:hidden rather than display:none since
-  //  the results of running MathJax are more accurate that way.)
-  //
-  SwapBuffers: function () {
-    var buffer = this.preview, preview = this.buffer;
-    this.buffer = buffer; this.preview = preview;
-    buffer.style.visibility = "hidden"; buffer.style.position = "absolute";
-    preview.style.position = ""; preview.style.visibility = "";
-  },
-
-  //
-  //  This gets called when a key is pressed in the textarea.
-  //  We check if there is already a pending update and clear it if so.
-  //  Then set up an update to occur after a small delay (so if more keys
-  //    are pressed, the update won't occur until after there has been 
-  //    a pause in the typing).
-  //  The callback function is set up below, after the Preview object is set up.
-  //
-  Update: function () {
-    if (this.timeout) {clearTimeout(this.timeout)}
-    this.timeout = setTimeout(this.callback,this.delay);
-  },
-
-  //
-  //  Creates the preview and runs MathJax on it.
-  //  If MathJax is already trying to render the code, return
-  //  If the text hasn't changed, return
-  //  Otherwise, indicate that MathJax is running, and start the
-  //    typesetting.  After it is done, call PreviewDone.
-  //  
-  CreatePreview: function () {
-    Preview.timeout = null;
-    if (this.mjRunning) return;
-    var text = document.getElementById("MathInput").value;
-    if (text === this.oldtext) return;
-    this.buffer.innerHTML = this.oldtext = text;
-    this.mjRunning = true;
-    MathJax.Hub.Queue(
-      ["Typeset",MathJax.Hub,this.buffer],
-      ["PreviewDone",this]
-    );
-  },
-
-  //
-  //  Indicate that MathJax is no longer running,
-  //  and swap the buffers to show the results.
-  //
-  PreviewDone: function () {
-    this.mjRunning = false;
-    this.SwapBuffers();
-  }
-
-};
-
-//
-//  Cache a callback to the CreatePreview action
-//
-Preview.callback = MathJax.Callback(["CreatePreview",Preview]);
-Preview.callback.autoReset = true;  // make sure it can run more than once
-
-</script>
-
-<script>
-Preview.Init();
+MathJax.Hub.Config({
+    skipStartupTypeset: true,
+    messageStyle: "none",
+    "HTML-CSS": {
+        showMathMenu: false
+    }
+});
+MathJax.Hub.Configured();
 </script>
 
 <div id="fb-root"></div>
