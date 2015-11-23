@@ -5,6 +5,28 @@
 
     tools:context=".MainActivity">
 
+    <LinearLayout
+        android:id="@+id/head"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:background="@drawable/button_selector"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Room Name"
+            android:id="@+id/roomname_View"
+            android:layout_weight="1"
+            android:textColor="#fff"
+            android:autoText="false"
+            android:gravity="center"
+            android:foregroundGravity="center" />
 
     <Button
         android:id="@+id/close"
@@ -14,6 +36,7 @@
         android:text = "Quit Room"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
+        android:background="@drawable/button_selector"
         />
 
     <Button
@@ -22,9 +45,10 @@
         android:layout_height="50dp"
         android:onClick="findPostByEmail"
         android:text = "Search&#10;Posts"
-        android:textSize="12sp"
+        android:textSize="13sp"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/close"
+        android:background="@drawable/button_selector"
         />
 
     <Button
@@ -38,12 +62,13 @@
         android:visibility="gone"
         android:clickable="false"
         />
+    </LinearLayout>
 
     <ListView
         android:id="@android:id/list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/close"
+        android:layout_below="@+id/head"
         android:layout_above="@+id/listFooter"
         android:transcriptMode="alwaysScroll"
         android:headerDividersEnabled="false" />
@@ -67,6 +92,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:paddingTop="10dp"
+        android:background="@drawable/button_selector"
         android:orientation="horizontal">
         
         <ImageButton
@@ -92,7 +118,9 @@
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_send" />
+            android:background="@drawable/button_selector"
+            android:src="@android:drawable/ic_menu_send"
+            android:foregroundGravity="center"/>
     </LinearLayout>
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -105,7 +133,10 @@
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
         tools:context=".MainActivity"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        >
     </LinearLayout>
+
+
 
 </RelativeLayout>
