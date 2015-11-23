@@ -52,7 +52,7 @@ todomvc.controller('TodoCtrl', ['$scope', '$location', '$firebaseArray', '$sce',
           id: room,
           ts: new Date().getTime(),
           st: true,
-          ref: appURL + room
+          ref: appURL + "question.html#/" + room
         });
         $scope.rooms = rooms;
       }
