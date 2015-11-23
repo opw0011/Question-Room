@@ -10,6 +10,19 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="hk.ust.cse.hunkim.questionroom.JoinActivity">
 
+    <ImageView
+        android:layout_width="60dp"
+        android:layout_height="80dp"
+        android:src="@drawable/android_logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Let's join a room!"
+        android:id="@+id/textView"
+        android:textAlignment="center" />
+
     <AutoCompleteTextView
         android:id="@+id/room_name"
         android:layout_width="match_parent"
