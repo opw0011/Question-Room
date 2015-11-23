@@ -201,7 +201,9 @@
             </button>
             &nbsp;
             <button ng-hide="editing" type="button" class="btn btn-default btn-xs" ng-click="isReplyOpen = !isReplyOpen">
-              <span class="glyphicon glyphicon-send" aria-hidden="true"></span> Reply
+              <!-- <span class="glyphicon glyphicon-send" aria-hidden="true"></span> -->
+              <span class="badge"> {{replyCount.length}}</span>
+              Reply
             </button>
             &nbsp;
             <button class="btn btn-default" ng-hide="!editing" ng-click="editing = false">
@@ -229,8 +231,10 @@
         <!-- reply collapse start -->
         <div ng-show="isReplyOpen">
           <div class="list-group" id="reply-list" >
-            <div class="list-group-item" ng-repeat="reply in todosReplies | filter:{'questionID':todo.$id} : true " ng-hide="todo.echo < -15">
-              <div ng-bind="reply.desc"></div>
+            <div class="list-group-item" ng-repeat="reply in todosReplies | filter:{'questionID':todo.$id} : true as replyCount" ng-hide="todo.echo < -15">
+              <div ng-bind="reply.desc" class="pull-left"></div>
+              <div class="pull-right"><small class="text-muted"><i class="fa fa-clock-o"></i> Replied {{timeAgo(reply.timestamp)}}</small></div>
+              <div class="clearfix"></div>
             </div>
           </div>      
           
@@ -239,7 +243,7 @@
               <div class="replyInputBox">
                 <textarea class="form-control custom-control ng-valid ng-touched ng-dirty ng-valid-parse" style="resize:none; overflow: auto; height:100px;" ng-model="input.replyMsg" autofocus required ng-minlength="5" maxlength="500" placeholder="Write your reply here ..."></textarea>
                 <div class="btn_reply">
-                  <button class="btn btn-success" ng-submit="addReply(todo)" ng-disabled="filterWord(input.replyMsg)||replyForm.$error.minlength||replyForm.$error.required||disableTimeInterval">Reply</button>                    
+                  <button class="btn btn-success" ng-submit="addReply(todo)" ng-disabled="filterWord(input.replyMsg)||replyForm.$error.minlength||replyForm.$error.required||disableTimeInterval">Reply</button>  
                 </div>
               </div>
               <span ng-style="{visibility: (postTimeCounter>0) && 'visible' || 'hidden'}"><small>Please wait for {{postTimeCounter}}    second to post again...</small></span>

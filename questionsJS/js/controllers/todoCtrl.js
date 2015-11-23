@@ -396,9 +396,6 @@ todomvc.controller('TodoCtrl', ['$scope', '$location', '$firebaseArray', '$sce',
       $scope.todos.$remove(todo);
     };
     $scope.addReply = function(todo) {
-      // todo.replys = {test:"test"};
-      // todo.replys = ["test","ffff"];
-      // todo.replys.push("this is my reply");
       var newTodo = $scope.input.replyMsg.trim();
       if (newTodo.length < 5) {
         console.log("Reply too short");
@@ -413,7 +410,7 @@ todomvc.controller('TodoCtrl', ['$scope', '$location', '$firebaseArray', '$sce',
         order: 0,
       });
       // remove the posted question in the input
-      todo.wholeMsgReply = '';
+      $scope.input.replyMsg = '';
       $scope.todos.$save(todo);
       // set the post time of reply (allow reply again in 5s)
       $scope.setPostTimeInterval();
