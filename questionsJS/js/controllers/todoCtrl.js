@@ -29,11 +29,16 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
 	$scope.roomId = roomId;
 	var url = firebaseURL + roomId + "/questions/";
+    var urlReplies = firebaseURL + roomId + "/replies/";
+
 	var echoRef = new Firebase(url);
+    var echoRefReplies = new Firebase(urlReplies);
 
 	var query = echoRef.orderByChild("order");
+    var queryReplies = echoRefReplies.orderByChild("order");
 
 	$scope.todos = $firebaseArray(query);
+    $scope.todosReplies = $firebaseArray(queryReplies);
 
 	$scope.editedTodo = null;
 
@@ -146,7 +151,8 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
             email: todoID,
             echo: 0,
             order: 0,
-            newQuestion: true
+            newQuestion: true,
+
         });
         
         // remove the posted question and email address in the input
@@ -242,6 +248,34 @@ function ($scope, $location, $firebaseArray, $sce, $localStorage, $window, $time
 
     $scope.removeTodo = function (todo) {
         $scope.todos.$remove(todo);
+    };
+
+    $scope.addReply = function (todo) {
+        // todo.replys = {test:"test"};
+        // todo.replys = ["test","ffff"];
+        // todo.replys.push("this is my reply");
+        var newTodo = $scope.input.replyMsg.trim();
+        if (newTodo.length < 5) {
+            console.log("Reply too short");
+            return;
+        }
+
+        $scope.todos.$save(todo);
+         // add to reply array
+        $scope.todosReplies.$add({            
+            questionID: todo.$id,
+            desc: newTodo,
+            timestamp: new Date().getTime(),
+            order: 0,
+        });
+        
+        // remove the posted question in the input
+        todo.wholeMsgReply = '';
+        $scope.todos.$save(todo);
+
+        // set the post time of reply (allow reply again in 5s)
+        $scope.setPostTimeInterval();
+
     };
 
     $scope.increaseMax = function () {
