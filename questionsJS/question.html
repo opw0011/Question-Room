@@ -144,7 +144,7 @@
 
       <!-- questions-list start -->
       <div class="list-group" id="todo-list" >
-        <div class="list-group-item" ng-repeat="todo in todos | filter:{'wholeMsg':input.searchMsg} | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion"  ng-hide="todo.echo < -15">
+        <div class="list-group-item" ng-repeat="todo in todos | filter:input.searchMsg | filter:{'email':input.searchEmail}:strict | questionFilter:maxQuestion"  ng-hide="todo.echo < -15">
           <div class="list-group-item-heading" ng-switch on="todo.head.slice(-1)">
             <div id="todo-sign" ng-hide="editing" class="question-heading-sign">           
               <span ng-class="{'badge badge-success': todo.echo > 0, 'badge': todo.echo == 0, 'badge badge-danger': todo.echo < 0}">{{todo.echo}}</span>
@@ -152,7 +152,7 @@
               <!-- switch -->
               <span ng-switch-when="?" class="glyphicon glyphicon-question-sign"></span>
               <span ng-switch-when="!" class="glyphicon glyphicon-info-sign"></span>
-              <span id="tag-label" class="label label-info" ng-show="todo.tags">{{todo.tags}}</span>
+              <span id="tag-label" class="label label-info" ng-show="todo.tags" ng-click="input.searchMsg = todo.tags">{{todo.tags}}</span>
               <small class="text-muted"> Asked {{timeAgo(todo.timestamp)}}</small>
             </div>          
             <td>
