@@ -290,7 +290,8 @@
 <script src="plugins/emoji/dist/angular-smilies.js"></script>
 
 <script>
-MathJax.Hub.Config({
+  MathJax.Hub.Config({
+    tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]},
     skipStartupTypeset: true,
     messageStyle: "none",
     "HTML-CSS": {
